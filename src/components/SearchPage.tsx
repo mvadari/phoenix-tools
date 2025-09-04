@@ -27,13 +27,14 @@ export default function SearchPage() {
 
   const { loadContent, getContentState } = useContentLoader();
 
-  // Calculate category counts from index items
+  // Calculate category counts from search results when searching, otherwise from all index items
   const categoryCounts = React.useMemo(() => {
-    return indexItems.reduce((counts, item) => {
+    const sourceData = query.trim() ? results : indexItems;
+    return sourceData.reduce((counts, item) => {
       counts[item.category] = (counts[item.category] || 0) + 1;
       return counts;
     }, {} as Record<DataCategory, number>);
-  }, [indexItems]);
+  }, [indexItems, results, query]);
 
   const handleResultSelect = async (result: SearchResultType) => {
     setSelectedResult(result);
@@ -46,6 +47,27 @@ export default function SearchPage() {
   };
 
   const contentState = selectedResult ? getContentState(selectedResult) : null;
+
+  // Convert index items to display format for showing all items
+  const allItemsForDisplay = React.useMemo(() => {
+    if (!selectedCategory) {
+      // Show all items when no category selected
+      return indexItems.map(item => ({
+        ...item,
+        score: 1, // Default score for non-search display
+        matches: []
+      } as SearchResultType));
+    } else {
+      // Filter by selected category
+      return indexItems
+        .filter(item => item.category === selectedCategory)
+        .map(item => ({
+          ...item,
+          score: 1,
+          matches: []
+        } as SearchResultType));
+    }
+  }, [indexItems, selectedCategory]);
 
   if (!initialized) {
     return (
@@ -84,6 +106,7 @@ export default function SearchPage() {
         error={error}
         query={query}
         onResultSelect={handleResultSelect}
+        allItems={allItemsForDisplay}
       />
 
       {initialized && indexItems.length > 0 && (

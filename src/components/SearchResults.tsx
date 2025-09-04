@@ -7,6 +7,7 @@ interface SearchResultsProps {
   error?: string | null;
   query?: string;
   onResultSelect: (result: SearchResultType) => void;
+  allItems?: SearchResultType[]; // All available items to show when no query
 }
 
 export default function SearchResults({ 
@@ -14,7 +15,8 @@ export default function SearchResults({
   loading = false, 
   error = null, 
   query = '',
-  onResultSelect 
+  onResultSelect,
+  allItems = []
 }: SearchResultsProps) {
   if (error) {
     return (
@@ -37,15 +39,56 @@ export default function SearchResults({
   }
 
   if (!query.trim()) {
+    if (allItems.length === 0) {
+      return (
+        <div className="search-results">
+          <div className="search-help" style={{
+            textAlign: 'center',
+            color: '#6c757d',
+            padding: '2rem',
+            fontStyle: 'italic'
+          }}>
+            Loading content...
+          </div>
+        </div>
+      );
+    }
+
+    // Show all items when no query
+    const displayItems = allItems.slice(0, 50); // Limit to first 50 items for performance
+    
     return (
       <div className="search-results">
-        <div className="search-help" style={{
-          textAlign: 'center',
-          color: '#6c757d',
-          padding: '2rem',
-          fontStyle: 'italic'
+        <div className="results-header" style={{
+          marginBottom: '1rem',
+          padding: '0.5rem 0',
+          borderBottom: '1px solid #dee2e6',
+          color: '#6c757d'
         }}>
-          Start typing to search across all 5e content...
+          Showing {displayItems.length} of {allItems.length.toLocaleString()} items
+          {allItems.length > 50 && (
+            <span style={{ fontSize: '0.9rem', marginLeft: '0.5rem' }}>
+              (start typing to search all items)
+            </span>
+          )}
+        </div>
+
+        <div 
+          className="simple-results"
+          style={{
+            maxHeight: '60vh',
+            overflowY: 'auto',
+            border: '1px solid #dee2e6',
+            borderRadius: '6px'
+          }}
+        >
+          {displayItems.map((result, index) => (
+            <SearchResult
+              key={`${result.name}-${result.source}-${index}`}
+              result={result}
+              onSelect={onResultSelect}
+            />
+          ))}
         </div>
       </div>
     );

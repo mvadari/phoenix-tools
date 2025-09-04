@@ -20,22 +20,22 @@ class DataServiceClass {
     hasIndex: boolean;
     basePath: string;
     dataKey: string;
-    isSubfolder?: boolean;
+    fileName?: string;
   }> = {
-    spell: { hasIndex: true, basePath: '/data/spells', dataKey: 'spell', isSubfolder: true },
-    class: { hasIndex: true, basePath: '/data/class', dataKey: 'class', isSubfolder: true },
-    monster: { hasIndex: true, basePath: '/data/bestiary', dataKey: 'monster', isSubfolder: true },
-    background: { hasIndex: false, basePath: '/data', dataKey: 'background' },
-    item: { hasIndex: false, basePath: '/data', dataKey: 'item' },
-    feat: { hasIndex: false, basePath: '/data', dataKey: 'feat' },
-    race: { hasIndex: false, basePath: '/data', dataKey: 'race' },
-    action: { hasIndex: false, basePath: '/data', dataKey: 'action' },
-    adventure: { hasIndex: false, basePath: '/data', dataKey: 'adventure' },
-    deity: { hasIndex: false, basePath: '/data', dataKey: 'deity' },
-    condition: { hasIndex: false, basePath: '/data', dataKey: 'condition' },
-    reward: { hasIndex: false, basePath: '/data', dataKey: 'reward' },
-    'variant-rule': { hasIndex: false, basePath: '/data', dataKey: 'variantRule' },
-    table: { hasIndex: false, basePath: '/data', dataKey: 'table' },
+    spell: { hasIndex: true, basePath: '/data/spells', dataKey: 'spell' },
+    class: { hasIndex: true, basePath: '/data/class', dataKey: 'class' },
+    monster: { hasIndex: true, basePath: '/data/bestiary', dataKey: 'monster' },
+    background: { hasIndex: false, basePath: '/data', dataKey: 'background', fileName: 'backgrounds.json' },
+    item: { hasIndex: false, basePath: '/data', dataKey: 'item', fileName: 'items.json' },
+    feat: { hasIndex: false, basePath: '/data', dataKey: 'feat', fileName: 'feats.json' },
+    race: { hasIndex: false, basePath: '/data', dataKey: 'race', fileName: 'races.json' },
+    action: { hasIndex: false, basePath: '/data', dataKey: 'action', fileName: 'actions.json' },
+    adventure: { hasIndex: false, basePath: '/data', dataKey: 'adventure', fileName: 'adventures.json' },
+    deity: { hasIndex: false, basePath: '/data', dataKey: 'deity', fileName: 'deities.json' },
+    condition: { hasIndex: false, basePath: '/data', dataKey: 'condition', fileName: 'conditionsdiseases.json' },
+    reward: { hasIndex: false, basePath: '/data', dataKey: 'reward', fileName: 'rewards.json' },
+    'variant-rule': { hasIndex: false, basePath: '/data', dataKey: 'variantRule', fileName: 'variantrules.json' },
+    table: { hasIndex: false, basePath: '/data', dataKey: 'table', fileName: 'tables.json' },
   };
 
   async loadIndex(category: DataCategory): Promise<SearchIndexItem[]> {
@@ -85,7 +85,10 @@ class DataServiceClass {
       for (const [source, filename] of Object.entries(indexData)) {
         try {
           const fileResponse = await fetch(`${config.basePath}/${filename}`);
-          if (!fileResponse.ok) continue;
+          if (!fileResponse.ok) {
+            console.warn(`Failed to fetch ${config.basePath}/${filename}:`, fileResponse.status, fileResponse.statusText);
+            continue;
+          }
           
           const fileData: DataFile = await fileResponse.json();
           const items = fileData[config.dataKey] || [];
@@ -94,7 +97,9 @@ class DataServiceClass {
           for (const item of items) {
             if (item && item.name) {
               try {
-                indexItems.push(this.createSearchIndexItem(item, category, source));
+                // Use the actual source from the item data, not the index key
+                const actualSource = item.source || source;
+                indexItems.push(this.createSearchIndexItem(item, category, actualSource));
               } catch (error) {
                 console.warn(`Skipping invalid item in ${filename}:`, item, error);
               }
@@ -114,8 +119,9 @@ class DataServiceClass {
 
   private async loadFromMainFile(category: DataCategory, config: any): Promise<SearchIndexItem[]> {
     try {
-      const response = await fetch(`${config.basePath}/${category}s.json`);
-      if (!response.ok) throw new Error(`Failed to load ${category} data`);
+      const fileName = config.fileName || `${category}s.json`;
+      const response = await fetch(`${config.basePath}/${fileName}`);
+      if (!response.ok) throw new Error(`Failed to load ${category} data from ${fileName}`);
       
       const fileData: DataFile = await response.json();
       const items = fileData[config.dataKey] || [];
@@ -210,13 +216,39 @@ class DataServiceClass {
         if (!indexResponse.ok) throw new Error(`Failed to load ${category} index`);
         
         const indexData: IndexFile = await indexResponse.json();
-        filename = indexData[source];
         
-        if (!filename) {
-          throw new Error(`Source ${source} not found in ${category} index`);
+        // For indexed categories, we need to find the correct file that contains the item
+        // Since we now use actual source (PHB, TCE) but index is keyed by item names
+        let foundFilename: string | null = null;
+        
+        // Search through all files to find one containing items with this source
+        for (const [indexKey, candidateFilename] of Object.entries(indexData)) {
+          try {
+            const testResponse = await fetch(`${config.basePath}/${candidateFilename}`);
+            if (!testResponse.ok) continue;
+            
+            const testData: DataFile = await testResponse.json();
+            const testItems = testData[config.dataKey] || [];
+            
+            // Check if any item in this file has the source we're looking for
+            const hasSource = testItems.some((item: any) => item.source === source);
+            if (hasSource) {
+              foundFilename = candidateFilename;
+              break;
+            }
+          } catch (error) {
+            // Continue searching other files
+            continue;
+          }
         }
+        
+        if (!foundFilename) {
+          throw new Error(`No file found containing ${category} items with source ${source}`);
+        }
+        
+        filename = foundFilename;
       } else {
-        filename = `${category}s.json`;
+        filename = config.fileName || `${category}s.json`;
       }
 
       const response = await fetch(`${config.basePath}/${filename}`);

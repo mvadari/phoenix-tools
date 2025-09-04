@@ -5,7 +5,10 @@
       "Bash(npm run build:*)",
       "Bash(npm run dev:*)",
       "WebFetch(domain:5e.tools)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(curl:*)",
+      "Bash(start http://localhost:5173)",
+      "Bash(start http://localhost:5174/test-class-data.html)"
     ],
     "deny": [],
     "ask": []
