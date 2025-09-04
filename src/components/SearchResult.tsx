@@ -62,16 +62,48 @@ export default function SearchResult({ result, onSelect }: SearchResultProps) {
     return meta;
   };
 
+  const formatCategoryName = (category: string): string => {
+    const categoryNames: Record<string, string> = {
+      spell: 'Spell',
+      monster: 'Bestiary',
+      item: 'Item',
+      class: 'Class',
+      background: 'Background',
+      feat: 'Feat',
+      race: 'Race',
+      action: 'Action',
+      deity: 'Deity',
+      condition: 'Condition',
+      optionalfeature: 'Optional Feature',
+      vehicle: 'Vehicle',
+      reward: 'Reward',
+      psionics: 'Psionic',
+      adventure: 'Adventure',
+      'variant-rule': 'Variant Rule',
+      table: 'Table'
+    };
+    return categoryNames[category] || category.charAt(0).toUpperCase() + category.slice(1);
+  };
+
   const getCategoryColor = (category: string): string => {
     const colors: Record<string, string> = {
       spell: '#8b5cf6',
-      monster: '#ef4444', 
+      monster: '#ef4444',
       item: '#f59e0b',
       class: '#10b981',
       background: '#06b6d4',
       feat: '#f97316',
       race: '#ec4899',
-      action: '#6366f1'
+      action: '#6366f1',
+      deity: '#f59e0b',
+      condition: '#dc2626',
+      optionalfeature: '#8b5cf6',
+      vehicle: '#1976d2',
+      reward: '#9c27b0',
+      psionics: '#673ab7',
+      adventure: '#795548',
+      'variant-rule': '#607d8b',
+      table: '#9e9e9e'
     };
     return colors[category] || '#6b7280';
   };
@@ -85,7 +117,7 @@ export default function SearchResult({ result, onSelect }: SearchResultProps) {
     <div className="result-item" data-category={result.category} onClick={handleClick}>
       <div className="result-header">
         <div className="result-name">
-          {highlightMatches(result.name)}
+          {highlightMatches(result.name)} ({formatCategoryName(result.category)})
         </div>
         <div 
           className="result-category"
@@ -101,7 +133,7 @@ export default function SearchResult({ result, onSelect }: SearchResultProps) {
             marginLeft: '8px'
           }}
         >
-          {result.category}
+          {formatCategoryName(result.category)}
         </div>
       </div>
       

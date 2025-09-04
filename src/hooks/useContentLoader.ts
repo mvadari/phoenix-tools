@@ -102,10 +102,18 @@ export function useContentLoader() {
         for (const defaultSource of defaultSources) {
           try {
             fullData = await DataService.loadFullData(result.category, defaultSource);
-            foundItem = fullData.find(item => 
-              item.name === result.name || 
-              item.name.toLowerCase() === result.name.toLowerCase()
-            );
+            foundItem = fullData.find(item => {
+              // Exact match
+              if (item.name === result.name || item.name.toLowerCase() === result.name.toLowerCase()) {
+                return true;
+              }
+              
+              // Handle URL slug matches
+              const itemSlug = item.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+              const resultSlug = result.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+              
+              return itemSlug === resultSlug;
+            });
             if (foundItem) {
               break;
             }

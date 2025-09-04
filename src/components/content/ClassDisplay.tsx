@@ -128,7 +128,7 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
     return featProgression.map((prog, index) => (
       <div key={index} style={{ marginBottom: '0.5rem' }}>
         <strong>{prog.name}:</strong> 
-        {prog.progression && Object.entries((prog.progression as Record<string, number>)).map(([level, count]: [string, number]) => (
+        {prog.progression && Object.entries((prog.progression as Record<string, number>)).map(([level, count]) => (
           <span key={level} style={{ marginLeft: '0.5rem' }}>
             Level {level} ({count} choice{count > 1 ? 's' : ''})
           </span>

@@ -75,7 +75,8 @@ export function createSearchResultFromParams(params: ContentParams, name?: strin
 export function isValidCategory(category: string): category is DataCategory {
   const validCategories = [
     'spell', 'class', 'monster', 'background', 'item', 'feat', 'race',
-    'action', 'adventure', 'deity', 'condition', 'reward', 'variant-rule', 'table'
+    'action', 'adventure', 'deity', 'condition', 'reward', 'variant-rule', 'table',
+    'optionalfeature', 'vehicle', 'psionics'
   ];
   return validCategories.includes(category);
 }

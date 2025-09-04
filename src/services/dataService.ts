@@ -36,6 +36,9 @@ class DataServiceClass {
     reward: { hasIndex: false, basePath: '/phoenix-tools/data', dataKey: 'reward', fileName: 'rewards.json' },
     'variant-rule': { hasIndex: false, basePath: '/phoenix-tools/data', dataKey: 'variantRule', fileName: 'variantrules.json' },
     table: { hasIndex: false, basePath: '/phoenix-tools/data', dataKey: 'table', fileName: 'tables.json' },
+    optionalfeature: { hasIndex: false, basePath: '/phoenix-tools/data', dataKey: 'optionalfeature', fileName: 'optionalfeatures.json' },
+    vehicle: { hasIndex: false, basePath: '/phoenix-tools/data', dataKey: 'vehicle', fileName: 'vehicles.json' },
+    psionics: { hasIndex: false, basePath: '/phoenix-tools/data', dataKey: 'psionic', fileName: 'psionics.json' },
   };
 
   async loadIndex(category: DataCategory): Promise<SearchIndexItem[]> {
@@ -279,7 +282,9 @@ class DataServiceClass {
     }
 
     const allCategories: DataCategory[] = [
-      'spell', 'class', 'monster', 'background', 'item', 'feat', 'race'
+      'spell', 'class', 'monster', 'background', 'item', 'feat', 'race',
+      'action', 'adventure', 'deity', 'condition', 'reward', 'variant-rule', 
+      'table', 'optionalfeature', 'vehicle', 'psionics'
     ];
     
     const allItems: SearchIndexItem[] = [];

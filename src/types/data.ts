@@ -192,7 +192,7 @@ export interface SearchResult extends SearchIndexItem {
 export type DataCategory = 
   | 'spell' 
   | 'class' 
-  | 'monster' 
+  | 'monster'
   | 'background' 
   | 'item' 
   | 'feat' 
@@ -203,7 +203,10 @@ export type DataCategory =
   | 'condition'
   | 'reward'
   | 'variant-rule'
-  | 'table';
+  | 'table'
+  | 'optionalfeature'
+  | 'vehicle'
+  | 'psionics';
 
 // Data file interfaces
 export interface DataFile<T = any> {
