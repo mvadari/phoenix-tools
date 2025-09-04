@@ -71,7 +71,7 @@ export default function SearchResult({ result, onSelect }: SearchResultProps) {
   };
 
   return (
-    <div className="result-item" onClick={handleClick}>
+    <div className="result-item" data-category={result.category} onClick={handleClick}>
       <div className="result-header">
         <div className="result-name">
           {highlightMatches(result.name)}
