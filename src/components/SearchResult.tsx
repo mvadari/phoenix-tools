@@ -1,14 +1,25 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { SearchResult as SearchResultType } from '../types';
+import { createContentPath } from '../utils/routing';
 
 interface SearchResultProps {
   result: SearchResultType;
-  onSelect: (result: SearchResultType) => void;
+  onSelect?: (result: SearchResultType) => void; // Made optional for backward compatibility
 }
 
 export default function SearchResult({ result, onSelect }: SearchResultProps) {
+  const navigate = useNavigate();
+
   const handleClick = () => {
-    onSelect(result);
+    if (onSelect) {
+      // Backward compatibility - if onSelect is provided, use it
+      onSelect(result);
+    } else {
+      // Navigate to the content page
+      const path = createContentPath(result);
+      navigate(path);
+    }
   };
 
   const formatMetadata = (): string[] => {

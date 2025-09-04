@@ -9,8 +9,6 @@ interface ClassDisplayProps {
 }
 
 export default function ClassDisplay({ result, content, onClose }: ClassDisplayProps) {
-  console.log(content);
-  console.log(result);
   return (
     <BaseContentDisplay result={result} content={content} onClose={onClose}>
       <div className="content-body">

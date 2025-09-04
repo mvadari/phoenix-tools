@@ -262,7 +262,10 @@ class DataServiceClass {
       await CacheService.cacheFullData(category, source, items);
       return items;
     } catch (error) {
-      console.error(`Error loading full data for ${category}/${source}:`, error);
+      // Only log errors that aren't expected fallback scenarios
+      if (error instanceof Error && !error.message.includes('No file found containing')) {
+        console.error(`Error loading full data for ${category}/${source}:`, error);
+      }
       return [];
     }
   }

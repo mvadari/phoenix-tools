@@ -13,6 +13,7 @@ interface UseSearchOptions {
     rarity?: string;
   };
   debounceMs?: number;
+  initialQuery?: string;
 }
 
 interface UseSearchResult {
@@ -29,12 +30,12 @@ interface UseSearchResult {
 let initializationPromise: Promise<void> | null = null;
 
 export function useSearch(options: UseSearchOptions = {}): UseSearchResult {
-  const { category, filters, debounceMs = 300 } = options;
+  const { category, filters, debounceMs = 300, initialQuery = '' } = options;
   
   // Memoize filters to prevent infinite re-renders
   const stableFilters = useMemo(() => filters || {}, [filters]);
   
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(initialQuery);
   const [results, setResults] = useState<SearchResult[]>([]);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -42,39 +43,49 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchResult {
   const [initialized, setInitialized] = useState(false);
   const [indexItems, setIndexItems] = useState<SearchIndexItem[]>([]);
 
+  // Update query when initialQuery changes (for URL restoration)
+  useEffect(() => {
+    if (initialQuery !== query) {
+      setQuery(initialQuery);
+    }
+  }, [initialQuery]);
+
   // Initialize data and search indices
   useEffect(() => {
     const initializeSearch = async () => {
-      if (initializationPromise) {
-        await initializationPromise;
-        setInitialized(true);
-        return;
-      }
+      try {
+        setLoading(true);
+        setError(null);
+        setInitialized(false);
 
-      initializationPromise = (async () => {
-        try {
-          setLoading(true);
-          setError(null);
-
-          if (category != null) {
-            // Load specific category
-            const categoryItems = await DataService.loadIndex(category);
-            setIndexItems(categoryItems);
-          } else {
-            // Load global index
-            const allItems = await DataService.loadGlobalIndex();
-            setIndexItems(allItems);
-          }
-        } catch (err) {
-          console.error('Failed to initialize search:', err);
-          setError(err instanceof Error ? err.message : 'Failed to initialize search');
-        } finally {
-          setLoading(false);
+        // Use the global initialization promise if it exists
+        if (initializationPromise) {
+          await initializationPromise;
+        } else {
+          initializationPromise = (async () => {
+            await DataService.initialize();
+          })();
+          await initializationPromise;
         }
-      })();
 
-      await initializationPromise;
-      setInitialized(true);
+        // Load the appropriate index for this component
+        let items: SearchIndexItem[];
+        if (category != null) {
+          // Load specific category
+          items = await DataService.loadIndex(category);
+        } else {
+          // Load global index
+          items = await DataService.loadGlobalIndex();
+        }
+        
+        setIndexItems(items);
+        setInitialized(true);
+      } catch (err) {
+        console.error('Failed to initialize search:', err);
+        setError(err instanceof Error ? err.message : 'Failed to initialize search');
+      } finally {
+        setLoading(false);
+      }
     };
 
     initializeSearch();

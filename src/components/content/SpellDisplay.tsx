@@ -9,7 +9,6 @@ interface SpellDisplayProps {
 }
 
 export default function SpellDisplay({ result, content, onClose }: SpellDisplayProps) {
-  console.log(content);
   return (
     <BaseContentDisplay result={result} content={content} onClose={onClose}>
       <div className="content-body">

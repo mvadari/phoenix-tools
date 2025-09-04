@@ -6,7 +6,7 @@ interface SearchResultsProps {
   loading?: boolean;
   error?: string | null;
   query?: string;
-  onResultSelect: (result: SearchResultType) => void;
+  onResultSelect?: (result: SearchResultType) => void; // Made optional
   allItems?: SearchResultType[]; // All available items to show when no query
 }
 

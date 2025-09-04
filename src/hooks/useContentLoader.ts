@@ -25,20 +25,68 @@ export function useContentLoader() {
     setContentStates(prev => new Map(prev).set(key, loadingState));
 
     try {
-      // Load full data for the category/source
-      const fullData = await DataService.loadFullData(result.category, result.source);
+      // First try to load from the specified source
+      let fullData: any[] = [];
+      let foundItem: any = null;
       
-      // Find the specific item
-      const item = fullData.find(item => 
-        item.name === result.name || 
-        item.name.toLowerCase() === result.name.toLowerCase()
-      );
-
-      if (!item) {
-        throw new Error(`Item "${result.name}" not found in ${result.category} data`);
+      try {
+        fullData = await DataService.loadFullData(result.category, result.source);
+        foundItem = fullData.find(item => 
+          item.name === result.name || 
+          item.name.toLowerCase() === result.name.toLowerCase()
+        );
+      } catch (sourceError) {
+        console.warn(`Failed to load from source ${result.source}, trying to find item across all sources`);
       }
 
-      const successState: ContentState = { data: item, loading: false, error: null };
+      // If not found in the specified source, try to find it by searching through the index
+      if (!foundItem) {
+        // Load the full index to find the correct source
+        const indexItems = await DataService.loadIndex(result.category);
+        const indexItem = indexItems.find(item => 
+          item.name.toLowerCase() === result.name.toLowerCase() ||
+          item.name === result.name
+        );
+        
+        if (indexItem) {
+          // Try loading from the correct source found in index
+          try {
+            fullData = await DataService.loadFullData(result.category, indexItem.source);
+            foundItem = fullData.find(item => 
+              item.name === result.name || 
+              item.name.toLowerCase() === result.name.toLowerCase()
+            );
+          } catch (indexSourceError) {
+            console.warn(`Failed to load from index source ${indexItem.source}`);
+          }
+        }
+      }
+
+      // If still not found, try common default sources
+      if (!foundItem) {
+        const defaultSources = ['PHB', 'MM', 'DMG', 'XGTE', 'TCE'];
+        for (const defaultSource of defaultSources) {
+          try {
+            fullData = await DataService.loadFullData(result.category, defaultSource);
+            foundItem = fullData.find(item => 
+              item.name === result.name || 
+              item.name.toLowerCase() === result.name.toLowerCase()
+            );
+            if (foundItem) {
+              break;
+            }
+          } catch (error) {
+            // Continue to next default source
+            continue;
+          }
+        }
+      }
+
+      if (!foundItem) {
+        throw new Error(`Item "${result.name}" not found in any ${result.category} data sources`);
+      }
+
+      const successState: ContentState = { data: foundItem, loading: false, error: null };
       setContentStates(prev => new Map(prev).set(key, successState));
       
       return successState;

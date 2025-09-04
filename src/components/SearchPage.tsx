@@ -1,15 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useSearch } from '../hooks';
-import { useContentLoader } from '../hooks/useContentLoader';
 import type { DataCategory, SearchResult as SearchResultType } from '../types';
 import SearchInput from './SearchInput';
 import CategoryFilter from './CategoryFilter';
 import SearchResults from './SearchResults';
-import ContentDisplay from './ContentDisplay';
 
 export default function SearchPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState<DataCategory | undefined>();
-  const [selectedResult, setSelectedResult] = useState<SearchResultType | null>(null);
+  
+  // Initialize state from URL parameters
+  useEffect(() => {
+    const categoryParam = searchParams.get('category') as DataCategory;
+    if (categoryParam) {
+      setSelectedCategory(categoryParam);
+    }
+  }, [searchParams]);
   
   const { 
     query, 
@@ -22,10 +29,31 @@ export default function SearchPage() {
     indexItems 
   } = useSearch({ 
     category: selectedCategory,
-    debounceMs: 300 
+    debounceMs: 300,
+    initialQuery: searchParams.get('q') || ''
   });
 
-  const { loadContent, getContentState } = useContentLoader();
+  // Update URL when search parameters change
+  const handleQueryChange = (newQuery: string) => {
+    setQuery(newQuery);
+    updateSearchParams(newQuery, selectedCategory);
+  };
+
+  const handleCategoryChange = (newCategory: DataCategory | undefined) => {
+    setSelectedCategory(newCategory);
+    updateSearchParams(query, newCategory);
+  };
+
+  const updateSearchParams = (currentQuery: string, currentCategory: DataCategory | undefined) => {
+    const newParams = new URLSearchParams();
+    if (currentQuery.trim()) {
+      newParams.set('q', currentQuery);
+    }
+    if (currentCategory) {
+      newParams.set('category', currentCategory);
+    }
+    setSearchParams(newParams, { replace: true });
+  };
 
   // Calculate category counts from search results when searching, otherwise from all index items
   const categoryCounts = React.useMemo(() => {
@@ -35,18 +63,6 @@ export default function SearchPage() {
       return counts;
     }, {} as Record<DataCategory, number>);
   }, [indexItems, results, query]);
-
-  const handleResultSelect = async (result: SearchResultType) => {
-    setSelectedResult(result);
-    // Content will be loaded when ContentDisplay component mounts
-    await loadContent(result);
-  };
-
-  const handleCloseContent = () => {
-    setSelectedResult(null);
-  };
-
-  const contentState = selectedResult ? getContentState(selectedResult) : null;
 
   // Convert index items to display format for showing all items
   const allItemsForDisplay = React.useMemo(() => {
@@ -84,7 +100,7 @@ export default function SearchPage() {
       <div className="search-header">
         <SearchInput
           value={query}
-          onChange={setQuery}
+          onChange={handleQueryChange}
           suggestions={suggestions}
           loading={loading}
           placeholder={selectedCategory ? 
@@ -96,7 +112,7 @@ export default function SearchPage() {
 
       <CategoryFilter
         selectedCategory={selectedCategory}
-        onCategoryChange={setSelectedCategory}
+        onCategoryChange={handleCategoryChange}
         counts={categoryCounts}
       />
 
@@ -105,7 +121,6 @@ export default function SearchPage() {
         loading={loading}
         error={error}
         query={query}
-        onResultSelect={handleResultSelect}
         allItems={allItemsForDisplay}
       />
 
@@ -120,68 +135,6 @@ export default function SearchPage() {
           textAlign: 'center'
         }}>
           Search index contains {indexItems.length.toLocaleString()} items across {Object.keys(categoryCounts).length} categories
-        </div>
-      )}
-
-      {/* Content Modal */}
-      {selectedResult && (
-        <div>
-          {contentState?.loading && (
-            <div className="content-modal-overlay" style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundColor: 'rgba(0,0,0,0.5)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: 1000
-            }}>
-              <div className="loading" style={{
-                backgroundColor: 'white',
-                padding: '2rem',
-                borderRadius: '8px'
-              }}>
-                Loading {selectedResult.name}...
-              </div>
-            </div>
-          )}
-          
-          {contentState?.error && (
-            <div className="content-modal-overlay" onClick={handleCloseContent} style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundColor: 'rgba(0,0,0,0.5)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: 1000
-            }}>
-              <div className="error" style={{
-                backgroundColor: 'white',
-                padding: '2rem',
-                borderRadius: '8px',
-                maxWidth: '400px'
-              }}>
-                <h3>Error Loading Content</h3>
-                <p>{contentState.error}</p>
-                <button onClick={handleCloseContent}>Close</button>
-              </div>
-            </div>
-          )}
-          
-          {contentState?.data && (
-            <ContentDisplay
-              result={selectedResult}
-              content={contentState.data}
-              onClose={handleCloseContent}
-            />
-          )}
         </div>
       )}
     </div>
