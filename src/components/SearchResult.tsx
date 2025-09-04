@@ -106,6 +106,7 @@ export default function SearchResult({ result, onSelect }: SearchResultProps) {
         }}>
           Matches: {result.matches.join(', ')}
         </div>
+      )}
     </div>
   );
 }

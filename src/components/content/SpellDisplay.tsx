@@ -9,6 +9,7 @@ interface SpellDisplayProps {
 }
 
 export default function SpellDisplay({ result, content, onClose }: SpellDisplayProps) {
+  console.log(content);
   return (
     <BaseContentDisplay result={result} content={content} onClose={onClose}>
       <div className="content-body">
@@ -35,9 +36,12 @@ export default function SpellDisplay({ result, content, onClose }: SpellDisplayP
           {content.range && (
             <div className="detail-row">
               <strong>Range:</strong> {
-                content.range.distance ? 
-                  `${content.range.distance.amount} ${content.range.distance.type}` :
-                  content.range.type
+                (content.range.distance ? 
+                  (content.range.distance.amount
+                    ? `${content.range.distance.amount} ${content.range.distance.type}`
+                    : content.range.distance.type)
+                  + `, ${content.range.type}` :
+                  content.range.type)
               }
             </div>
           )}
@@ -57,7 +61,7 @@ export default function SpellDisplay({ result, content, onClose }: SpellDisplayP
               <strong>Duration:</strong> {
                 Array.isArray(content.duration) ?
                   content.duration.map((d: any) => 
-                    d.duration ? `${d.duration.number} ${d.duration.unit}` : d.type
+                    d.duration ? `${d.duration.amount} ${d.duration.type}` : d.type
                   ).join(', ') :
                   'Unknown'
               }
@@ -69,7 +73,6 @@ export default function SpellDisplay({ result, content, onClose }: SpellDisplayP
         
         {content.entriesHigherLevel && (
           <div className="higher-level-entries">
-            <h4>At Higher Levels</h4>
             <ContentEntries entries={content.entriesHigherLevel} />
           </div>
         )}
