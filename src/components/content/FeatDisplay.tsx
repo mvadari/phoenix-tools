@@ -1,6 +1,5 @@
 import type { SearchResult } from '../../types';
 import BaseContentDisplay from './BaseContentDisplay';
-import ContentEntries from './ContentEntries';
 
 interface FeatDisplayProps {
   result: SearchResult;
