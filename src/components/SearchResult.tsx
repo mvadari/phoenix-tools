@@ -106,16 +106,6 @@ export default function SearchResult({ result, onSelect }: SearchResultProps) {
         }}>
           Matches: {result.matches.join(', ')}
         </div>
-      )}
-      
-      <div className="result-score" style={{
-        fontSize: '0.7rem',
-        color: '#adb5bd',
-        textAlign: 'right',
-        marginTop: '4px'
-      }}>
-        Score: {result.score.toFixed(2)}
-      </div>
     </div>
   );
 }
