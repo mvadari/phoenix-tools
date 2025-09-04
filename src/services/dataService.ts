@@ -22,20 +22,20 @@ class DataServiceClass {
     dataKey: string;
     fileName?: string;
   }> = {
-    spell: { hasIndex: true, basePath: '/data/spells', dataKey: 'spell' },
-    class: { hasIndex: true, basePath: '/data/class', dataKey: 'class' },
-    monster: { hasIndex: true, basePath: '/data/bestiary', dataKey: 'monster' },
-    background: { hasIndex: false, basePath: '/data', dataKey: 'background', fileName: 'backgrounds.json' },
-    item: { hasIndex: false, basePath: '/data', dataKey: 'item', fileName: 'items.json' },
-    feat: { hasIndex: false, basePath: '/data', dataKey: 'feat', fileName: 'feats.json' },
-    race: { hasIndex: false, basePath: '/data', dataKey: 'race', fileName: 'races.json' },
-    action: { hasIndex: false, basePath: '/data', dataKey: 'action', fileName: 'actions.json' },
-    adventure: { hasIndex: false, basePath: '/data', dataKey: 'adventure', fileName: 'adventures.json' },
-    deity: { hasIndex: false, basePath: '/data', dataKey: 'deity', fileName: 'deities.json' },
-    condition: { hasIndex: false, basePath: '/data', dataKey: 'condition', fileName: 'conditionsdiseases.json' },
-    reward: { hasIndex: false, basePath: '/data', dataKey: 'reward', fileName: 'rewards.json' },
-    'variant-rule': { hasIndex: false, basePath: '/data', dataKey: 'variantRule', fileName: 'variantrules.json' },
-    table: { hasIndex: false, basePath: '/data', dataKey: 'table', fileName: 'tables.json' },
+    spell: { hasIndex: true, basePath: '/phoenix-tools/data/spells', dataKey: 'spell' },
+    class: { hasIndex: true, basePath: '/phoenix-tools/data/class', dataKey: 'class' },
+    monster: { hasIndex: true, basePath: '/phoenix-tools/data/bestiary', dataKey: 'monster' },
+    background: { hasIndex: false, basePath: '/phoenix-tools/data', dataKey: 'background', fileName: 'backgrounds.json' },
+    item: { hasIndex: false, basePath: '/phoenix-tools/data', dataKey: 'item', fileName: 'items.json' },
+    feat: { hasIndex: false, basePath: '/phoenix-tools/data', dataKey: 'feat', fileName: 'feats.json' },
+    race: { hasIndex: false, basePath: '/phoenix-tools/data', dataKey: 'race', fileName: 'races.json' },
+    action: { hasIndex: false, basePath: '/phoenix-tools/data', dataKey: 'action', fileName: 'actions.json' },
+    adventure: { hasIndex: false, basePath: '/phoenix-tools/data', dataKey: 'adventure', fileName: 'adventures.json' },
+    deity: { hasIndex: false, basePath: '/phoenix-tools/data', dataKey: 'deity', fileName: 'deities.json' },
+    condition: { hasIndex: false, basePath: '/phoenix-tools/data', dataKey: 'condition', fileName: 'conditionsdiseases.json' },
+    reward: { hasIndex: false, basePath: '/phoenix-tools/data', dataKey: 'reward', fileName: 'rewards.json' },
+    'variant-rule': { hasIndex: false, basePath: '/phoenix-tools/data', dataKey: 'variantRule', fileName: 'variantrules.json' },
+    table: { hasIndex: false, basePath: '/phoenix-tools/data', dataKey: 'table', fileName: 'tables.json' },
   };
 
   async loadIndex(category: DataCategory): Promise<SearchIndexItem[]> {
@@ -46,7 +46,7 @@ class DataServiceClass {
 
     // Check persistent cache
     const cachedIndex = await CacheService.getCachedIndex(category);
-    if (cachedIndex) {
+    if (cachedIndex != null) {
       this.indexCache.set(category, cachedIndex);
       await SimpleSearchService.buildCategoryIndex(cachedIndex, category);
       return cachedIndex;
@@ -270,7 +270,7 @@ class DataServiceClass {
   async loadGlobalIndex(): Promise<SearchIndexItem[]> {
     // Check persistent cache first
     const cachedGlobal = await CacheService.getCachedGlobalIndex();
-    if (cachedGlobal) {
+    if (cachedGlobal != null) {
       await SimpleSearchService.buildGlobalIndex(cachedGlobal);
       return cachedGlobal;
     }

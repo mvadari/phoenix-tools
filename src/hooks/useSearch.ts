@@ -56,7 +56,7 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchResult {
           setLoading(true);
           setError(null);
 
-          if (category) {
+          if (category != null) {
             // Load specific category
             const categoryItems = await DataService.loadIndex(category);
             setIndexItems(categoryItems);

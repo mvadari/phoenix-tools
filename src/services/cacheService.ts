@@ -62,7 +62,7 @@ class CacheServiceClass {
     try {
       const cachedData: CachedData<SearchIndexItem[]> | null = await this.indexStore.getItem(category);
       
-      if (!cachedData || !this.isValidCache(cachedData.metadata)) {
+      if (cachedData == null || !this.isValidCache(cachedData.metadata)) {
         return null;
       }
 
