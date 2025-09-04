@@ -4,6 +4,7 @@ import MonsterDisplay from './content/MonsterDisplay';
 import ClassDisplay from './content/ClassDisplay';
 import ItemDisplay from './content/ItemDisplay';
 import GenericDisplay from './content/GenericDisplay';
+import BackgroundDisplay from './content/BackgroundDisplay';
 
 interface ContentDisplayProps {
   result: SearchResult;
@@ -27,6 +28,9 @@ export default function ContentDisplay({ result, content, onClose }: ContentDisp
     
     case 'item':
       return <ItemDisplay result={result} content={content} onClose={onClose} />;
+    
+    case 'background':
+      return <BackgroundDisplay result={result} content={content} onClose={onClose} />;
     
     default:
       return <GenericDisplay result={result} content={content} onClose={onClose} />;
