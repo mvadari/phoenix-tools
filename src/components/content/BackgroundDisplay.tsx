@@ -51,8 +51,6 @@ function processLanguageProficiencies(skillProficiencies: any) {
 }
 
 export default function BackgroundDisplay({ result, content, onClose }: BackgroundDisplayProps) {
-    console.log(content);
-    console.log(result);
     return (
     <BaseContentDisplay result={result} content={content} onClose={onClose}>
       <div className="content-body">

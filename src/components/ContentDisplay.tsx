@@ -5,6 +5,7 @@ import ClassDisplay from './content/ClassDisplay';
 import ItemDisplay from './content/ItemDisplay';
 import GenericDisplay from './content/GenericDisplay';
 import BackgroundDisplay from './content/BackgroundDisplay';
+import FeatDisplay from './content/FeatDisplay';
 
 interface ContentDisplayProps {
   result: SearchResult;
@@ -31,6 +32,9 @@ export default function ContentDisplay({ result, content, onClose }: ContentDisp
     
     case 'background':
       return <BackgroundDisplay result={result} content={content} onClose={onClose} />;
+    
+    case 'feat':
+      return <FeatDisplay result={result} content={content} onClose={onClose} />;
     
     default:
       return <GenericDisplay result={result} content={content} onClose={onClose} />;

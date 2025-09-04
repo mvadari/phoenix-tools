@@ -5,3 +5,5 @@ export { default as MonsterDisplay } from './MonsterDisplay';
 export { default as ClassDisplay } from './ClassDisplay';
 export { default as ItemDisplay } from './ItemDisplay';
 export { default as GenericDisplay } from './GenericDisplay';
+export { default as BackgroundDisplay } from './BackgroundDisplay';
+export { default as FeatDisplay } from './FeatDisplay';

@@ -4,7 +4,6 @@ interface ContentEntriesProps {
 
 export default function ContentEntries({ entries }: ContentEntriesProps) {
   if (!entries || !Array.isArray(entries)) return null;
-  console.log(entries);
 
   return (
     <div className="content-entries">
