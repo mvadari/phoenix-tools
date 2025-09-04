@@ -176,5 +176,6 @@ export function processEntry(entry: any): React.ReactNode {
     }
   }
 
-  return entry;
+  // If we can't process it, return as string or null for React safety
+  return typeof entry === 'string' ? entry : JSON.stringify(entry);
 }
