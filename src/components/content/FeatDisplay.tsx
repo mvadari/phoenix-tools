@@ -63,7 +63,6 @@ function TableDisplay({ entry }: { entry: TableEntry }) {
 }
 
 export default function FeatDisplay({ result, content, onClose }: FeatDisplayProps) {
-  console.log(content);
   return (
     <BaseContentDisplay result={result} content={content} onClose={onClose}>
       <div className="content-body">
