@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { DataService } from '../services';
 import type { DataCategory, SearchResult, SearchIndexItem } from '../types';
 
@@ -29,7 +29,10 @@ interface UseSearchResult {
 let initializationPromise: Promise<void> | null = null;
 
 export function useSearch(options: UseSearchOptions = {}): UseSearchResult {
-  const { category, filters = {}, debounceMs = 300 } = options;
+  const { category, filters, debounceMs = 300 } = options;
+  
+  // Memoize filters to prevent infinite re-renders
+  const stableFilters = useMemo(() => filters || {}, [filters]);
   
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -91,8 +94,8 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchResult {
         setError(null);
 
         // Get search results
-        const searchResults = Object.keys(filters).length > 0
-          ? await DataService.searchWithFilters(query, category, filters)
+        const searchResults = Object.keys(stableFilters).length > 0
+          ? await DataService.searchWithFilters(query, category, stableFilters)
           : await DataService.search(query, category);
 
         // Get suggestions
@@ -111,7 +114,7 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchResult {
     }, debounceMs);
 
     return () => clearTimeout(timeoutId);
-  }, [query, category, filters, initialized, debounceMs]);
+  }, [query, category, stableFilters, initialized, debounceMs]);
 
   // Update suggestions when query changes (faster than full search)
   useEffect(() => {

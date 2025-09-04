@@ -10,9 +10,11 @@
   },
   "dependencies": {
     "@types/jquery": "^3.5.33",
+    "@types/lunr": "^2.3.7",
     "elasticlunr": "^0.9.5",
     "jquery": "^3.7.1",
     "localforage": "^1.10.0",
+    "lunr": "^2.3.9",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },

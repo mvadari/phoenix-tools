@@ -8,7 +8,7 @@ import type {
   Monster,
   Item
 } from '../types';
-import { SearchService } from './searchService';
+import { SimpleSearchService } from './simpleSearchService';
 import { CacheService } from './cacheService';
 
 class DataServiceClass {
@@ -48,7 +48,7 @@ class DataServiceClass {
     const cachedIndex = await CacheService.getCachedIndex(category);
     if (cachedIndex) {
       this.indexCache.set(category, cachedIndex);
-      await SearchService.buildCategoryIndex(cachedIndex, category);
+      await SimpleSearchService.buildCategoryIndex(cachedIndex, category);
       return cachedIndex;
     }
 
@@ -68,7 +68,7 @@ class DataServiceClass {
     await CacheService.cacheIndex(category, indexItems);
     
     // Build search index
-    await SearchService.buildCategoryIndex(indexItems, category);
+    await SimpleSearchService.buildCategoryIndex(indexItems, category);
     
     return indexItems;
   }
@@ -92,7 +92,13 @@ class DataServiceClass {
           
           // Convert to search index items
           for (const item of items) {
-            indexItems.push(this.createSearchIndexItem(item, category, source));
+            if (item && item.name) {
+              try {
+                indexItems.push(this.createSearchIndexItem(item, category, source));
+              } catch (error) {
+                console.warn(`Skipping invalid item in ${filename}:`, item, error);
+              }
+            }
           }
         } catch (error) {
           console.warn(`Failed to load ${filename} for indexing:`, error);
@@ -124,34 +130,58 @@ class DataServiceClass {
   }
 
   private createSearchIndexItem(item: any, category: DataCategory, source: string): SearchIndexItem {
-    const baseItem: SearchIndexItem = {
-      name: item.name,
-      source,
-      category,
-      page: item.page,
-    };
+    try {
+      const baseItem: SearchIndexItem = {
+        name: item.name || 'Unknown',
+        source,
+        category,
+        page: item.page,
+      };
 
-    // Add category-specific metadata
-    switch (category) {
-      case 'spell':
-        const spell = item as Spell;
-        return { ...baseItem, level: spell.level, school: spell.school };
-      
-      case 'monster':
-        const monster = item as Monster;
-        return { ...baseItem, cr: monster.cr, type: this.getMonsterType(monster.type) };
-      
-      case 'item':
-        const itemData = item as Item;
-        return { ...baseItem, type: itemData.type, rarity: itemData.rarity };
-      
-      default:
-        return baseItem;
+      // Add category-specific metadata
+      switch (category) {
+        case 'spell':
+          const spell = item as Spell;
+          return { 
+            ...baseItem, 
+            level: spell.level ?? undefined, 
+            school: spell.school || undefined 
+          };
+        
+        case 'monster':
+          const monster = item as Monster;
+          return { 
+            ...baseItem, 
+            cr: monster.cr ?? undefined, 
+            type: this.getMonsterType(monster.type) 
+          };
+        
+        case 'item':
+          const itemData = item as Item;
+          return { 
+            ...baseItem, 
+            type: itemData.type || undefined, 
+            rarity: itemData.rarity || undefined 
+          };
+        
+        default:
+          return baseItem;
+      }
+    } catch (error) {
+      console.warn(`Failed to create search index item for ${item.name || 'unknown'} in ${category}:`, error);
+      // Return minimal item to prevent complete failure
+      return {
+        name: item.name || 'Unknown',
+        source,
+        category,
+        page: item.page,
+      };
     }
   }
 
-  private getMonsterType(type: string | { type: string; tags?: string[] }): string {
-    return typeof type === 'string' ? type : type.type;
+  private getMonsterType(type: string | { type: string; tags?: string[] } | undefined | null): string {
+    if (!type) return 'unknown';
+    return typeof type === 'string' ? type : (type.type || 'unknown');
   }
 
   async loadFullData(category: DataCategory, source: string): Promise<any[]> {
@@ -209,7 +239,7 @@ class DataServiceClass {
     // Check persistent cache first
     const cachedGlobal = await CacheService.getCachedGlobalIndex();
     if (cachedGlobal) {
-      await SearchService.buildGlobalIndex(cachedGlobal);
+      await SimpleSearchService.buildGlobalIndex(cachedGlobal);
       return cachedGlobal;
     }
 
@@ -231,14 +261,14 @@ class DataServiceClass {
     // Cache global index and build search index
     if (allItems.length > 0) {
       await CacheService.cacheGlobalIndex(allItems);
-      await SearchService.buildGlobalIndex(allItems);
+      await SimpleSearchService.buildGlobalIndex(allItems);
     }
     
     return allItems;
   }
 
   async search(query: string, category?: DataCategory): Promise<SearchResult[]> {
-    return SearchService.search(query, category);
+    return SimpleSearchService.search(query, category);
   }
 
   async searchWithFilters(
@@ -253,11 +283,11 @@ class DataServiceClass {
       rarity?: string;
     } = {}
   ): Promise<SearchResult[]> {
-    return SearchService.searchWithFilters(query, category, filters);
+    return SimpleSearchService.searchWithFilters(query, category, filters);
   }
 
   getSuggestions(query: string, category?: DataCategory): string[] {
-    return SearchService.getSuggestions(query, category);
+    return SimpleSearchService.getSuggestions(query, category);
   }
 
   // Cache management methods

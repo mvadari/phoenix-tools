@@ -1,41 +1,52 @@
-import elasticlunr from 'elasticlunr';
+import lunr from 'lunr';
 import type { SearchIndexItem, SearchResult, DataCategory } from '../types';
 
 interface SearchIndex {
-  index: elasticlunr.Index<SearchIndexItem>;
+  index: lunr.Index;
   items: SearchIndexItem[];
+  documentsById: Map<string, SearchIndexItem>;
 }
 
-class SearchServiceClass {
+class SimpleSearchServiceClass {
   private indices = new Map<string, SearchIndex>();
   private globalIndex: SearchIndex | null = null;
 
   createIndex(items: SearchIndexItem[], category?: DataCategory): SearchIndex {
-    // Create ElasticLunr index
-    const index = elasticlunr<SearchIndexItem>(function() {
-      this.addField('name');
-      this.addField('source');
-      this.addField('category');
-      this.addField('type');
-      this.addField('school');
-      this.addField('rarity');
-      this.setRef('name');
+    const documentsById = new Map<string, SearchIndexItem>();
+    
+    // Create Lunr index
+    const index = lunr(function() {
+      this.ref('id');
+      this.field('name', { boost: 10 });
+      this.field('source', { boost: 2 });
+      this.field('category', { boost: 3 });
+      this.field('type', { boost: 3 });
+      this.field('school', { boost: 3 });
+      this.field('rarity', { boost: 2 });
+
+      // Add documents to index
+      items.forEach((item, idx) => {
+        const id = `${item.name}_${item.source}_${idx}`;
+        const doc = {
+          id,
+          name: item.name,
+          source: item.source,
+          category: item.category,
+          type: item.type || '',
+          school: item.school || '',
+          rarity: item.rarity || ''
+        };
+        
+        documentsById.set(id, item);
+        this.add(doc);
+      });
     });
 
-    // Add documents to index
-    items.forEach((item, idx) => {
-      try {
-        index.addDoc({
-          ...item,
-          // ElasticLunr requires a unique ref, use combination of name and index
-          name: `${item.name}_${idx}`,
-        });
-      } catch (error) {
-        console.warn('Failed to add document to search index:', item.name, error);
-      }
-    });
-
-    const searchIndex: SearchIndex = { index, items };
+    const searchIndex: SearchIndex = { 
+      index, 
+      items, 
+      documentsById 
+    };
     
     // Cache the index
     const key = category || 'global';
@@ -54,16 +65,11 @@ class SearchServiceClass {
 
   search(query: string, category?: DataCategory, options: {
     limit?: number;
-    fields?: string[];
     fuzzy?: boolean;
   } = {}): SearchResult[] {
     if (!query.trim()) return [];
 
-    const {
-      limit = 20,
-      fields = ['name', 'source', 'type', 'school'],
-      fuzzy = true
-    } = options;
+    const { limit = 20, fuzzy = true } = options;
 
     // Get the appropriate index
     let searchIndex: SearchIndex | null = null;
@@ -80,42 +86,29 @@ class SearchServiceClass {
     }
 
     try {
-      // Configure search options
-      const searchOptions: any = {};
-      
-      // Add field-specific boosts
-      const fieldBoosts = {
-        name: 10,     // Name matches are most important
-        source: 2,    // Source matches are less important
-        type: 3,      // Type matches are moderately important
-        school: 3     // School matches are moderately important
-      };
-
-      // Build field configuration for search
-      fields.forEach(field => {
-        if (fieldBoosts[field as keyof typeof fieldBoosts]) {
-          searchOptions[field] = {
-            boost: fieldBoosts[field as keyof typeof fieldBoosts],
-            bool: 'OR',
-            expand: fuzzy
-          };
-        }
-      });
+      // Build search query
+      let searchQuery = query;
+      if (fuzzy) {
+        // Add fuzzy matching for each term
+        const terms = query.split(/\s+/).filter(term => term.length > 0);
+        searchQuery = terms.map(term => {
+          if (term.length > 3) {
+            return `${term}~1 ${term}*`; // fuzzy + wildcard
+          } else {
+            return `${term}*`; // just wildcard for short terms
+          }
+        }).join(' ');
+      }
 
       // Perform the search
-      const results = searchIndex.index.search(query, searchOptions);
+      const results = searchIndex.index.search(searchQuery);
       
       // Convert results to SearchResult format
       const searchResults: SearchResult[] = results
         .slice(0, limit)
         .map(result => {
-          // Find the original item by parsing the ref
-          const originalName = result.ref.replace(/_\d+$/, '');
-          const item = searchIndex.items.find(item => 
-            item.name === originalName || 
-            item.name.toLowerCase() === originalName.toLowerCase()
-          );
-
+          const item = searchIndex!.documentsById.get(result.ref);
+          
           if (!item) {
             console.warn('Could not find original item for search result:', result.ref);
             return null;
@@ -124,7 +117,7 @@ class SearchServiceClass {
           return {
             ...item,
             score: result.score,
-            matches: this.extractMatches(query, item, fields)
+            matches: this.extractMatches(query, item)
           } as SearchResult;
         })
         .filter((result): result is SearchResult => result !== null);
@@ -136,11 +129,13 @@ class SearchServiceClass {
     }
   }
 
-  private extractMatches(query: string, item: SearchIndexItem, fields: string[]): string[] {
+  private extractMatches(query: string, item: SearchIndexItem): string[] {
     const matches: string[] = [];
     const queryLower = query.toLowerCase();
     const queryWords = queryLower.split(/\s+/).filter(word => word.length > 0);
 
+    const fields = ['name', 'source', 'type', 'school', 'category'];
+    
     fields.forEach(field => {
       const value = (item as any)[field];
       if (typeof value === 'string') {
@@ -271,4 +266,4 @@ class SearchServiceClass {
   }
 }
 
-export const SearchService = new SearchServiceClass();
+export const SimpleSearchService = new SimpleSearchServiceClass();

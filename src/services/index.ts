@@ -1,3 +1,3 @@
 export { DataService } from './dataService';
-export { SearchService } from './searchService';
+export { SimpleSearchService } from './simpleSearchService';
 export { CacheService } from './cacheService';
