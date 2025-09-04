@@ -2,7 +2,7 @@ import type { SearchResult } from '../../types';
 import BaseContentDisplay from './BaseContentDisplay';
 import ContentEntries from './ContentEntries';
 import DetailRow from '../basic/DetailRow';
-import { ProficiencyList, EquipmentList, PrerequisiteDisplay } from './shared';
+import { ProficiencyList, EquipmentList } from './shared';
 
 interface ClassDisplayProps {
   result: SearchResult;
@@ -128,7 +128,7 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
     return featProgression.map((prog, index) => (
       <div key={index} style={{ marginBottom: '0.5rem' }}>
         <strong>{prog.name}:</strong> 
-        {prog.progression && Object.entries(prog.progression).map(([level, count]) => (
+        {prog.progression && Object.entries((prog.progression as Record<string, number>)).map(([level, count]: [string, number]) => (
           <span key={level} style={{ marginLeft: '0.5rem' }}>
             Level {level} ({count} choice{count > 1 ? 's' : ''})
           </span>

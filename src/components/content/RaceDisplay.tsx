@@ -27,7 +27,7 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
       <div key={index} style={{ marginBottom: '0.5rem' }}>
         {Object.entries(abilitySet).map(([stat, value]) => (
           <span key={stat} style={{ marginRight: '1rem' }}>
-            <strong>{stat.toUpperCase()}</strong> +{value}
+            <strong>{stat.toUpperCase()}</strong> +{(value as number)}
           </span>
         ))}
       </div>

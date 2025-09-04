@@ -14,8 +14,7 @@ export default function ActionsList({
   reactions, 
   legendary, 
   lair, 
-  mythic, 
-  title = "Actions" 
+  mythic,
 }: ActionsListProps) {
   const hasActions = actions?.length || reactions?.length || legendary?.length || lair?.length || mythic?.length;
   

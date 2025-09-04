@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom';
-
 interface ProficiencyListProps {
   skills?: string[] | { [skill: string]: string | boolean }[] | { [skill: string]: string | boolean } | { choose?: { from: string[], count: number } }[];
   languages?: string[] | { [lang: string]: boolean }[] | { anyStandard?: number };
@@ -27,7 +25,8 @@ export default function ProficiencyList({
     if (Array.isArray(skills)) {
       return skills.flatMap(skill => {
         if (typeof skill === 'string') return [skill];
-        if (skill.choose) {
+        if (skill.choose != null) {
+          // @ts-expect-error
           return [`Choose ${skill.choose.count} from: ${skill.choose.from.join(', ')}`];
         }
         return Object.entries(skill)

@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom';
-
 interface PrerequisiteDisplayProps {
   prerequisite?: any[];
   label?: string;

@@ -7,7 +7,7 @@ interface BaseContentDisplayProps {
   children: React.ReactNode;
 }
 
-export default function BaseContentDisplay({ result, content, onClose, children }: BaseContentDisplayProps) {
+export default function BaseContentDisplay({ result, content, children }: BaseContentDisplayProps) {
   return (
     <div className="content-display" style={{
       maxWidth: '1000px',
