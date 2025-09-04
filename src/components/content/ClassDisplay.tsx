@@ -45,7 +45,7 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
               )}
               {content.startingProficiencies.skills && (
                 <div className="detail-row">
-                  <strong>Skill Proficiencies:</strong> Choose {content.startingProficiencies.skills.map(skill => `${skill.choose.count} from ${skill.choose.from.join(', ')}`).join(', ')}
+                  <strong>Skill Proficiencies:</strong> Choose {content.startingProficiencies.skills.map((skill: any) => `${skill.choose.count} from ${skill.choose.from.join(', ')}`).join(', ')}
                 </div>
               )}
             </>

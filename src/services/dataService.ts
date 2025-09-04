@@ -222,7 +222,7 @@ class DataServiceClass {
         let foundFilename: string | null = null;
         
         // Search through all files to find one containing items with this source
-        for (const [indexKey, candidateFilename] of Object.entries(indexData)) {
+        for (const [_indexKey, candidateFilename] of Object.entries(indexData)) {
           try {
             const testResponse = await fetch(`${config.basePath}/${candidateFilename}`);
             if (!testResponse.ok) continue;
