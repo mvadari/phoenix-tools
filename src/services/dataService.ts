@@ -224,46 +224,45 @@ class DataServiceClass {
         // Since we now use actual source (PHB, TCE) but index is keyed by item names
         let foundFilename: string | null = null;
         
-        // Search through all files to find one containing items with this source
+        // IMPROVED: Load from ALL files and combine results, then filter by source
+        // This is less efficient but more reliable than trying to find the "right" file
+        const allItems: any[] = [];
+        
         for (const [_indexKey, candidateFilename] of Object.entries(indexData)) {
           try {
-            const testResponse = await fetch(`${config.basePath}/${candidateFilename}`);
-            if (!testResponse.ok) continue;
+            const fileResponse = await fetch(`${config.basePath}/${candidateFilename}`);
+            if (!fileResponse.ok) continue;
             
-            const testData: DataFile = await testResponse.json();
-            const testItems = testData[config.dataKey] || [];
-            
-            // Check if any item in this file has the source we're looking for
-            const hasSource = testItems.some((item: any) => item.source === source);
-            if (hasSource) {
-              foundFilename = candidateFilename;
-              break;
-            }
+            const fileData: DataFile = await fileResponse.json();
+            const items = fileData[config.dataKey] || [];
+            allItems.push(...items);
           } catch (error) {
-            // Continue searching other files
+            console.warn(`Failed to load ${candidateFilename}:`, error);
             continue;
           }
         }
         
-        if (!foundFilename) {
-          throw new Error(`No file found containing ${category} items with source ${source}`);
-        }
+        // Filter all items by source and return directly
+        const items = allItems.filter((item: any) => item.source === source);
         
-        filename = foundFilename;
+        // Cache the result
+        this.dataCache.set(cacheKey, items);
+        await CacheService.cacheFullData(category, source, items);
+        return items;
       } else {
-        filename = config.fileName || `${category}s.json`;
+        // Non-indexed categories: load from single file
+        const filename = config.fileName || `${category}s.json`;
+        const response = await fetch(`${config.basePath}/${filename}`);
+        if (!response.ok) throw new Error(`Failed to load ${filename}`);
+        
+        const fileData: DataFile = await response.json();
+        const items = fileData[config.dataKey] || [];
+        
+        // Cache and return all items (no source filtering for non-indexed categories)
+        this.dataCache.set(cacheKey, items);
+        await CacheService.cacheFullData(category, source, items);
+        return items;
       }
-
-      const response = await fetch(`${config.basePath}/${filename}`);
-      if (!response.ok) throw new Error(`Failed to load ${filename}`);
-      
-      const fileData: DataFile = await response.json();
-      const items = fileData[config.dataKey] || [];
-      
-      // Cache the result in memory and persistently
-      this.dataCache.set(cacheKey, items);
-      await CacheService.cacheFullData(category, source, items);
-      return items;
     } catch (error) {
       // Only log errors that aren't expected fallback scenarios
       if (error instanceof Error && !error.message.includes('No file found containing')) {

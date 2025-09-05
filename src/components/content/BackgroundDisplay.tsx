@@ -2,14 +2,47 @@ import type { SearchResult } from '../../types';
 import BaseContentDisplay from './BaseContentDisplay';
 import ContentEntries from './ContentEntries';
 import { ProficiencyList, EquipmentList } from './shared';
+import { useState } from 'react';
+import SourceTabs from './shared/SourceTabs';
 
 interface BackgroundDisplayProps {
   result: SearchResult;
-  content: any;
+  content: { [source: string]: any } | any; // Support both old and new format
   onClose: () => void;
 }
 
 export default function BackgroundDisplay({ result, content, onClose }: BackgroundDisplayProps) {
+  const [currentContent, setCurrentContent] = useState<any>(null);
+
+  // Determine if we have multi-source content or single content
+  const isMultiSource = content && typeof content === 'object' && 
+    !content.name && // If it has a name, it's probably a single object
+    Object.keys(content).some(key => content[key]?.name); // Check if values look like objects
+
+  const handleSourceChange = (_source: string, sourceContent: any) => {
+    setCurrentContent(sourceContent);
+  };
+
+  // If it's single source content, use it directly
+  const actualContent = isMultiSource ? currentContent : content;
+
+  if (isMultiSource && !currentContent) {
+    // Show source tabs and wait for selection
+    return (
+      <BaseContentDisplay result={result} content={null} onClose={onClose}>
+        <SourceTabs 
+          sources={content}
+          availableSources={result.availableSources}
+          onSourceChange={handleSourceChange}
+          primarySource={result.source}
+        />
+        <div style={{ textAlign: 'center', padding: '2rem', color: '#6c757d' }}>
+          Select a source above to view content
+        </div>
+      </BaseContentDisplay>
+    );
+  }
+
   const formatTraits = (traits: any[]): React.ReactNode => {
     if (!traits || traits.length === 0) return null;
 
@@ -26,10 +59,18 @@ export default function BackgroundDisplay({ result, content, onClose }: Backgrou
   };
 
   return (
-    <BaseContentDisplay result={result} content={content} onClose={onClose}>
+    <BaseContentDisplay result={result} content={actualContent} onClose={onClose}>
+      {isMultiSource && (
+        <SourceTabs 
+          sources={content}
+          availableSources={result.availableSources}
+          onSourceChange={handleSourceChange}
+          primarySource={result.source}
+        />
+      )}
       <div className="background-display">
         {/* Proficiencies */}
-        {(content.skillProficiencies || content.languageProficiencies || content.toolProficiencies) && (
+        {(actualContent.skillProficiencies || actualContent.languageProficiencies || actualContent.toolProficiencies) && (
           <div className="background-proficiencies" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -45,27 +86,27 @@ export default function BackgroundDisplay({ result, content, onClose }: Backgrou
               Proficiencies
             </h4>
             <ProficiencyList
-              skills={content.skillProficiencies}
-              languages={content.languageProficiencies}
-              tools={content.toolProficiencies}
+              skills={actualContent.skillProficiencies}
+              languages={actualContent.languageProficiencies}
+              tools={actualContent.toolProficiencies}
             />
           </div>
         )}
 
         {/* Starting Equipment */}
-        {content.startingEquipment && (
-          <EquipmentList equipment={content.startingEquipment} />
+        {actualContent.startingEquipment && (
+          <EquipmentList equipment={actualContent.startingEquipment} />
         )}
 
         {/* Background Description */}
-        {content.entries && (
+        {actualContent.entries && (
           <div className="background-description" style={{ marginBottom: '1.5rem' }}>
-            <ContentEntries entries={content.entries} />
+            <ContentEntries entries={actualContent.entries} />
           </div>
         )}
 
         {/* Personality Traits */}
-        {content.personality && content.personality.length > 0 && (
+        {actualContent.personality && actualContent.personality.length > 0 && (
           <div className="personality-traits" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -80,12 +121,12 @@ export default function BackgroundDisplay({ result, content, onClose }: Backgrou
             }}>
               Suggested Personality Traits
             </h4>
-            {formatTraits(content.personality)}
+            {formatTraits(actualContent.personality)}
           </div>
         )}
 
         {/* Ideals */}
-        {content.ideals && content.ideals.length > 0 && (
+        {actualContent.ideals && actualContent.ideals.length > 0 && (
           <div className="ideals" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -100,12 +141,12 @@ export default function BackgroundDisplay({ result, content, onClose }: Backgrou
             }}>
               Suggested Ideals
             </h4>
-            {formatTraits(content.ideals)}
+            {formatTraits(actualContent.ideals)}
           </div>
         )}
 
         {/* Bonds */}
-        {content.bonds && content.bonds.length > 0 && (
+        {actualContent.bonds && actualContent.bonds.length > 0 && (
           <div className="bonds" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -120,12 +161,12 @@ export default function BackgroundDisplay({ result, content, onClose }: Backgrou
             }}>
               Suggested Bonds
             </h4>
-            {formatTraits(content.bonds)}
+            {formatTraits(actualContent.bonds)}
           </div>
         )}
 
         {/* Flaws */}
-        {content.flaws && content.flaws.length > 0 && (
+        {actualContent.flaws && actualContent.flaws.length > 0 && (
           <div className="flaws" style={{
             padding: '1rem',
             backgroundColor: '#ffebee',
@@ -139,7 +180,7 @@ export default function BackgroundDisplay({ result, content, onClose }: Backgrou
             }}>
               Suggested Flaws
             </h4>
-            {formatTraits(content.flaws)}
+            {formatTraits(actualContent.flaws)}
           </div>
         )}
       </div>

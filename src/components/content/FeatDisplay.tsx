@@ -3,14 +3,47 @@ import BaseContentDisplay from './BaseContentDisplay';
 import ContentEntries from './ContentEntries';
 import DetailRow from '../basic/DetailRow';
 import { PrerequisiteDisplay, ProficiencyList } from './shared';
+import { useState } from 'react';
+import SourceTabs from './shared/SourceTabs';
 
 interface FeatDisplayProps {
   result: SearchResult;
-  content: any;
+  content: { [source: string]: any } | any; // Support both old and new format
   onClose: () => void;
 }
 
 export default function FeatDisplay({ result, content, onClose }: FeatDisplayProps) {
+  const [currentContent, setCurrentContent] = useState<any>(null);
+
+  // Determine if we have multi-source content or single content
+  const isMultiSource = content && typeof content === 'object' && 
+    !content.name && // If it has a name, it's probably a single object
+    Object.keys(content).some(key => content[key]?.name); // Check if values look like objects
+
+  const handleSourceChange = (_source: string, sourceContent: any) => {
+    setCurrentContent(sourceContent);
+  };
+
+  // If it's single source content, use it directly
+  const actualContent = isMultiSource ? currentContent : content;
+
+  if (isMultiSource && !currentContent) {
+    // Show source tabs and wait for selection
+    return (
+      <BaseContentDisplay result={result} content={null} onClose={onClose}>
+        <SourceTabs 
+          sources={content}
+          availableSources={result.availableSources}
+          onSourceChange={handleSourceChange}
+          primarySource={result.source}
+        />
+        <div style={{ textAlign: 'center', padding: '2rem', color: '#6c757d' }}>
+          Select a source above to view content
+        </div>
+      </BaseContentDisplay>
+    );
+  }
+
   const formatAbilityIncrease = (ability: any[]): string => {
     return ability.map(ab => {
       const increases: string[] = [];
@@ -54,15 +87,23 @@ export default function FeatDisplay({ result, content, onClose }: FeatDisplayPro
   };
 
   return (
-    <BaseContentDisplay result={result} content={content} onClose={onClose}>
+    <BaseContentDisplay result={result} content={actualContent} onClose={onClose}>
+      {isMultiSource && (
+        <SourceTabs 
+          sources={content}
+          availableSources={result.availableSources}
+          onSourceChange={handleSourceChange}
+          primarySource={result.source}
+        />
+      )}
       <div className="feat-display">
         {/* Prerequisites */}
-        {content.prerequisite && (
-          <PrerequisiteDisplay prerequisite={content.prerequisite} />
+        {actualContent.prerequisite && (
+          <PrerequisiteDisplay prerequisite={actualContent.prerequisite} />
         )}
 
         {/* Ability Score Increases */}
-        {content.ability && content.ability.length > 0 && (
+        {actualContent.ability && actualContent.ability.length > 0 && (
           <div className="ability-increases" style={{
             marginTop: '1.5rem',
             padding: '1rem',
@@ -77,12 +118,12 @@ export default function FeatDisplay({ result, content, onClose }: FeatDisplayPro
             }}>
               Ability Score Improvement
             </h4>
-            <DetailRow name="Increase" value={formatAbilityIncrease(content.ability)} />
+            <DetailRow name="Increase" value={formatAbilityIncrease(actualContent.ability)} />
           </div>
         )}
 
         {/* Proficiencies Granted */}
-        {(content.skillProficiencies || content.languageProficiencies || content.toolProficiencies) && (
+        {(actualContent.skillProficiencies || actualContent.languageProficiencies || actualContent.toolProficiencies) && (
           <div className="feat-proficiencies" style={{
             marginTop: '1.5rem',
             padding: '1rem',
@@ -98,15 +139,15 @@ export default function FeatDisplay({ result, content, onClose }: FeatDisplayPro
               Proficiencies Granted
             </h4>
             <ProficiencyList
-              skills={content.skillProficiencies}
-              languages={content.languageProficiencies}
-              tools={content.toolProficiencies}
+              skills={actualContent.skillProficiencies}
+              languages={actualContent.languageProficiencies}
+              tools={actualContent.toolProficiencies}
             />
           </div>
         )}
 
         {/* Additional Spells */}
-        {content.additionalSpells && content.additionalSpells.length > 0 && (
+        {actualContent.additionalSpells && actualContent.additionalSpells.length > 0 && (
           <div className="additional-spells" style={{
             marginTop: '1.5rem',
             padding: '1rem',
@@ -121,17 +162,17 @@ export default function FeatDisplay({ result, content, onClose }: FeatDisplayPro
             }}>
               Spells Granted
             </h4>
-            {formatAdditionalSpells(content.additionalSpells)}
-            {content.additionalSpells[0]?.ability && (
+            {formatAdditionalSpells(actualContent.additionalSpells)}
+            {actualContent.additionalSpells[0]?.ability && (
               <div style={{ marginTop: '0.5rem', fontSize: '0.9rem', fontStyle: 'italic' }}>
-                <strong>Spellcasting Ability:</strong> {content.additionalSpells[0].ability.toUpperCase()}
+                <strong>Spellcasting Ability:</strong> {actualContent.additionalSpells[0].ability.toUpperCase()}
               </div>
             )}
           </div>
         )}
 
         {/* Feat Description */}
-        {content.entries && (
+        {actualContent.entries && (
           <div className="feat-description" style={{ marginTop: '1.5rem' }}>
             <h4 style={{ 
               color: '#495057', 
@@ -141,12 +182,12 @@ export default function FeatDisplay({ result, content, onClose }: FeatDisplayPro
             }}>
               Description
             </h4>
-            <ContentEntries entries={content.entries} />
+            <ContentEntries entries={actualContent.entries} />
           </div>
         )}
 
         {/* Feat Options/Variants */}
-        {content.feats && content.feats.length > 0 && (
+        {actualContent.feats && actualContent.feats.length > 0 && (
           <div className="feat-options" style={{
             marginTop: '1.5rem',
             padding: '1rem',
@@ -161,11 +202,11 @@ export default function FeatDisplay({ result, content, onClose }: FeatDisplayPro
             }}>
               Feat Options
             </h4>
-            {content.feats.map((feat: any, index: number) => (
+            {actualContent.feats.map((feat: any, index: number) => (
               <div key={index} style={{ 
                 marginBottom: '1rem',
                 paddingBottom: '1rem',
-                borderBottom: index < content.feats.length - 1 ? '1px solid #dee2e6' : 'none'
+                borderBottom: index < actualContent.feats.length - 1 ? '1px solid #dee2e6' : 'none'
               }}>
                 <h5 style={{ 
                   margin: '0 0 0.5rem 0',

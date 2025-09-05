@@ -3,14 +3,47 @@ import BaseContentDisplay from './BaseContentDisplay';
 import ContentEntries from './ContentEntries';
 import DetailRow from '../basic/DetailRow';
 import { SpeedDisplay, ProficiencyList } from './shared';
+import { useState } from 'react';
+import SourceTabs from './shared/SourceTabs';
 
 interface RaceDisplayProps {
   result: SearchResult;
-  content: any;
+  content: { [source: string]: any } | any; // Support both old and new format
   onClose: () => void;
 }
 
 export default function RaceDisplay({ result, content, onClose }: RaceDisplayProps) {
+  const [currentContent, setCurrentContent] = useState<any>(null);
+
+  // Determine if we have multi-source content or single content
+  const isMultiSource = content && typeof content === 'object' && 
+    !content.name && // If it has a name, it's probably a single object
+    Object.keys(content).some(key => content[key]?.name); // Check if values look like objects
+
+  const handleSourceChange = (_source: string, sourceContent: any) => {
+    setCurrentContent(sourceContent);
+  };
+
+  // If it's single source content, use it directly
+  const actualContent = isMultiSource ? currentContent : content;
+
+  if (isMultiSource && !currentContent) {
+    // Show source tabs and wait for selection
+    return (
+      <BaseContentDisplay result={result} content={null} onClose={onClose}>
+        <SourceTabs 
+          sources={content}
+          availableSources={result.availableSources}
+          onSourceChange={handleSourceChange}
+          primarySource={result.source}
+        />
+        <div style={{ textAlign: 'center', padding: '2rem', color: '#6c757d' }}>
+          Select a source above to view content
+        </div>
+      </BaseContentDisplay>
+    );
+  }
+
   const formatSize = (size: string[] | string): string => {
     if (Array.isArray(size)) return size.join(', ');
     const sizeMap: { [key: string]: string } = {
@@ -163,7 +196,15 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
   };
 
   return (
-    <BaseContentDisplay result={result} content={content} onClose={onClose}>
+    <BaseContentDisplay result={result} content={actualContent} onClose={onClose}>
+      {isMultiSource && (
+        <SourceTabs 
+          sources={content}
+          availableSources={result.availableSources}
+          onSourceChange={handleSourceChange}
+          primarySource={result.source}
+        />
+      )}
       <div className="race-display">
         {/* Basic Race Information */}
         <div className="race-basic-info" style={{
@@ -172,12 +213,12 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
           gap: '1rem',
           marginBottom: '1.5rem'
         }}>
-          <DetailRow name="Size" value={formatSize(content.size)} />
-          {content.age && <DetailRow name="Age" value={formatAge(content.age)} />}
+          <DetailRow name="Size" value={formatSize(actualContent.size)} />
+          {actualContent.age && <DetailRow name="Age" value={formatAge(actualContent.age)} />}
         </div>
 
         {/* Physical Characteristics */}
-        {(content.height || content.weight) && (
+        {(actualContent.height || actualContent.weight) && (
           <div className="physical-characteristics" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -191,16 +232,16 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
             }}>
               Physical Characteristics
             </h4>
-            {content.height && <DetailRow name="Height" value={formatHeight(content.height)} />}
-            {content.weight && <DetailRow name="Weight" value={formatWeight(content.weight)} />}
+            {actualContent.height && <DetailRow name="Height" value={formatHeight(actualContent.height)} />}
+            {actualContent.weight && <DetailRow name="Weight" value={formatWeight(actualContent.weight)} />}
           </div>
         )}
 
         {/* Speed */}
-        {content.speed && <SpeedDisplay speed={content.speed} />}
+        {actualContent.speed && <SpeedDisplay speed={actualContent.speed} />}
 
         {/* Ability Score Increases */}
-        {content.ability && (
+        {actualContent.ability && (
           <div className="ability-increases" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -215,12 +256,12 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
             }}>
               Ability Score Increase
             </h4>
-            {formatAbilityScoreIncrease(content.ability)}
+            {formatAbilityScoreIncrease(actualContent.ability)}
           </div>
         )}
 
         {/* Proficiencies */}
-        {(content.skillProficiencies || content.languageProficiencies || content.toolProficiencies || content.weaponProficiencies || content.armorProficiencies) && (
+        {(actualContent.skillProficiencies || actualContent.languageProficiencies || actualContent.toolProficiencies || actualContent.weaponProficiencies || actualContent.armorProficiencies) && (
           <div className="race-proficiencies" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -236,17 +277,17 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
               Proficiencies
             </h4>
             <ProficiencyList
-              skills={content.skillProficiencies}
-              languages={content.languageProficiencies}
-              tools={content.toolProficiencies}
-              weapons={content.weaponProficiencies}
-              armor={content.armorProficiencies}
+              skills={actualContent.skillProficiencies}
+              languages={actualContent.languageProficiencies}
+              tools={actualContent.toolProficiencies}
+              weapons={actualContent.weaponProficiencies}
+              armor={actualContent.armorProficiencies}
             />
           </div>
         )}
 
         {/* Damage Resistances & Immunities */}
-        {(content.resist || content.immune || content.vulnerable) && (
+        {(actualContent.resist || actualContent.immune || actualContent.vulnerable) && (
           <div className="resistances" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -261,14 +302,14 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
             }}>
               Damage Resistances & Immunities
             </h4>
-            {content.resist && <DetailRow name="Resistances" value={formatResistances(content.resist)} />}
-            {content.immune && <DetailRow name="Immunities" value={formatResistances(content.immune)} />}
-            {content.vulnerable && <DetailRow name="Vulnerabilities" value={formatResistances(content.vulnerable)} />}
+            {actualContent.resist && <DetailRow name="Resistances" value={formatResistances(actualContent.resist)} />}
+            {actualContent.immune && <DetailRow name="Immunities" value={formatResistances(actualContent.immune)} />}
+            {actualContent.vulnerable && <DetailRow name="Vulnerabilities" value={formatResistances(actualContent.vulnerable)} />}
           </div>
         )}
 
         {/* Trait Tags */}
-        {content.traitTags && content.traitTags.length > 0 && (
+        {actualContent.traitTags && actualContent.traitTags.length > 0 && (
           <div className="trait-tags" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -283,12 +324,12 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
             }}>
               Traits
             </h4>
-            {formatTraitTags(content.traitTags)}
+            {formatTraitTags(actualContent.traitTags)}
           </div>
         )}
 
         {/* Racial Traits */}
-        {content.entries && (
+        {actualContent.entries && (
           <div className="racial-traits" style={{ marginBottom: '1.5rem' }}>
             <h4 style={{ 
               color: '#495057', 
@@ -298,12 +339,12 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
             }}>
               Racial Traits
             </h4>
-            {formatRacialTraits(content.entries)}
+            {formatRacialTraits(actualContent.entries)}
           </div>
         )}
 
         {/* Subraces */}
-        {content.subrace && content.subrace.length > 0 && (
+        {actualContent.subrace && actualContent.subrace.length > 0 && (
           <div className="subraces" style={{
             padding: '1rem',
             backgroundColor: '#e8f5e8',
@@ -317,7 +358,7 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
             }}>
               Subraces
             </h4>
-            {formatSubraces(content.subrace)}
+            {formatSubraces(actualContent.subrace)}
           </div>
         )}
       </div>

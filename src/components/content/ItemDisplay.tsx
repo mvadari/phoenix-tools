@@ -1,15 +1,47 @@
+import { useState } from 'react';
 import type { SearchResult } from '../../types';
 import BaseContentDisplay from './BaseContentDisplay';
 import ContentEntries from './ContentEntries';
 import DetailRow from '../basic/DetailRow';
+import SourceTabs from './shared/SourceTabs';
 
 interface ItemDisplayProps {
   result: SearchResult;
-  content: any;
+  content: { [source: string]: any } | any; // Support both old and new format
   onClose: () => void;
 }
 
 export default function ItemDisplay({ result, content, onClose }: ItemDisplayProps) {
+  const [currentContent, setCurrentContent] = useState<any>(null);
+
+  // Determine if we have multi-source content or single content
+  const isMultiSource = content && typeof content === 'object' && 
+    !content.name && // If it has a name, it's probably a single item object
+    Object.keys(content).some(key => content[key]?.name); // Check if values look like item objects
+
+  const handleSourceChange = (_source: string, sourceContent: any) => {
+    setCurrentContent(sourceContent);
+  };
+
+  // If it's single source content, use it directly
+  const itemContent = isMultiSource ? currentContent : content;
+  
+  if (isMultiSource && !currentContent) {
+    // Show source tabs and wait for selection
+    return (
+      <BaseContentDisplay result={result} content={null} onClose={onClose}>
+        <SourceTabs 
+          sources={content}
+          availableSources={result.availableSources}
+          onSourceChange={handleSourceChange}
+          primarySource={result.source}
+        />
+        <div style={{ textAlign: 'center', padding: '2rem', color: '#6c757d' }}>
+          Select a source above to view content
+        </div>
+      </BaseContentDisplay>
+    );
+  }
   const getRarityColor = (rarity: string): string => {
     const colors: { [key: string]: string } = {
       'common': '#6c757d',
@@ -64,7 +96,15 @@ export default function ItemDisplay({ result, content, onClose }: ItemDisplayPro
   };
 
   return (
-    <BaseContentDisplay result={result} content={content} onClose={onClose}>
+    <BaseContentDisplay result={result} content={itemContent} onClose={onClose}>
+      {isMultiSource && (
+        <SourceTabs 
+          sources={content}
+          availableSources={result.availableSources}
+          onSourceChange={handleSourceChange}
+          primarySource={result.source}
+        />
+      )}
       <div className="item-display">
         {/* Item Type and Rarity */}
         <div className="item-header" style={{
@@ -77,23 +117,23 @@ export default function ItemDisplay({ result, content, onClose }: ItemDisplayPro
           borderRadius: '6px'
         }}>
           <div>
-            {content.type && (
+            {itemContent.type && (
               <div style={{ fontSize: '1.1rem', fontWeight: '500', color: '#495057' }}>
-                {content.typeAlt || content.type}
+                {itemContent.typeAlt || itemContent.type}
               </div>
             )}
           </div>
-          {content.rarity && (
+          {itemContent.rarity && (
             <div style={{
               padding: '0.25rem 1rem',
-              backgroundColor: getRarityColor(content.rarity) + '20',
-              color: getRarityColor(content.rarity),
+              backgroundColor: getRarityColor(itemContent.rarity) + '20',
+              color: getRarityColor(itemContent.rarity),
               borderRadius: '16px',
               fontSize: '0.9rem',
               fontWeight: 'bold',
               textTransform: 'capitalize'
             }}>
-              {content.rarity}
+              {itemContent.rarity}
             </div>
           )}
         </div>
@@ -105,19 +145,19 @@ export default function ItemDisplay({ result, content, onClose }: ItemDisplayPro
           gap: '1rem',
           marginBottom: '1.5rem'
         }}>
-          {content.reqAttune && (
-            <DetailRow name="Attunement" value={formatAttunement(content.reqAttune)} />
+          {itemContent.reqAttune && (
+            <DetailRow name="Attunement" value={formatAttunement(itemContent.reqAttune)} />
           )}
-          {content.weight !== undefined && (
-            <DetailRow name="Weight" value={formatWeight(content.weight)} />
+          {itemContent.weight !== undefined && (
+            <DetailRow name="Weight" value={formatWeight(itemContent.weight)} />
           )}
-          {content.value && (
-            <DetailRow name="Value" value={formatValue(content.value)} />
+          {itemContent.value && (
+            <DetailRow name="Value" value={formatValue(itemContent.value)} />
           )}
         </div>
 
         {/* Magic Item Properties */}
-        {(content.bonusSpellAttack || content.bonusSpellSaveDc || content.charges) && (
+        {(itemContent.bonusSpellAttack || itemContent.bonusSpellSaveDc || itemContent.charges) && (
           <div className="magic-properties" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -132,20 +172,20 @@ export default function ItemDisplay({ result, content, onClose }: ItemDisplayPro
             }}>
               Magic Properties
             </h4>
-            {content.bonusSpellAttack && (
-              <DetailRow name="Spell Attack Bonus" value={content.bonusSpellAttack} />
+            {itemContent.bonusSpellAttack && (
+              <DetailRow name="Spell Attack Bonus" value={itemContent.bonusSpellAttack} />
             )}
-            {content.bonusSpellSaveDc && (
-              <DetailRow name="Spell Save DC Bonus" value={content.bonusSpellSaveDc} />
+            {itemContent.bonusSpellSaveDc && (
+              <DetailRow name="Spell Save DC Bonus" value={itemContent.bonusSpellSaveDc} />
             )}
-            {content.charges && (
-              <DetailRow name="Charges" value={content.charges} />
+            {itemContent.charges && (
+              <DetailRow name="Charges" value={itemContent.charges} />
             )}
           </div>
         )}
 
         {/* Weapon Properties */}
-        {(content.weapon || content.dmg1 || content.range || content.property) && (
+        {(itemContent.weapon || itemContent.dmg1 || itemContent.range || itemContent.property) && (
           <div className="weapon-properties" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -160,29 +200,29 @@ export default function ItemDisplay({ result, content, onClose }: ItemDisplayPro
             }}>
               Weapon Properties
             </h4>
-            {content.dmg1 && (
+            {itemContent.dmg1 && (
               <DetailRow 
                 name="Damage" 
-                value={`${content.dmg1} ${content.dmgType || ''}`} 
+                value={`${itemContent.dmg1} ${itemContent.dmgType || ''}`} 
               />
             )}
-            {content.dmg2 && (
+            {itemContent.dmg2 && (
               <DetailRow 
                 name="Two-Handed Damage" 
-                value={`${content.dmg2} ${content.dmgType || ''}`} 
+                value={`${itemContent.dmg2} ${itemContent.dmgType || ''}`} 
               />
             )}
-            {content.range && (
-              <DetailRow name="Range" value={content.range} />
+            {itemContent.range && (
+              <DetailRow name="Range" value={itemContent.range} />
             )}
-            {content.property && (
-              <DetailRow name="Properties" value={formatProperties(content.property)} />
+            {itemContent.property && (
+              <DetailRow name="Properties" value={formatProperties(itemContent.property)} />
             )}
           </div>
         )}
 
         {/* Armor Properties */}
-        {(content.armor || content.ac || content.strength || content.stealth) && (
+        {(itemContent.armor || itemContent.ac || itemContent.strength || itemContent.stealth) && (
           <div className="armor-properties" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -197,27 +237,27 @@ export default function ItemDisplay({ result, content, onClose }: ItemDisplayPro
             }}>
               Armor Properties
             </h4>
-            {content.ac && (
-              <DetailRow name="Armor Class" value={content.ac} />
+            {itemContent.ac && (
+              <DetailRow name="Armor Class" value={itemContent.ac} />
             )}
-            {content.strength && (
-              <DetailRow name="Strength Requirement" value={content.strength} />
+            {itemContent.strength && (
+              <DetailRow name="Strength Requirement" value={itemContent.strength} />
             )}
-            {content.stealth && (
+            {itemContent.stealth && (
               <DetailRow name="Stealth" value="Disadvantage" />
             )}
           </div>
         )}
 
         {/* Item Description */}
-        {content.entries && (
+        {itemContent.entries && (
           <div className="item-description" style={{ marginBottom: '1.5rem' }}>
-            <ContentEntries entries={content.entries} />
+            <ContentEntries entries={itemContent.entries} />
           </div>
         )}
 
         {/* Additional Entries */}
-        {content.additionalEntries && (
+        {itemContent.additionalEntries && (
           <div className="additional-entries" style={{ 
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -232,12 +272,12 @@ export default function ItemDisplay({ result, content, onClose }: ItemDisplayPro
             }}>
               Additional Information
             </h4>
-            <ContentEntries entries={content.additionalEntries} />
+            <ContentEntries entries={itemContent.additionalEntries} />
           </div>
         )}
 
         {/* Item Variants */}
-        {content.variants && content.variants.length > 0 && (
+        {itemContent.variants && itemContent.variants.length > 0 && (
           <div className="item-variants" style={{
             padding: '1rem',
             backgroundColor: '#e8f5e8',
@@ -251,7 +291,7 @@ export default function ItemDisplay({ result, content, onClose }: ItemDisplayPro
             }}>
               Variants
             </h4>
-            {content.variants.map((variant: any, index: number) => (
+            {itemContent.variants.map((variant: any, index: number) => (
               <div key={index} style={{ 
                 marginBottom: '1rem',
                 paddingLeft: '1rem',

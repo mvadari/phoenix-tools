@@ -3,16 +3,17 @@ import { DataService } from '../services';
 import type { SearchResult } from '../types';
 
 interface ContentState {
-  data: any | null;
+  data: { [source: string]: any } | null; // Multiple sources per item
   loading: boolean;
   error: string | null;
+  availableSources?: string[]; // Track which sources have this item
 }
 
 export function useContentLoader() {
   const [contentStates, setContentStates] = useState<Map<string, ContentState>>(new Map());
 
   const loadContent = useCallback(async (result: SearchResult): Promise<ContentState> => {
-    const key = `${result.category}-${result.source}-${result.name}`;
+    const key = `${result.category}-${result.name}`; // Remove source from cache key
     
     // Check if already loading or loaded and return early if so
     let shouldProceed = true;
@@ -35,100 +36,86 @@ export function useContentLoader() {
     }
 
     try {
-      // First try to load from the specified source
-      let fullData: any[] = [];
-      let foundItem: any = null;
+      // Load index to find all sources that contain this item
+      const indexItems = await DataService.loadIndex(result.category);
       
-      try {
-        fullData = await DataService.loadFullData(result.category, result.source);
-        foundItem = fullData.find(item => {
-          // Exact match
-          if (item.name === result.name || item.name.toLowerCase() === result.name.toLowerCase()) {
-            return true;
-          }
-          
-          // Handle URL slug matches - convert both to comparable formats
-          const itemSlug = item.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-          const resultSlug = result.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-          
-          return itemSlug === resultSlug;
-        });
-      } catch (sourceError) {
-        console.warn(`Failed to load from source ${result.source}, trying to find item across all sources`);
-      }
-
-      // If not found in the specified source, try to find it by searching through the index
-      if (!foundItem) {
-        // Load the full index to find the correct source
-        const indexItems = await DataService.loadIndex(result.category);
-        const indexItem = indexItems.find(item => {
-          // Exact match
-          if (item.name === result.name || item.name.toLowerCase() === result.name.toLowerCase()) {
-            return true;
-          }
-          
-          // Handle URL slug matches
-          const itemSlug = item.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-          const resultSlug = result.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-          
-          return itemSlug === resultSlug;
-        });
+      const matchingIndexItems = indexItems.filter(item => {
+        // Exact match
+        if (item.name === result.name || item.name.toLowerCase() === result.name.toLowerCase()) {
+          return true;
+        }
         
-        if (indexItem) {
-          // Try loading from the correct source found in index
-          try {
-            fullData = await DataService.loadFullData(result.category, indexItem.source);
-            foundItem = fullData.find(item => {
-              // Exact match
-              if (item.name === result.name || item.name.toLowerCase() === result.name.toLowerCase()) {
-                return true;
-              }
-              
-              // Handle URL slug matches
-              const itemSlug = item.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-              const resultSlug = result.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-              
-              return itemSlug === resultSlug;
-            });
-          } catch (indexSourceError) {
-            console.warn(`Failed to load from index source ${indexItem.source}`);
-          }
-        }
-      }
+        // Handle URL slug matches by normalizing both names the same way createSlug does
+        const normalizeForSlugMatch = (text: string): string => {
+          return text
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, '') // Remove special characters except hyphens (same as createSlug)
+            .replace(/\s+/g, '-') // Replace spaces with hyphens
+            .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
+            .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
+        };
+        
+        const itemNormalized = normalizeForSlugMatch(item.name);
+        const resultNormalized = normalizeForSlugMatch(result.name);
+        
+        
+        return itemNormalized === resultNormalized;
+      });
 
-      // If still not found, try common default sources
-      if (!foundItem) {
-        const defaultSources = ['PHB', 'MM', 'DMG', 'XGTE', 'TCE'];
-        for (const defaultSource of defaultSources) {
-          try {
-            fullData = await DataService.loadFullData(result.category, defaultSource);
-            foundItem = fullData.find(item => {
-              // Exact match
-              if (item.name === result.name || item.name.toLowerCase() === result.name.toLowerCase()) {
-                return true;
-              }
-              
-              // Handle URL slug matches
-              const itemSlug = item.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-              const resultSlug = result.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-              
-              return itemSlug === resultSlug;
-            });
-            if (foundItem) {
-              break;
-            }
-          } catch (error) {
-            // Continue to next default source
-            continue;
-          }
-        }
-      }
-
-      if (!foundItem) {
+      if (matchingIndexItems.length === 0) {
         throw new Error(`Item "${result.name}" not found in any ${result.category} data sources`);
       }
+      
 
-      const successState: ContentState = { data: foundItem, loading: false, error: null };
+      // Get unique sources that contain this item
+      const availableSources = [...new Set(matchingIndexItems.map(item => item.source))];
+      
+      // Load full data from all sources that contain this item
+      const allSourceData: { [source: string]: any } = {};
+      
+      for (const source of availableSources) {
+        try {
+          const fullData = await DataService.loadFullData(result.category, source);
+          const foundItem = fullData.find(item => {
+            // Exact match
+            if (item.name === result.name || item.name.toLowerCase() === result.name.toLowerCase()) {
+              return true;
+            }
+            
+            // Handle URL slug matches using same normalization as above
+            const normalizeForSlugMatch = (text: string): string => {
+              return text
+                .toLowerCase()
+                .replace(/[^\w\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-|-$/g, '');
+            };
+            
+            const itemNormalized = normalizeForSlugMatch(item.name);
+            const resultNormalized = normalizeForSlugMatch(result.name);
+            
+            return itemNormalized === resultNormalized;
+          });
+          
+          if (foundItem) {
+            allSourceData[source] = foundItem;
+          }
+        } catch (sourceError) {
+          console.warn(`Failed to load from source ${source}:`, sourceError);
+        }
+      }
+
+      if (Object.keys(allSourceData).length === 0) {
+        throw new Error(`Item "${result.name}" could not be loaded from any source`);
+      }
+
+      const successState: ContentState = { 
+        data: allSourceData, 
+        loading: false, 
+        error: null,
+        availableSources
+      };
       setContentStates(prev => new Map(prev).set(key, successState));
       
       return successState;
@@ -142,7 +129,7 @@ export function useContentLoader() {
   }, []);
 
   const getContentState = useCallback((result: SearchResult): ContentState | null => {
-    const key = `${result.category}-${result.source}-${result.name}`;
+    const key = `${result.category}-${result.name}`; // Remove source from cache key
     return contentStates.get(key) || null;
   }, [contentStates]);
 

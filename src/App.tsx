@@ -76,6 +76,7 @@ function App() {
         }}>
           <Routes>
             <Route path="/" element={<SearchPage />} />
+            <Route path="/:category/:slug" element={<ContentPage />} />
             <Route path="/:category/:source/:slug" element={<ContentPage />} />
           </Routes>
         </main>

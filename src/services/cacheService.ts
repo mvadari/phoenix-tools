@@ -14,7 +14,7 @@ interface CachedData<T = any> {
 }
 
 class CacheServiceClass {
-  private readonly CACHE_VERSION = '1.1.0';
+  private readonly CACHE_VERSION = '2.0.0';
   private readonly CACHE_EXPIRY_MS = 24 * 60 * 60 * 1000; // 24 hours
   
   private indexStore: LocalForage;
@@ -163,6 +163,11 @@ class CacheServiceClass {
       this.dataStore.clear(),
       this.metadataStore.clear()
     ]);
+  }
+
+  async clearFullDataCache(category: DataCategory, source: string): Promise<void> {
+    const key = `${category}-${source}`;
+    await this.dataStore.removeItem(key);
   }
 
   async getCacheStats(): Promise<{

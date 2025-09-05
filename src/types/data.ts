@@ -187,6 +187,7 @@ export interface SearchIndexItem {
 export interface SearchResult extends SearchIndexItem {
   score: number;
   matches: string[];
+  availableSources?: string[]; // Track all sources that contain this item
 }
 
 export type DataCategory = 

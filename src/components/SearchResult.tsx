@@ -23,7 +23,16 @@ export default function SearchResult({ result, onSelect }: SearchResultProps) {
   };
 
   const formatMetadata = (): string[] => {
-    const meta: string[] = [result.source];
+    // Show primary source and indicate if there are additional sources
+    const primarySource = result.source;
+    const additionalSources = result.availableSources?.filter(s => s !== primarySource) || [];
+    
+    let sourceText = primarySource;
+    if (additionalSources.length > 0) {
+      sourceText += ` (+${additionalSources.length} more)`;
+    }
+    
+    const meta: string[] = [sourceText];
     
     if (result.page) {
       meta.push(`p. ${result.page}`);
@@ -140,6 +149,16 @@ export default function SearchResult({ result, onSelect }: SearchResultProps) {
       <div className="result-meta">
         {formatMetadata().join(' • ')}
       </div>
+
+      {result.availableSources && result.availableSources.length > 1 && (
+        <div className="available-sources" style={{
+          fontSize: '0.75rem',
+          color: '#6c757d',
+          marginTop: '2px'
+        }}>
+          Available in: {result.availableSources.join(', ')}
+        </div>
+      )}
       
       {result.matches && result.matches.length > 0 && (
         <div className="result-matches" style={{

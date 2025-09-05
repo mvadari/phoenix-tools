@@ -64,25 +64,76 @@ export default function SearchPage() {
     }, {} as Record<DataCategory, number>);
   }, [indexItems, results, query]);
 
-  // Convert index items to display format for showing all items
-  const allItemsForDisplay = React.useMemo(() => {
-    if (!selectedCategory) {
-      // Show all items when no category selected
-      return indexItems.map(item => ({
+  // Deduplicate function (same logic as SimpleSearchService)
+  const deduplicateIndexItems = (items: typeof indexItems): SearchResultType[] => {
+    const resultMap = new Map<string, SearchResultType>();
+    
+    // Source priority (PHB is highest priority, then official books, then others)
+    const getSourcePriority = (source: string): number => {
+      const priorities: { [key: string]: number } = {
+        'PHB': 100,
+        'MM': 90,
+        'DMG': 90,
+        'XGTE': 80,
+        'TCE': 80,
+        'VGM': 70,
+        'MTF': 70,
+        'SCAG': 60,
+        'FTOD': 50
+      };
+      return priorities[source] || 10; // Default low priority for unknown sources
+    };
+
+    for (const item of items) {
+      const key = `${item.category}:${item.name.toLowerCase()}`;
+      const existing = resultMap.get(key);
+      
+      const searchResult: SearchResultType = {
         ...item,
         score: 1, // Default score for non-search display
         matches: []
-      } as SearchResultType));
-    } else {
-      // Filter by selected category
-      return indexItems
-        .filter(item => item.category === selectedCategory)
-        .map(item => ({
-          ...item,
-          score: 1,
-          matches: []
-        } as SearchResultType));
+      };
+      
+      if (!existing) {
+        // First occurrence of this item
+        const enhancedResult = {
+          ...searchResult,
+          availableSources: [item.source] // Track all sources
+        };
+        resultMap.set(key, enhancedResult);
+      } else {
+        // Duplicate found - merge sources and pick best result
+        const existingPriority = getSourcePriority(existing.source);
+        const newPriority = getSourcePriority(item.source);
+        
+        // Add this source to the available sources list
+        if (!existing.availableSources) existing.availableSources = [existing.source];
+        if (!existing.availableSources.includes(item.source)) {
+          existing.availableSources.push(item.source);
+        }
+        
+        // Keep the result with higher priority source, or higher score if same priority
+        if (newPriority > existingPriority) {
+          resultMap.set(key, {
+            ...searchResult,
+            availableSources: existing.availableSources
+          });
+        }
+      }
     }
+    
+    // Convert map back to array and sort by name
+    return Array.from(resultMap.values())
+      .sort((a, b) => a.name.localeCompare(b.name));
+  };
+
+  // Convert index items to display format for showing all items
+  const allItemsForDisplay = React.useMemo(() => {
+    const itemsToProcess = selectedCategory ? 
+      indexItems.filter(item => item.category === selectedCategory) : 
+      indexItems;
+    
+    return deduplicateIndexItems(itemsToProcess);
   }, [indexItems, selectedCategory]);
 
   if (!initialized) {

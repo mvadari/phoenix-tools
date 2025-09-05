@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import type { SearchResult } from '../../types';
 import BaseContentDisplay from './BaseContentDisplay';
 import ContentEntries from './ContentEntries';
 import DetailRow from '../basic/DetailRow';
+import SourceTabs from './shared/SourceTabs';
 import { 
   AbilityScores, 
   SpeedDisplay, 
@@ -14,11 +16,41 @@ import {
 
 interface MonsterDisplayProps {
   result: SearchResult;
-  content: any;
+  content: { [source: string]: any } | any; // Support both old and new format
   onClose: () => void;
 }
 
 export default function MonsterDisplay({ result, content, onClose }: MonsterDisplayProps) {
+  const [currentContent, setCurrentContent] = useState<any>(null);
+
+  // Determine if we have multi-source content or single content
+  const isMultiSource = content && typeof content === 'object' && 
+    !content.name && // If it has a name, it's probably a single monster object
+    Object.keys(content).some(key => content[key]?.name); // Check if values look like monster objects
+
+  const handleSourceChange = (_source: string, sourceContent: any) => {
+    setCurrentContent(sourceContent);
+  };
+
+  // If it's single source content, use it directly
+  const monsterContent = isMultiSource ? currentContent : content;
+  
+  if (isMultiSource && !currentContent) {
+    // Show source tabs and wait for selection
+    return (
+      <BaseContentDisplay result={result} content={null} onClose={onClose}>
+        <SourceTabs 
+          sources={content}
+          availableSources={result.availableSources}
+          onSourceChange={handleSourceChange}
+          primarySource={result.source}
+        />
+        <div style={{ textAlign: 'center', padding: '2rem', color: '#6c757d' }}>
+          Select a source above to view content
+        </div>
+      </BaseContentDisplay>
+    );
+  }
   const formatSize = (size: string[] | string): string => {
     if (Array.isArray(size)) return size.join(', ');
     const sizeMap: { [key: string]: string } = {
@@ -59,7 +91,15 @@ export default function MonsterDisplay({ result, content, onClose }: MonsterDisp
   };
 
   return (
-    <BaseContentDisplay result={result} content={content} onClose={onClose}>
+    <BaseContentDisplay result={result} content={monsterContent} onClose={onClose}>
+      {isMultiSource && (
+        <SourceTabs 
+          sources={content}
+          availableSources={result.availableSources}
+          onSourceChange={handleSourceChange}
+          primarySource={result.source}
+        />
+      )}
       <div className="monster-display">
         {/* Basic Information */}
         <div className="monster-basic-info" style={{
@@ -72,32 +112,32 @@ export default function MonsterDisplay({ result, content, onClose }: MonsterDisp
           textAlign: 'center',
           color: '#495057'
         }}>
-          {formatSize(content.size)} {formatType(content.type)}, {formatAlignment(content.alignment)}
+          {formatSize(monsterContent.size)} {formatType(monsterContent.type)}, {formatAlignment(monsterContent.alignment)}
         </div>
 
         {/* Core Stats */}
         <StatBlock 
-          ac={content.ac} 
-          hp={content.hp} 
-          cr={content.cr} 
-          xp={content.xp} 
+          ac={monsterContent.ac} 
+          hp={monsterContent.hp} 
+          cr={monsterContent.cr} 
+          xp={monsterContent.xp} 
         />
 
         {/* Speed */}
-        {content.speed && <SpeedDisplay speed={content.speed} />}
+        {monsterContent.speed && <SpeedDisplay speed={monsterContent.speed} />}
 
         {/* Ability Scores */}
         <AbilityScores
-          str={content.str}
-          dex={content.dex}
-          con={content.con}
-          int={content.int}
-          wis={content.wis}
-          cha={content.cha}
+          str={monsterContent.str}
+          dex={monsterContent.dex}
+          con={monsterContent.con}
+          int={monsterContent.int}
+          wis={monsterContent.wis}
+          cha={monsterContent.cha}
         />
 
         {/* Skills, Saves, and Proficiencies */}
-        {(content.save || content.skill) && (
+        {(monsterContent.save || monsterContent.skill) && (
           <div style={{
             marginTop: '1.5rem',
             padding: '1rem',
@@ -105,8 +145,8 @@ export default function MonsterDisplay({ result, content, onClose }: MonsterDisp
             borderRadius: '6px'
           }}>
             <ProficiencyList 
-              saves={content.save}
-              skills={content.skill}
+              saves={monsterContent.save}
+              skills={monsterContent.skill}
               inline={true}
             />
           </div>
@@ -114,21 +154,21 @@ export default function MonsterDisplay({ result, content, onClose }: MonsterDisp
 
         {/* Damage Resistances */}
         <DamageResistanceBlock
-          resist={content.resist}
-          immune={content.immune}
-          vulnerable={content.vulnerable}
-          conditionImmune={content.conditionImmune}
+          resist={monsterContent.resist}
+          immune={monsterContent.immune}
+          vulnerable={monsterContent.vulnerable}
+          conditionImmune={monsterContent.conditionImmune}
         />
 
         {/* Senses and Languages */}
         <div style={{ marginTop: '1.5rem' }}>
-          {content.senses && <DetailRow name="Senses" value={formatSenses(content.senses)} />}
-          <DetailRow name="Languages" value={formatLanguages(content.languages)} />
-          {content.passive && <DetailRow name="Passive Perception" value={content.passive} />}
+          {monsterContent.senses && <DetailRow name="Senses" value={formatSenses(monsterContent.senses)} />}
+          <DetailRow name="Languages" value={formatLanguages(monsterContent.languages)} />
+          {monsterContent.passive && <DetailRow name="Passive Perception" value={monsterContent.passive} />}
         </div>
 
         {/* Traits */}
-        {content.trait && content.trait.length > 0 && (
+        {monsterContent.trait && monsterContent.trait.length > 0 && (
           <div className="traits" style={{ marginTop: '1.5rem' }}>
             <h4 style={{ 
               color: '#495057', 
@@ -138,7 +178,7 @@ export default function MonsterDisplay({ result, content, onClose }: MonsterDisp
             }}>
               Traits
             </h4>
-            {content.trait.map((trait: any, index: number) => (
+            {monsterContent.trait.map((trait: any, index: number) => (
               <div key={index} style={{ 
                 marginBottom: '1rem',
                 paddingLeft: '1rem',
@@ -160,21 +200,21 @@ export default function MonsterDisplay({ result, content, onClose }: MonsterDisp
         )}
 
         {/* Spellcasting */}
-        {content.spellcasting && (
-          <SpellcastingBlock spellcasting={content.spellcasting} />
+        {monsterContent.spellcasting && (
+          <SpellcastingBlock spellcasting={monsterContent.spellcasting} />
         )}
 
         {/* Actions */}
         <ActionsList
-          actions={content.action}
-          reactions={content.reaction}
-          legendary={content.legendary}
-          lair={content.lair}
-          mythic={content.mythic}
+          actions={monsterContent.action}
+          reactions={monsterContent.reaction}
+          legendary={monsterContent.legendary}
+          lair={monsterContent.lair}
+          mythic={monsterContent.mythic}
         />
 
         {/* Description */}
-        {content.entries && (
+        {monsterContent.entries && (
           <div style={{ marginTop: '1.5rem' }}>
             <h4 style={{ 
               color: '#495057', 
@@ -184,7 +224,7 @@ export default function MonsterDisplay({ result, content, onClose }: MonsterDisp
             }}>
               Description
             </h4>
-            <ContentEntries entries={content.entries} />
+            <ContentEntries entries={monsterContent.entries} />
           </div>
         )}
       </div>

@@ -1,16 +1,48 @@
+import { useState } from 'react';
 import type { SearchResult } from '../../types';
 import BaseContentDisplay from './BaseContentDisplay';
 import ContentEntries from './ContentEntries';
 import DetailRow from '../basic/DetailRow';
 import { Link } from 'react-router-dom';
+import SourceTabs from './shared/SourceTabs';
 
 interface ActionDisplayProps {
   result: SearchResult;
-  content: any;
+  content: { [source: string]: any } | any; // Support both old and new format
   onClose: () => void;
 }
 
 export default function ActionDisplay({ result, content, onClose }: ActionDisplayProps) {
+  const [currentContent, setCurrentContent] = useState<any>(null);
+
+  // Determine if we have multi-source content or single content
+  const isMultiSource = content && typeof content === 'object' && 
+    !content.name && // If it has a name, it's probably a single action object
+    Object.keys(content).some(key => content[key]?.name); // Check if values look like action objects
+
+  const handleSourceChange = (_source: string, sourceContent: any) => {
+    setCurrentContent(sourceContent);
+  };
+
+  // If it's single source content, use it directly
+  const actionContent = isMultiSource ? currentContent : content;
+  
+  if (isMultiSource && !currentContent) {
+    // Show source tabs and wait for selection
+    return (
+      <BaseContentDisplay result={result} content={null} onClose={onClose}>
+        <SourceTabs 
+          sources={content}
+          availableSources={result.availableSources}
+          onSourceChange={handleSourceChange}
+          primarySource={result.source}
+        />
+        <div style={{ textAlign: 'center', padding: '2rem', color: '#6c757d' }}>
+          Select a source above to view content
+        </div>
+      </BaseContentDisplay>
+    );
+  }
   const formatTime = (time: any[]): string => {
     if (!time || time.length === 0) return '';
     return time.map((t: any) => `${t.number} ${t.unit}${t.number > 1 ? 's' : ''}`).join(', ');
@@ -35,14 +67,13 @@ export default function ActionDisplay({ result, content, onClose }: ActionDispla
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
         {seeAlso.map((actionRef) => {
           // Parse action reference like "Grapple" or "Disarm|DMG"
-          const [actionName, source] = actionRef.split('|');
+          const [actionName] = actionRef.split('|');
           const slug = actionName.toLowerCase().replace(/\s+/g, '-');
-          const actionSource = source || 'phb';
           
           return (
             <Link
               key={actionRef}
-              to={`/action/${actionSource.toLowerCase()}/${slug}`}
+              to={`/action/${slug}`}
               style={{
                 padding: '0.25rem 0.75rem',
                 backgroundColor: '#e3f2fd',
@@ -104,31 +135,39 @@ export default function ActionDisplay({ result, content, onClose }: ActionDispla
   };
 
   return (
-    <BaseContentDisplay result={result} content={content} onClose={onClose}>
+    <BaseContentDisplay result={result} content={actionContent} onClose={onClose}>
+      {isMultiSource && (
+        <SourceTabs 
+          sources={content}
+          availableSources={result.availableSources}
+          onSourceChange={handleSourceChange}
+          primarySource={result.source}
+        />
+      )}
       <div className="action-display">
         {/* Action Type and Timing */}
-        {content.time && (
+        {actionContent.time && (
           <div className="action-timing" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
-            backgroundColor: getActionTypeColor(content.time) + '20',
+            backgroundColor: getActionTypeColor(actionContent.time) + '20',
             borderRadius: '6px',
-            borderLeft: `4px solid ${getActionTypeColor(content.time)}`
+            borderLeft: `4px solid ${getActionTypeColor(actionContent.time)}`
           }}>
             <h4 style={{ 
               margin: '0 0 1rem 0', 
-              color: getActionTypeColor(content.time),
+              color: getActionTypeColor(actionContent.time),
               fontSize: '1.1rem'
             }}>
               Action Type
             </h4>
-            <DetailRow name="Time" value={formatTime(content.time)} />
-            {content.range && <DetailRow name="Range" value={formatRange(content.range)} />}
+            <DetailRow name="Time" value={formatTime(actionContent.time)} />
+            {actionContent.range && <DetailRow name="Range" value={formatRange(actionContent.range)} />}
           </div>
         )}
 
         {/* Spell-like Properties */}
-        {(content.components || content.duration || content.school) && (
+        {(actionContent.components || actionContent.duration || actionContent.school) && (
           <div className="spell-properties" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -143,14 +182,14 @@ export default function ActionDisplay({ result, content, onClose }: ActionDispla
             }}>
               Spell Properties
             </h4>
-            {content.components && <DetailRow name="Components" value={formatComponents(content.components)} />}
-            {content.duration && <DetailRow name="Duration" value={formatDuration(content.duration)} />}
-            {content.school && <DetailRow name="School" value={content.school} />}
+            {actionContent.components && <DetailRow name="Components" value={formatComponents(actionContent.components)} />}
+            {actionContent.duration && <DetailRow name="Duration" value={formatDuration(actionContent.duration)} />}
+            {actionContent.school && <DetailRow name="School" value={actionContent.school} />}
           </div>
         )}
 
         {/* Action Description */}
-        {content.entries && (
+        {actionContent.entries && (
           <div className="action-description" style={{ marginBottom: '1.5rem' }}>
             <h4 style={{ 
               color: '#495057', 
@@ -160,12 +199,12 @@ export default function ActionDisplay({ result, content, onClose }: ActionDispla
             }}>
               Description
             </h4>
-            <ContentEntries entries={content.entries} />
+            <ContentEntries entries={actionContent.entries} />
           </div>
         )}
 
         {/* Higher Level Information */}
-        {content.entriesHigherLevel && (
+        {actionContent.entriesHigherLevel && (
           <div className="higher-level-section" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -180,12 +219,12 @@ export default function ActionDisplay({ result, content, onClose }: ActionDispla
             }}>
               At Higher Levels
             </h4>
-            <ContentEntries entries={content.entriesHigherLevel} />
+            <ContentEntries entries={actionContent.entriesHigherLevel} />
           </div>
         )}
 
         {/* Classes that can use this action */}
-        {content.classes && (
+        {actionContent.classes && (
           <div className="action-classes" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -201,10 +240,10 @@ export default function ActionDisplay({ result, content, onClose }: ActionDispla
               Available to Classes
             </h4>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-              {content.classes.fromClassList?.map((cls: any) => (
+              {actionContent.classes.fromClassList?.map((cls: any) => (
                 <Link
                   key={cls.name}
-                  to={`/class/phb/${cls.name.toLowerCase()}`}
+                  to={`/class/${cls.name.toLowerCase()}`}
                   style={{
                     padding: '0.25rem 0.75rem',
                     backgroundColor: '#e1bee7',
@@ -223,7 +262,7 @@ export default function ActionDisplay({ result, content, onClose }: ActionDispla
         )}
 
         {/* Related Actions */}
-        {content.seeAlsoAction && content.seeAlsoAction.length > 0 && (
+        {actionContent.seeAlsoAction && actionContent.seeAlsoAction.length > 0 && (
           <div className="related-actions" style={{
             padding: '1rem',
             backgroundColor: '#e8f5e8',
@@ -237,7 +276,7 @@ export default function ActionDisplay({ result, content, onClose }: ActionDispla
             }}>
               Related Actions
             </h4>
-            {formatSeeAlsoActions(content.seeAlsoAction)}
+            {formatSeeAlsoActions(actionContent.seeAlsoAction)}
           </div>
         )}
       </div>

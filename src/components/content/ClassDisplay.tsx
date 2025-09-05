@@ -1,16 +1,48 @@
+import { useState } from 'react';
 import type { SearchResult } from '../../types';
 import BaseContentDisplay from './BaseContentDisplay';
 import ContentEntries from './ContentEntries';
 import DetailRow from '../basic/DetailRow';
 import { ProficiencyList, EquipmentList } from './shared';
+import SourceTabs from './shared/SourceTabs';
 
 interface ClassDisplayProps {
   result: SearchResult;
-  content: any;
+  content: { [source: string]: any } | any; // Support both old and new format
   onClose: () => void;
 }
 
 export default function ClassDisplay({ result, content, onClose }: ClassDisplayProps) {
+  const [currentContent, setCurrentContent] = useState<any>(null);
+
+  // Determine if we have multi-source content or single content
+  const isMultiSource = content && typeof content === 'object' && 
+    !content.name && // If it has a name, it's probably a single class object
+    Object.keys(content).some(key => content[key]?.name); // Check if values look like class objects
+
+  const handleSourceChange = (_source: string, sourceContent: any) => {
+    setCurrentContent(sourceContent);
+  };
+
+  // If it's single source content, use it directly
+  const classContent = isMultiSource ? currentContent : content;
+  
+  if (isMultiSource && !currentContent) {
+    // Show source tabs and wait for selection
+    return (
+      <BaseContentDisplay result={result} content={null} onClose={onClose}>
+        <SourceTabs 
+          sources={content}
+          availableSources={result.availableSources}
+          onSourceChange={handleSourceChange}
+          primarySource={result.source}
+        />
+        <div style={{ textAlign: 'center', padding: '2rem', color: '#6c757d' }}>
+          Select a source above to view content
+        </div>
+      </BaseContentDisplay>
+    );
+  }
   const formatHitDie = (hd: any): string => {
     if (!hd) return '';
     return `1d${hd.faces}`;
@@ -143,10 +175,18 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
   };
 
   return (
-    <BaseContentDisplay result={result} content={content} onClose={onClose}>
+    <BaseContentDisplay result={result} content={classContent} onClose={onClose}>
+      {isMultiSource && (
+        <SourceTabs 
+          sources={content}
+          availableSources={result.availableSources}
+          onSourceChange={handleSourceChange}
+          primarySource={result.source}
+        />
+      )}
       <div className="class-display">
         {/* Primary Ability Scores */}
-        {content.primaryAbility && (
+        {classContent.primaryAbility && (
           <div className="primary-abilities" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -161,7 +201,7 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
             }}>
               Primary Abilities
             </h4>
-            <DetailRow name="Recommended" value={formatAbilityScores(content.primaryAbility)} />
+            <DetailRow name="Recommended" value={formatAbilityScores(classContent.primaryAbility)} />
           </div>
         )}
 
@@ -173,16 +213,16 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
           marginBottom: '1.5rem'
         }}>
           <div>
-            <DetailRow name="Hit Die" value={formatHitDie(content.hd)} />
-            <DetailRow name="Saving Throws" value={formatSavingThrows(content.proficiency)} />
+            <DetailRow name="Hit Die" value={formatHitDie(classContent.hd)} />
+            <DetailRow name="Saving Throws" value={formatSavingThrows(classContent.proficiency)} />
           </div>
-          {content.subclassTitle && (
-            <DetailRow name="Subclass Type" value={content.subclassTitle} />
+          {classContent.subclassTitle && (
+            <DetailRow name="Subclass Type" value={classContent.subclassTitle} />
           )}
         </div>
 
         {/* Starting Proficiencies */}
-        {content.startingProficiencies && (
+        {classContent.startingProficiencies && (
           <div className="starting-proficiencies" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -198,21 +238,21 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
               Starting Proficiencies
             </h4>
             <ProficiencyList
-              armor={content.startingProficiencies.armor}
-              weapons={content.startingProficiencies.weapons}
-              tools={content.startingProficiencies.tools}
-              skills={content.startingProficiencies.skills}
+              armor={classContent.startingProficiencies.armor}
+              weapons={classContent.startingProficiencies.weapons}
+              tools={classContent.startingProficiencies.tools}
+              skills={classContent.startingProficiencies.skills}
             />
           </div>
         )}
 
         {/* Starting Equipment */}
-        {content.startingEquipment && (
-          <EquipmentList equipment={content.startingEquipment} />
+        {classContent.startingEquipment && (
+          <EquipmentList equipment={classContent.startingEquipment} />
         )}
 
         {/* Multiclassing */}
-        {content.multiclassing && (
+        {classContent.multiclassing && (
           <div className="multiclassing" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -227,12 +267,12 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
             }}>
               Multiclassing
             </h4>
-            {formatMulticlassing(content.multiclassing)}
+            {formatMulticlassing(classContent.multiclassing)}
           </div>
         )}
 
         {/* Feat Progression */}
-        {(content.featProgression || content.optionalfeatureProgression) && (
+        {(classContent.featProgression || classContent.optionalfeatureProgression) && (
           <div className="feat-progression" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -247,13 +287,13 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
             }}>
               Optional Features & Feats
             </h4>
-            {content.featProgression && formatFeatProgression(content.featProgression)}
-            {content.optionalfeatureProgression && formatFeatProgression(content.optionalfeatureProgression)}
+            {classContent.featProgression && formatFeatProgression(classContent.featProgression)}
+            {classContent.optionalfeatureProgression && formatFeatProgression(classContent.optionalfeatureProgression)}
           </div>
         )}
 
         {/* Class Features Progression */}
-        {content.classFeatures && content.classFeatures.length > 0 && (
+        {classContent.classFeatures && classContent.classFeatures.length > 0 && (
           <div className="class-features" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -268,12 +308,12 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
             }}>
               Class Features by Level
             </h4>
-            {formatClassFeatures(content.classFeatures)}
+            {formatClassFeatures(classContent.classFeatures)}
           </div>
         )}
 
         {/* Class Description */}
-        {content.entries && (
+        {classContent.entries && (
           <div className="class-description" style={{ marginBottom: '1.5rem' }}>
             <h4 style={{ 
               color: '#495057', 
@@ -283,12 +323,12 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
             }}>
               Description
             </h4>
-            <ContentEntries entries={content.entries} />
+            <ContentEntries entries={classContent.entries} />
           </div>
         )}
 
         {/* Subclass Information */}
-        {content.subclass && content.subclass.length > 0 && (
+        {classContent.subclass && classContent.subclass.length > 0 && (
           <div className="subclasses" style={{
             padding: '1rem',
             backgroundColor: '#ffebee',
@@ -300,13 +340,13 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
               color: '#c62828',
               fontSize: '1.1rem'
             }}>
-              {content.subclassTitle || 'Subclasses'}
+              {classContent.subclassTitle || 'Subclasses'}
             </h4>
-            {content.subclass.map((subclass: any, index: number) => (
+            {classContent.subclass.map((subclass: any, index: number) => (
               <div key={index} style={{ 
                 marginBottom: '1rem',
                 paddingBottom: '1rem',
-                borderBottom: index < content.subclass.length - 1 ? '1px solid #ffcdd2' : 'none'
+                borderBottom: index < classContent.subclass.length - 1 ? '1px solid #ffcdd2' : 'none'
               }}>
                 <h5 style={{ 
                   margin: '0 0 0.5rem 0',

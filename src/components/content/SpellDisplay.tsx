@@ -1,16 +1,48 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { SearchResult } from '../../types';
 import BaseContentDisplay from './BaseContentDisplay';
 import ContentEntries from './ContentEntries';
 import DetailRow from '../basic/DetailRow';
+import SourceTabs from './shared/SourceTabs';
 
 interface SpellDisplayProps {
   result: SearchResult;
-  content: any;
+  content: { [source: string]: any } | any; // Support both old and new format
   onClose: () => void;
 }
 
 export default function SpellDisplay({ result, content, onClose }: SpellDisplayProps) {
+  const [currentContent, setCurrentContent] = useState<any>(null);
+
+  // Determine if we have multi-source content or single content
+  const isMultiSource = content && typeof content === 'object' && 
+    !content.name && // If it has a name, it's probably a single spell object
+    Object.keys(content).some(key => content[key]?.name); // Check if values look like spell objects
+
+  const handleSourceChange = (_source: string, sourceContent: any) => {
+    setCurrentContent(sourceContent);
+  };
+
+  // If it's single source content, use it directly
+  const spellContent = isMultiSource ? currentContent : content;
+  
+  if (isMultiSource && !currentContent) {
+    // Show source tabs and wait for selection
+    return (
+      <BaseContentDisplay result={result} content={null} onClose={onClose}>
+        <SourceTabs 
+          sources={content}
+          availableSources={result.availableSources}
+          onSourceChange={handleSourceChange}
+          primarySource={result.source}
+        />
+        <div style={{ textAlign: 'center', padding: '2rem', color: '#6c757d' }}>
+          Select a source above to view content
+        </div>
+      </BaseContentDisplay>
+    );
+  }
   const formatTime = (time: any[]): string => {
     return time.map((t: any) => `${t.number} ${t.unit}`).join(', ');
   };
@@ -71,7 +103,15 @@ export default function SpellDisplay({ result, content, onClose }: SpellDisplayP
   };
 
   return (
-    <BaseContentDisplay result={result} content={content} onClose={onClose}>
+    <BaseContentDisplay result={result} content={spellContent} onClose={onClose}>
+      {isMultiSource && (
+        <SourceTabs 
+          sources={content}
+          availableSources={result.availableSources}
+          onSourceChange={handleSourceChange}
+          primarySource={result.source}
+        />
+      )}
       <div className="spell-display">
         {/* Core Spell Information */}
         <div className="spell-stats" style={{
@@ -86,29 +126,29 @@ export default function SpellDisplay({ result, content, onClose }: SpellDisplayP
           <div>
             <DetailRow 
               name="Level" 
-              value={content.level === 0 ? 'Cantrip' : `${content.level}${content.level === 1 ? 'st' : content.level === 2 ? 'nd' : content.level === 3 ? 'rd' : 'th'} level`} 
+              value={spellContent.level === 0 ? 'Cantrip' : `${spellContent.level}${spellContent.level === 1 ? 'st' : spellContent.level === 2 ? 'nd' : spellContent.level === 3 ? 'rd' : 'th'} level`} 
             />
-            <DetailRow name="School" value={getSchoolName(content.school)} />
+            <DetailRow name="School" value={getSchoolName(spellContent.school)} />
           </div>
           <div>
-            <DetailRow name="Casting Time" value={formatTime(content.time)} />
-            <DetailRow name="Range" value={formatRange(content.range)} />
+            <DetailRow name="Casting Time" value={formatTime(spellContent.time)} />
+            <DetailRow name="Range" value={formatRange(spellContent.range)} />
           </div>
           <div>
-            <DetailRow name="Components" value={formatComponents(content.components)} />
-            <DetailRow name="Duration" value={formatDuration(content.duration)} />
+            <DetailRow name="Components" value={formatComponents(spellContent.components)} />
+            <DetailRow name="Duration" value={formatDuration(spellContent.duration)} />
           </div>
         </div>
 
         {/* Spell Description */}
-        {content.entries && (
+        {spellContent.entries && (
           <div className="spell-description" style={{ marginBottom: '1.5rem' }}>
-            <ContentEntries entries={content.entries} />
+            <ContentEntries entries={spellContent.entries} />
           </div>
         )}
 
         {/* At Higher Levels */}
-        {content.entriesHigherLevel && (
+        {spellContent.entriesHigherLevel && (
           <div className="higher-level-section" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -123,12 +163,12 @@ export default function SpellDisplay({ result, content, onClose }: SpellDisplayP
             }}>
               At Higher Levels
             </h4>
-            <ContentEntries entries={content.entriesHigherLevel} />
+            <ContentEntries entries={spellContent.entriesHigherLevel} />
           </div>
         )}
 
         {/* Scaling Level Dice */}
-        {content.scalingLevelDice && (
+        {spellContent.scalingLevelDice && (
           <div className="scaling-dice" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -141,10 +181,10 @@ export default function SpellDisplay({ result, content, onClose }: SpellDisplayP
               color: '#f57c00',
               fontSize: '1.1rem'
             }}>
-              Damage Scaling: {content.scalingLevelDice.label}
+              Damage Scaling: {spellContent.scalingLevelDice.label}
             </h4>
             <div style={{ fontFamily: 'monospace' }}>
-              {Object.entries(content.scalingLevelDice.scaling).map(([level, dice]) => (
+              {Object.entries(spellContent.scalingLevelDice.scaling).map(([level, dice]) => (
                 <div key={level} style={{ marginBottom: '0.25rem' }}>
                   <strong>Level {level}:</strong> {dice as string}
                 </div>
@@ -154,7 +194,7 @@ export default function SpellDisplay({ result, content, onClose }: SpellDisplayP
         )}
 
         {/* Available Classes */}
-        {content.classes && formatClasses(content.classes).length > 0 && (
+        {spellContent.classes && formatClasses(spellContent.classes).length > 0 && (
           <div className="spell-classes" style={{
             marginBottom: '1.5rem',
             padding: '1rem',
@@ -170,10 +210,10 @@ export default function SpellDisplay({ result, content, onClose }: SpellDisplayP
               Available to Classes
             </h4>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-              {formatClasses(content.classes).map((className) => (
+              {formatClasses(spellContent.classes).map((className) => (
                 <Link
                   key={className}
-                  to={`/class/phb/${className.toLowerCase()}`}
+                  to={`/class/${className.toLowerCase()}`}
                   style={{
                     padding: '0.25rem 0.75rem',
                     backgroundColor: '#e1bee7',
@@ -192,7 +232,7 @@ export default function SpellDisplay({ result, content, onClose }: SpellDisplayP
         )}
 
         {/* Combat Information */}
-        {(content.savingThrow || content.damageInflict || content.conditionInflict) && (
+        {(spellContent.savingThrow || spellContent.damageInflict || spellContent.conditionInflict) && (
           <div className="combat-info" style={{
             padding: '1rem',
             backgroundColor: '#ffebee',
@@ -206,14 +246,14 @@ export default function SpellDisplay({ result, content, onClose }: SpellDisplayP
             }}>
               Combat Effects
             </h4>
-            {content.savingThrow && (
-              <DetailRow name="Saving Throw" value={content.savingThrow.join(', ')} />
+            {spellContent.savingThrow && (
+              <DetailRow name="Saving Throw" value={spellContent.savingThrow.join(', ')} />
             )}
-            {content.damageInflict && (
-              <DetailRow name="Damage Types" value={content.damageInflict.join(', ')} />
+            {spellContent.damageInflict && (
+              <DetailRow name="Damage Types" value={spellContent.damageInflict.join(', ')} />
             )}
-            {content.conditionInflict && (
-              <DetailRow name="Conditions" value={content.conditionInflict.join(', ')} />
+            {spellContent.conditionInflict && (
+              <DetailRow name="Conditions" value={spellContent.conditionInflict.join(', ')} />
             )}
           </div>
         )}

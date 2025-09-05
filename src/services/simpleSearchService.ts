@@ -104,8 +104,7 @@ class SimpleSearchServiceClass {
       const results = searchIndex.index.search(searchQuery);
       
       // Convert results to SearchResult format
-      const searchResults: SearchResult[] = results
-        .slice(0, limit)
+      const rawResults: SearchResult[] = results
         .map(result => {
           const item = searchIndex!.documentsById.get(result.ref);
           
@@ -122,11 +121,71 @@ class SimpleSearchServiceClass {
         })
         .filter((result): result is SearchResult => result !== null);
 
-      return searchResults;
+      // Deduplicate results by name+category, keeping the best score from primary sources
+      const deduplicatedResults = this.deduplicateSearchResults(rawResults);
+      
+      return deduplicatedResults.slice(0, limit);
     } catch (error) {
       console.error('Search error:', error);
       return [];
     }
+  }
+
+  private deduplicateSearchResults(results: SearchResult[]): SearchResult[] {
+    const resultMap = new Map<string, SearchResult>();
+    
+    // Source priority (PHB is highest priority, then official books, then others)
+    const getSourcePriority = (source: string): number => {
+      const priorities: { [key: string]: number } = {
+        'PHB': 100,
+        'MM': 90,
+        'DMG': 90,
+        'XGTE': 80,
+        'TCE': 80,
+        'VGM': 70,
+        'MTF': 70,
+        'SCAG': 60,
+        'FTOD': 50
+      };
+      return priorities[source] || 10; // Default low priority for unknown sources
+    };
+
+    for (const result of results) {
+      const key = `${result.category}:${result.name.toLowerCase()}`;
+      const existing = resultMap.get(key);
+      
+      if (!existing) {
+        // First occurrence of this item
+        const enhancedResult = {
+          ...result,
+          availableSources: [result.source] // Track all sources
+        };
+        resultMap.set(key, enhancedResult);
+      } else {
+        // Duplicate found - merge sources and pick best result
+        const existingPriority = getSourcePriority(existing.source);
+        const newPriority = getSourcePriority(result.source);
+        
+        // Add this source to the available sources list
+        if (!existing.availableSources) existing.availableSources = [existing.source];
+        if (!existing.availableSources.includes(result.source)) {
+          existing.availableSources.push(result.source);
+        }
+        
+        // Keep the result with higher priority source, or higher score if same priority
+        if (newPriority > existingPriority || 
+            (newPriority === existingPriority && result.score > existing.score)) {
+          resultMap.set(key, {
+            ...result,
+            availableSources: existing.availableSources
+          });
+        }
+      }
+    }
+    
+    // Convert map back to array and sort by score
+    return Array.from(resultMap.values())
+      .sort((a, b) => b.score - a.score);
   }
 
   private extractMatches(query: string, item: SearchIndexItem): string[] {

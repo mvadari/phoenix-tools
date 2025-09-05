@@ -60,9 +60,9 @@ export default function BaseContentDisplay({ result, content, children }: BaseCo
             color: '#374151',
             fontWeight: '500'
           }}>
-            <strong>Source:</strong> {content.source || result.source}
-            {content.page && <span> • Page {content.page}</span>}
-            {content.srd && <span style={{ 
+            <strong>Source:</strong> {content?.source || result.source}
+            {content?.page && <span> • Page {content?.page}</span>}
+            {content?.srd && <span style={{ 
               marginLeft: '0.75rem',
               padding: '0.25rem 0.5rem',
               backgroundColor: '#dbeafe',
@@ -71,7 +71,7 @@ export default function BaseContentDisplay({ result, content, children }: BaseCo
               fontSize: '0.75rem',
               fontWeight: 'bold'
             }}>SRD</span>}
-            {content.basicRules && <span style={{ 
+            {content?.basicRules && <span style={{ 
               marginLeft: '0.75rem',
               padding: '0.25rem 0.5rem',
               backgroundColor: '#dcfce7',

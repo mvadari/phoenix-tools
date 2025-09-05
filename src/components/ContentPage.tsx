@@ -30,7 +30,15 @@ export default function ContentPage() {
     setSearchResult(result);
     
     // Load the content
-    loadContent(result).catch((err) => {
+    loadContent(result).then((contentState) => {
+      // Update the search result with discovered available sources
+      if (contentState?.availableSources && contentState.availableSources.length > 0) {
+        setSearchResult(prevResult => ({
+          ...prevResult!,
+          availableSources: contentState.availableSources
+        }));
+      }
+    }).catch((err) => {
       console.error('Failed to load content:', err);
       setError(`Failed to load content: ${err.message}`);
     });
