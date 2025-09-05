@@ -211,18 +211,12 @@ class DataServiceClass {
     const config = this.categoryConfig[category];
     
     try {
-      let filename: string;
-      
       if (config.hasIndex) {
         // Load index to get filename
         const indexResponse = await fetch(`${config.basePath}/index.json`);
         if (!indexResponse.ok) throw new Error(`Failed to load ${category} index`);
         
         const indexData: IndexFile = await indexResponse.json();
-        
-        // For indexed categories, we need to find the correct file that contains the item
-        // Since we now use actual source (PHB, TCE) but index is keyed by item names
-        let foundFilename: string | null = null;
         
         // IMPROVED: Load from ALL files and combine results, then filter by source
         // This is less efficient but more reliable than trying to find the "right" file
