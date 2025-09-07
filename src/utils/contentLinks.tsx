@@ -23,17 +23,58 @@ const KNOWN_CONTENT = {
   ]
 };
 
+
+// Map JSON reference types to our categories
+const REFERENCE_TYPE_MAP: Record<string, DataCategory> = {
+  'item': 'item',
+  'spell': 'spell', 
+  'condition': 'condition',
+  'skill': 'background', // Skills are typically found in backgrounds/classes
+  'creature': 'monster',
+  'monster': 'monster',
+  'action': 'action',
+  'variantrule': 'variant-rule',
+  'subclassFeature': 'class',
+  'classFeature': 'class',
+  'status': 'condition',
+  'feat': 'feat',
+  'race': 'race',
+  'background': 'background',
+  'class': 'class',
+  'deity': 'deity',
+  'reward': 'reward',
+  'table': 'table',
+  'optionalfeature': 'optionalfeature',
+  'vehicle': 'vehicle',
+  'psionics': 'psionics'
+};
+
 /**
- * Creates a search result for known content
+ * Parses a JSON reference like {@item Herbalism kit|PHB} into components
  */
-function createKnownContentResult(name: string, category: DataCategory): SearchResult {
-  return {
-    name,
-    source: 'PHB', // Default to Player's Handbook
-    category,
-    score: 1,
-    matches: []
-  };
+function parseJsonReference(reference: string): { type: string, name: string, source: string } | null {
+  // Handle complex references like {@subclassFeature Fast Hands|Rogue||Thief||3}
+  const complexMatch = reference.match(/\{@(\w+)\s+([^|]+)\|([^|]*)\|([^|]*)\|([^|]*)\|([^}]*)\}/);
+  if (complexMatch) {
+    const [, type, name, , , , source] = complexMatch;
+    return { type, name: name.trim(), source: source?.trim() || 'PHB' };
+  }
+
+  // Handle book references like {@book Making an Attack|phb|9|making an attack}
+  const bookMatch = reference.match(/\{@book\s+([^|]+)\|([^|]+)\|([^|]+)\|([^}]+)\}/);
+  if (bookMatch) {
+    const [, name, source] = bookMatch;
+    return { type: 'book', name: name.trim(), source: source.toUpperCase() };
+  }
+
+  // Handle standard references like {@item Herbalism kit|PHB}
+  const standardMatch = reference.match(/\{@(\w+)\s+([^|]+)(?:\|([^}]+))?\}/);
+  if (standardMatch) {
+    const [, type, name, source = 'PHB'] = standardMatch;
+    return { type, name: name.trim(), source: source.trim() };
+  }
+
+  return null;
 }
 
 /**
@@ -46,20 +87,46 @@ export function processContentLinks(text: string): React.ReactNode {
 
   let processedText: React.ReactNode[] = [];
   let lastIndex = 0;
-  const matches: Array<{ match: string, category: DataCategory, start: number, end: number }> = [];
+  const matches: Array<{ match: string, displayText: string, category: DataCategory | null, source: string, start: number, end: number }> = [];
 
-  // Find all potential matches
+  // First, find JSON-style references like {@item Something|PHB}
+  const jsonRefRegex = /\{@\w+[^}]+\}/g;
+  let jsonMatch;
+  while ((jsonMatch = jsonRefRegex.exec(text)) !== null) {
+    const parsed = parseJsonReference(jsonMatch[0]);
+    if (parsed) {
+      matches.push({
+        match: jsonMatch[0],
+        displayText: parsed.name,
+        category: REFERENCE_TYPE_MAP[parsed.type] || null, // null for unsupported types
+        source: parsed.source,
+        start: jsonMatch.index,
+        end: jsonMatch.index + jsonMatch[0].length
+      });
+    }
+  }
+
+  // Then, find natural language references for known content (but avoid overlaps)
   Object.entries(KNOWN_CONTENT).forEach(([category, items]) => {
     items.forEach(item => {
       const regex = new RegExp(`\\b${item.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi');
-      let match;
-      while ((match = regex.exec(text)) !== null) {
-        matches.push({
-          match: match[0],
-          category: category as DataCategory,
-          start: match.index,
-          end: match.index + match[0].length
-        });
+      let regexMatch: RegExpExecArray | null;
+      while ((regexMatch = regex.exec(text)) !== null) {
+        // Check if this overlaps with any JSON reference
+        const hasOverlap = matches.some(jsonRef => 
+          regexMatch!.index < jsonRef.end && regexMatch!.index + regexMatch![0].length > jsonRef.start
+        );
+        
+        if (!hasOverlap) {
+          matches.push({
+            match: regexMatch[0],
+            displayText: regexMatch[0],
+            category: category as DataCategory,
+            source: 'PHB',
+            start: regexMatch.index,
+            end: regexMatch.index + regexMatch[0].length
+          });
+        }
       }
     });
   });
@@ -81,20 +148,35 @@ export function processContentLinks(text: string): React.ReactNode {
       processedText.push(text.substring(lastIndex, match.start));
     }
 
-    // Create the link
-    const searchResult = createKnownContentResult(match.match, match.category);
-    const path = createContentPath(searchResult);
-    
-    processedText.push(
-      <Link
-        key={`link-${index}`}
-        to={path}
-        className="content-link"
-        title={`Go to ${match.category}: ${match.match}`}
-      >
-        {match.match}
-      </Link>
-    );
+    // Create the link or plain text based on whether we have a valid category
+    if (match.category) {
+      const searchResult: SearchResult = {
+        name: match.displayText,
+        source: match.source,
+        category: match.category,
+        score: 1,
+        matches: []
+      };
+      const path = createContentPath(searchResult);
+      
+      processedText.push(
+        <Link
+          key={`link-${index}`}
+          to={path}
+          className="content-link"
+          title={`Go to ${match.category}: ${match.displayText} (${match.source})`}
+        >
+          {match.displayText}
+        </Link>
+      );
+    } else {
+      // For unsupported reference types, render as plain text
+      processedText.push(
+        <span key={`text-${index}`} className="content-ref">
+          {match.displayText}
+        </span>
+      );
+    }
 
     lastIndex = match.end;
   });

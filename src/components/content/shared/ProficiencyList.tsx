@@ -1,3 +1,5 @@
+import { processContentLinks } from '../../../utils/contentLinks';
+
 interface ProficiencyListProps {
   skills?: string[] | { [skill: string]: string | boolean }[] | { [skill: string]: string | boolean } | { choose?: { from: string[], count: number } }[] | { proficiency: string; optional?: boolean }[];
   languages?: string[] | { [lang: string]: boolean }[] | { anyStandard?: number };
@@ -100,11 +102,11 @@ export default function ProficiencyList({
         <span className={label ? 'inline-label' : ''}>
           {allProficiencies.map((prof, index) => (
             <span key={index} className="proficiency-item">
-              {typeof prof.name === 'string' ? prof.name : (
+              {processContentLinks(typeof prof.name === 'string' ? prof.name : (
                 typeof prof.name === 'object' && prof.name !== null ? 
                   JSON.stringify(prof.name) : 
                   String(prof.name)
-              )}
+              ))}
               {index < allProficiencies.length - 1 && ', '}
             </span>
           ))}
@@ -118,11 +120,11 @@ export default function ProficiencyList({
                   {prof.type}
                 </span>
               )}
-              {typeof prof.name === 'string' ? prof.name : (
+              {processContentLinks(typeof prof.name === 'string' ? prof.name : (
                 typeof prof.name === 'object' && prof.name !== null ? 
                   JSON.stringify(prof.name) : 
                   String(prof.name)
-              )}
+              ))}
             </div>
           ))}
         </div>

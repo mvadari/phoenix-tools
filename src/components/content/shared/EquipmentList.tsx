@@ -1,3 +1,5 @@
+import { processContentLinks } from '../../../utils/contentLinks';
+
 interface EquipmentListProps {
   equipment?: any[];
   title?: string;
@@ -6,28 +8,26 @@ interface EquipmentListProps {
 export default function EquipmentList({ equipment, title = "Starting Equipment" }: EquipmentListProps) {
   if (!equipment?.length) return null;
 
-  const formatEquipmentItem = (item: any): string => {
+  const formatEquipmentItem = (item: any): React.ReactNode => {
+    let text = '';
+    
     if (typeof item === 'string') {
-      return item;
-    }
-    
-    if (item.item) {
-      let result = item.displayName || item.item;
+      text = item;
+    } else if (item.item) {
+      text = item.displayName || item.item;
       if (item.quantity && item.quantity > 1) {
-        result = `${item.quantity} × ${result}`;
+        text = `${item.quantity} × ${text}`;
       }
-      return result;
-    }
-    
-    if (item.special) {
-      let result = item.special;
+    } else if (item.special) {
+      text = item.special;
       if (item.quantity && item.quantity > 1) {
-        result = `${item.quantity} × ${result}`;
+        text = `${item.quantity} × ${text}`;
       }
-      return result;
+    } else {
+      text = JSON.stringify(item);
     }
     
-    return JSON.stringify(item);
+    return processContentLinks(text);
   };
 
   const renderEquipmentGroup = (equipGroup: any, groupIndex: number) => {
