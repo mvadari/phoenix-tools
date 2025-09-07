@@ -176,15 +176,7 @@ export default function SearchPage() {
       />
 
       {initialized && indexItems.length > 0 && (
-        <div className="search-stats" style={{
-          marginTop: '2rem',
-          padding: '1rem',
-          backgroundColor: '#f8f9fa',
-          borderRadius: '6px',
-          fontSize: '0.9rem',
-          color: '#6c757d',
-          textAlign: 'center'
-        }}>
+        <div className="search-stats">
           Search index contains {indexItems.length.toLocaleString()} items across {Object.keys(categoryCounts).length} categories
         </div>
       )}

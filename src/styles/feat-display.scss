@@ -1,0 +1,109 @@
+// Feat Display Components
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.feat-display {
+  .ability-increases {
+    @include content-section($color-success);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #2e7d32;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .feat-proficiencies {
+    @include content-section($color-warning);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #f57c00;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .additional-spells {
+    @include content-section(#2196f3);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #1976d2;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+
+    .spell-group {
+      margin-bottom: $spacing-sm;
+
+      .innate-spells {
+        margin-left: $spacing-lg;
+
+        strong {
+          color: $color-text-primary;
+        }
+      }
+    }
+
+    .spellcasting-ability {
+      margin-top: $spacing-sm;
+      font-size: $font-size-sm;
+      font-style: italic;
+
+      strong {
+        color: $color-text-primary;
+      }
+    }
+  }
+
+  .feat-description {
+    margin-top: $spacing-2xl;
+
+    h4 {
+      color: $gray-700;
+      margin-bottom: $spacing-lg;
+      border-bottom: 2px solid $gray-200;
+      padding-bottom: $spacing-sm;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .feat-options {
+    margin-top: $spacing-2xl;
+    padding: $spacing-lg;
+    background-color: $gray-50;
+    border-radius: $border-radius-md;
+    border: 1px solid $gray-200;
+
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: $gray-700;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+
+    .feat-option {
+      margin-bottom: $spacing-lg;
+      padding-bottom: $spacing-lg;
+      
+      &:not(:last-child) {
+        border-bottom: 1px solid $gray-200;
+      }
+
+      h5 {
+        margin: 0 0 $spacing-sm 0;
+        color: $gray-700;
+        font-weight: $font-weight-bold;
+        @include heading-style($font-size-base);
+      }
+    }
+  }
+
+  .source-selection-message {
+    text-align: center;
+    padding: $spacing-2xl;
+    color: $gray-500;
+  }
+}

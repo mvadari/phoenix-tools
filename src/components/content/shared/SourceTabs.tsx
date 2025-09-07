@@ -62,45 +62,16 @@ export default function SourceTabs({
   };
 
   return (
-    <div className="source-tabs" style={{
-      marginBottom: '1.5rem',
-      borderBottom: '2px solid #dee2e6'
-    }}>
-      <div style={{
-        display: 'flex',
-        gap: '0.5rem',
-        overflowX: 'auto',
-        paddingBottom: '0.5rem'
-      }}>
+    <div className="source-tabs">
+      <div className="tab-container">
         {sourceList.map(source => (
           <button
             key={source}
             onClick={() => handleSourceChange(source)}
-            style={{
-              padding: '0.75rem 1rem',
-              border: 'none',
-              borderRadius: '6px 6px 0 0',
-              backgroundColor: activeSource === source ? '#007bff' : '#f8f9fa',
-              color: activeSource === source ? 'white' : '#495057',
-              cursor: 'pointer',
-              fontSize: '0.9rem',
-              fontWeight: activeSource === source ? '600' : '400',
-              whiteSpace: 'nowrap',
-              transition: 'all 0.2s ease'
-            }}
-            onMouseOver={(e) => {
-              if (activeSource !== source) {
-                e.currentTarget.style.backgroundColor = '#e9ecef';
-              }
-            }}
-            onMouseOut={(e) => {
-              if (activeSource !== source) {
-                e.currentTarget.style.backgroundColor = '#f8f9fa';
-              }
-            }}
+            className={`source-tab ${activeSource === source ? 'active' : 'inactive'}`}
           >
-            <span style={{ fontWeight: 'bold', marginRight: '0.5rem' }}>{source}</span>
-            <span style={{ fontSize: '0.8rem', opacity: 0.8 }}>
+            <span className="source-code">{source}</span>
+            <span className="source-name">
               {getSourceDisplayName(source)}
             </span>
           </button>
@@ -108,12 +79,7 @@ export default function SourceTabs({
       </div>
       
       {sourceList.length > 1 && (
-        <div style={{
-          fontSize: '0.8rem',
-          color: '#6c757d',
-          fontStyle: 'italic',
-          marginTop: '0.25rem'
-        }}>
+        <div className="tab-info">
           This item appears in {sourceList.length} source{sourceList.length > 1 ? 's' : ''}. 
           Click tabs to view differences.
         </div>

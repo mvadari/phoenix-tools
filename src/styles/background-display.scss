@@ -1,0 +1,80 @@
+// Background Display Components
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.background-display {
+  .background-proficiencies {
+    @include content-section(#2196f3);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #1976d2;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .background-description {
+    margin-bottom: $spacing-2xl;
+  }
+
+  .personality-traits {
+    @include content-section($color-warning);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #f57c00;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .ideals {
+    @include content-section($color-success);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #2e7d32;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .bonds {
+    @include content-section(#9c27b0);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #7b1fa2;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .flaws {
+    @include content-section(#f44336);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #c62828;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .trait-item {
+    margin-bottom: $spacing-md;
+    font-size: $font-size-sm;
+
+    .trait-number {
+      font-weight: $font-weight-bold;
+      margin-bottom: $spacing-xs;
+    }
+  }
+
+  .source-selection-message {
+    text-align: center;
+    padding: $spacing-2xl;
+    color: $gray-500;
+  }
+}

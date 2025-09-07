@@ -42,12 +42,7 @@ export default function SearchResults({
     if (allItems.length === 0) {
       return (
         <div className="search-results">
-          <div className="search-help" style={{
-            textAlign: 'center',
-            color: '#6c757d',
-            padding: '2rem',
-            fontStyle: 'italic'
-          }}>
+          <div className="search-help">
             Loading content...
           </div>
         </div>
@@ -59,29 +54,16 @@ export default function SearchResults({
     
     return (
       <div className="search-results">
-        <div className="results-header" style={{
-          marginBottom: '1rem',
-          padding: '0.5rem 0',
-          borderBottom: '1px solid #dee2e6',
-          color: '#6c757d'
-        }}>
+        <div className="results-header">
           Showing {displayItems.length} of {allItems.length.toLocaleString()} items
           {allItems.length > 50 && (
-            <span style={{ fontSize: '0.9rem', marginLeft: '0.5rem' }}>
+            <span className="results-hint">
               (start typing to search all items)
             </span>
           )}
         </div>
 
-        <div 
-          className="simple-results"
-          style={{
-            maxHeight: '60vh',
-            overflowY: 'auto',
-            border: '1px solid #dee2e6',
-            borderRadius: '6px'
-          }}
-        >
+        <div className="simple-results">
           {displayItems.map((result, index) => (
             <SearchResult
               key={`${result.name}-${result.source}-${index}`}
@@ -97,13 +79,9 @@ export default function SearchResults({
   if (results.length === 0) {
     return (
       <div className="search-results">
-        <div className="no-results" style={{
-          textAlign: 'center',
-          color: '#6c757d',
-          padding: '2rem'
-        }}>
+        <div className="no-results">
           <div>No results found for "<strong>{query}</strong>"</div>
-          <div style={{ fontSize: '0.9rem', marginTop: '8px' }}>
+          <div className="no-results-hint">
             Try searching with different keywords or check your spelling.
           </div>
         </div>
@@ -134,12 +112,7 @@ export default function SearchResults({
 
   return (
     <div className="search-results">
-      <div className="results-header" style={{
-        marginBottom: '1rem',
-        padding: '0.5rem 0',
-        borderBottom: '1px solid #dee2e6',
-        color: '#6c757d'
-      }}>
+      <div className="results-header">
         Found {results.length} result{results.length !== 1 ? 's' : ''} for "<strong>{query}</strong>"
       </div>
 
@@ -147,14 +120,8 @@ export default function SearchResults({
         // Grouped view for many results
         <div className="grouped-results">
           {sortedCategories.map(category => (
-            <div key={category} className="category-group" style={{ marginBottom: '2rem' }}>
-              <h3 style={{
-                textTransform: 'capitalize',
-                color: '#495057',
-                marginBottom: '1rem',
-                fontSize: '1.1rem',
-                fontWeight: '600'
-              }}>
+            <div key={category} className="category-group">
+              <h3>
                 {category}s ({groupedResults[category].length})
               </h3>
               <div className="category-results">

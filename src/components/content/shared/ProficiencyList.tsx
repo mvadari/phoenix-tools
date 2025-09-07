@@ -91,26 +91,15 @@ export default function ProficiencyList({
 
   if (allProficiencies.length === 0) return null;
 
-  const containerStyle = inline ? {
-    display: 'inline'
-  } : {
-    marginTop: '0.5rem'
-  };
-
-  const itemStyle = inline ? {
-    display: 'inline',
-    marginRight: '0.5rem'
-  } : {
-    marginBottom: '0.25rem'
-  };
+  // Styles will be handled by CSS classes
 
   return (
-    <div style={containerStyle}>
+    <div className={`proficiency-list ${inline ? 'inline' : 'block'}`}>
       {label && <strong>{label}:</strong>}
       {inline ? (
-        <span style={{ marginLeft: label ? '0.5rem' : 0 }}>
+        <span className={label ? 'inline-label' : ''}>
           {allProficiencies.map((prof, index) => (
-            <span key={index} style={itemStyle}>
+            <span key={index} className="proficiency-item">
               {typeof prof.name === 'string' ? prof.name : (
                 typeof prof.name === 'object' && prof.name !== null ? 
                   JSON.stringify(prof.name) : 
@@ -121,16 +110,11 @@ export default function ProficiencyList({
           ))}
         </span>
       ) : (
-        <div style={{ marginLeft: '1rem' }}>
+        <div className="block-content">
           {allProficiencies.map((prof, index) => (
-            <div key={index} style={itemStyle}>
+            <div key={index} className="proficiency-item">
               {prof.type === 'skill' && (
-                <span style={{ 
-                  fontSize: '0.8rem',
-                  color: '#6c757d',
-                  marginRight: '0.5rem',
-                  textTransform: 'uppercase'
-                }}>
+                <span className="proficiency-type-label">
                   {prof.type}
                 </span>
               )}

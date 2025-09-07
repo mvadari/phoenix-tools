@@ -1,0 +1,153 @@
+// Item Display Components
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.item-display {
+  .loading-message {
+    text-align: center;
+    padding: $spacing-3xl;
+    color: $gray-600;
+  }
+
+  .item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-2xl;
+    padding: $spacing-lg;
+    background-color: $gray-50;
+    border-radius: $border-radius-md;
+
+    .item-type {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-medium;
+      color: $gray-700;
+    }
+
+    .item-rarity {
+      padding: $spacing-xs $spacing-lg;
+      border-radius: $border-radius-pill;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-bold;
+      text-transform: capitalize;
+
+      &[data-rarity="common"] {
+        background-color: rgba(#6c757d, 0.2);
+        color: #6c757d;
+      }
+
+      &[data-rarity="uncommon"] {
+        background-color: rgba(#28a745, 0.2);
+        color: #28a745;
+      }
+
+      &[data-rarity="rare"] {
+        background-color: rgba(#007bff, 0.2);
+        color: #007bff;
+      }
+
+      &[data-rarity="very rare"] {
+        background-color: rgba(#6f42c1, 0.2);
+        color: #6f42c1;
+      }
+
+      &[data-rarity="legendary"] {
+        background-color: rgba(#fd7e14, 0.2);
+        color: #fd7e14;
+      }
+
+      &[data-rarity="artifact"] {
+        background-color: rgba(#dc3545, 0.2);
+        color: #dc3545;
+      }
+
+      // Default fallback
+      &:not([data-rarity]) {
+        background-color: rgba(#6c757d, 0.2);
+        color: #6c757d;
+      }
+    }
+  }
+
+  .item-properties {
+    @include responsive-grid(200px, $spacing-lg);
+    margin-bottom: $spacing-2xl;
+  }
+
+  .magic-properties {
+    @include content-section(#2196f3);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #1976d2;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .weapon-properties {
+    @include content-section(#f44336);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #c62828;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .armor-properties {
+    @include content-section($color-spell);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #7b1fa2;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .item-description {
+    margin-bottom: $spacing-2xl;
+  }
+
+  .additional-entries {
+    @include content-section($color-warning);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #f57c00;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .item-variants {
+    @include content-section($color-success);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #2e7d32;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+
+    .variant-item {
+      margin-bottom: $spacing-lg;
+      padding-left: $spacing-lg;
+      border-left: 2px solid #81c784;
+
+      h5 {
+        margin: 0 0 $spacing-sm 0;
+        color: #2e7d32;
+        font-weight: $font-weight-bold;
+        @include heading-style($font-size-base);
+      }
+    }
+  }
+}
+
+// Legacy item-specific details section (for backwards compatibility)
+.item-details {
+  @include content-section($color-item);
+}

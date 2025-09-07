@@ -1,0 +1,191 @@
+// Condition Display Components
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.condition-display {
+  .condition-type {
+    margin-bottom: $spacing-2xl;
+    padding: $spacing-lg;
+    border-radius: $border-radius-md;
+    border-left: 4px solid;
+    text-align: center;
+
+    h4 {
+      margin: 0;
+      font-size: $font-size-xl;
+      font-weight: $font-weight-bold;
+      @include heading-style($font-size-xl);
+    }
+
+    // Condition-specific colors via data attributes
+    &[data-condition="blinded"] {
+      background-color: rgba(220, 53, 69, 0.125);
+      border-left-color: #dc3545;
+      h4 { color: #dc3545; }
+    }
+
+    &[data-condition="charmed"] {
+      background-color: rgba(232, 62, 140, 0.125);
+      border-left-color: #e83e8c;
+      h4 { color: #e83e8c; }
+    }
+
+    &[data-condition="deafened"] {
+      background-color: rgba(102, 16, 242, 0.125);
+      border-left-color: #6610f2;
+      h4 { color: #6610f2; }
+    }
+
+    &[data-condition="frightened"] {
+      background-color: rgba(253, 126, 20, 0.125);
+      border-left-color: #fd7e14;
+      h4 { color: #fd7e14; }
+    }
+
+    &[data-condition="grappled"] {
+      background-color: rgba(32, 201, 151, 0.125);
+      border-left-color: #20c997;
+      h4 { color: #20c997; }
+    }
+
+    &[data-condition="incapacitated"] {
+      background-color: rgba(220, 53, 69, 0.125);
+      border-left-color: #dc3545;
+      h4 { color: #dc3545; }
+    }
+
+    &[data-condition="paralyzed"] {
+      background-color: rgba(111, 66, 193, 0.125);
+      border-left-color: #6f42c1;
+      h4 { color: #6f42c1; }
+    }
+
+    &[data-condition="petrified"] {
+      background-color: rgba(108, 117, 125, 0.125);
+      border-left-color: #6c757d;
+      h4 { color: #6c757d; }
+    }
+
+    &[data-condition="poisoned"] {
+      background-color: rgba(40, 167, 69, 0.125);
+      border-left-color: #28a745;
+      h4 { color: #28a745; }
+    }
+
+    &[data-condition="prone"] {
+      background-color: rgba(255, 193, 7, 0.125);
+      border-left-color: #ffc107;
+      h4 { color: #ffc107; }
+    }
+
+    &[data-condition="restrained"] {
+      background-color: rgba(23, 162, 184, 0.125);
+      border-left-color: #17a2b8;
+      h4 { color: #17a2b8; }
+    }
+
+    &[data-condition="stunned"] {
+      background-color: rgba(220, 53, 69, 0.125);
+      border-left-color: #dc3545;
+      h4 { color: #dc3545; }
+    }
+
+    &[data-condition="unconscious"] {
+      background-color: rgba(52, 58, 64, 0.125);
+      border-left-color: #343a40;
+      h4 { color: #343a40; }
+    }
+
+    &[data-condition="exhaustion"] {
+      background-color: rgba(253, 126, 20, 0.125);
+      border-left-color: #fd7e14;
+      h4 { color: #fd7e14; }
+    }
+
+    // Default fallback
+    &:not([data-condition]) {
+      background-color: rgba(108, 117, 125, 0.125);
+      border-left-color: #6c757d;
+      h4 { color: #6c757d; }
+    }
+  }
+
+  .condition-mechanics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: $spacing-lg;
+    margin-bottom: $spacing-2xl;
+
+    .duration-info {
+      padding: $spacing-sm $spacing-lg;
+      background-color: #fff3e0;
+      border-radius: $border-radius-md;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-medium;
+
+      strong {
+        color: $color-text-primary;
+      }
+    }
+
+    .save-info {
+      padding: $spacing-sm $spacing-lg;
+      background-color: #e8f5e8;
+      border-radius: $border-radius-md;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-medium;
+
+      strong {
+        color: $color-text-primary;
+      }
+    }
+  }
+
+  .condition-effects {
+    margin-bottom: $spacing-2xl;
+    padding: $spacing-lg;
+    background-color: $gray-50;
+    border-radius: $border-radius-md;
+    border: 1px solid $gray-200;
+
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: $gray-700;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .condition-severity {
+    @include content-section(#f44336);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #c62828;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .condition-transmission {
+    @include content-section($color-warning);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #f57c00;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .condition-treatment {
+    @include content-section($color-success);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #2e7d32;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+}

@@ -29,21 +29,6 @@ export default function OptionalFeatureDisplay({ result, content, onClose }: Opt
     return featureType.map(type => typeMap[type] || type).join(', ');
   };
 
-  const getFeatureTypeColor = (featureType: string[]): string => {
-    if (!featureType || featureType.length === 0) return '#6c757d';
-    const firstType = featureType[0];
-    const colorMap: { [key: string]: string } = {
-      'EI': '#8b5cf6', // Eldritch Invocation - purple
-      'FS': '#ef4444', // Fighting Style - red
-      'MM': '#3b82f6', // Metamagic - blue
-      'PB': '#10b981', // Pact Boon - emerald
-      'ED': '#f59e0b', // Elemental Discipline - amber
-      'AI': '#6366f1', // Artificer Infusion - indigo
-      'RN': '#22c55e', // Ranger - green
-      'MV': '#f97316'  // Maneuver - orange
-    };
-    return colorMap[firstType] || '#6c757d';
-  };
 
   const formatRepeatable = (repeatable: boolean): string => {
     return repeatable ? 'Yes' : 'No';
@@ -72,18 +57,8 @@ export default function OptionalFeatureDisplay({ result, content, onClose }: Opt
       <div className="optional-feature-display">
         {/* Feature Type */}
         {content.featureType && (
-          <div className="feature-type" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: getFeatureTypeColor(content.featureType) + '20',
-            borderRadius: '6px',
-            borderLeft: `4px solid ${getFeatureTypeColor(content.featureType)}`
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: getFeatureTypeColor(content.featureType),
-              fontSize: '1.1rem'
-            }}>
+          <div className="feature-type" data-feature-type={content.featureType?.[0]}>
+            <h4>
               Feature Type
             </h4>
             <DetailRow name="Type" value={formatFeatureType(content.featureType)} />
@@ -97,17 +72,8 @@ export default function OptionalFeatureDisplay({ result, content, onClose }: Opt
 
         {/* Feature Properties */}
         {(content.repeatable || content.charges || content.level) && (
-          <div className="feature-properties" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#f8f9fa',
-            borderRadius: '6px'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#495057',
-              fontSize: '1.1rem'
-            }}>
+          <div className="feature-properties">
+            <h4>
               Properties
             </h4>
             {content.level && <DetailRow name="Level" value={content.level} />}
@@ -115,9 +81,9 @@ export default function OptionalFeatureDisplay({ result, content, onClose }: Opt
               <DetailRow name="Repeatable" value={formatRepeatable(content.repeatable)} />
             )}
             {content.charges && (
-              <div style={{ marginTop: '0.5rem' }}>
+              <div className="charges-section">
                 <strong>Charges:</strong>
-                <div style={{ marginLeft: '1rem' }}>
+                <div className="charges-details">
                   {formatCharges(content.charges)}
                 </div>
               </div>
@@ -127,18 +93,8 @@ export default function OptionalFeatureDisplay({ result, content, onClose }: Opt
 
         {/* Usage Limitations */}
         {(content.usesAction || content.usesBonus || content.usesReaction) && (
-          <div className="usage-info" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#fff3e0',
-            borderRadius: '6px',
-            borderLeft: '4px solid #ff9800'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#f57c00',
-              fontSize: '1.1rem'
-            }}>
+          <div className="usage-info">
+            <h4>
               Action Economy
             </h4>
             {content.usesAction && <DetailRow name="Uses Action" value="Yes" />}
@@ -149,13 +105,8 @@ export default function OptionalFeatureDisplay({ result, content, onClose }: Opt
 
         {/* Feature Description */}
         {content.entries && (
-          <div className="feature-description" style={{ marginBottom: '1.5rem' }}>
-            <h4 style={{ 
-              color: '#495057', 
-              marginBottom: '1rem',
-              borderBottom: '2px solid #dee2e6',
-              paddingBottom: '0.5rem'
-            }}>
+          <div className="feature-description">
+            <h4>
               Description
             </h4>
             <ContentEntries entries={content.entries} />
@@ -164,21 +115,12 @@ export default function OptionalFeatureDisplay({ result, content, onClose }: Opt
 
         {/* Additional Information */}
         {content.additionalSources && content.additionalSources.length > 0 && (
-          <div className="additional-sources" style={{
-            padding: '1rem',
-            backgroundColor: '#e8f5e8',
-            borderRadius: '6px',
-            borderLeft: '4px solid #4caf50'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#2e7d32',
-              fontSize: '1.1rem'
-            }}>
+          <div className="additional-sources">
+            <h4>
               Additional Sources
             </h4>
             {content.additionalSources.map((source: any, index: number) => (
-              <div key={index} style={{ marginBottom: '0.5rem' }}>
+              <div key={index} className="source-item">
                 <strong>{source.source}</strong>
                 {source.page && ` p. ${source.page}`}
               </div>

@@ -36,7 +36,7 @@ export default function BackgroundDisplay({ result, content, onClose }: Backgrou
           onSourceChange={handleSourceChange}
           primarySource={result.source}
         />
-        <div style={{ textAlign: 'center', padding: '2rem', color: '#6c757d' }}>
+        <div className="source-selection-message">
           Select a source above to view content
         </div>
       </BaseContentDisplay>
@@ -47,11 +47,8 @@ export default function BackgroundDisplay({ result, content, onClose }: Backgrou
     if (!traits || traits.length === 0) return null;
 
     return traits.map((trait, index) => (
-      <div key={index} style={{ 
-        marginBottom: '0.75rem',
-        fontSize: '0.9rem'
-      }}>
-        <div style={{ fontWeight: 'bold', marginBottom: '0.25rem' }}>
+      <div key={index} className="trait-item">
+        <div className="trait-number">
           {index + 1}. {trait}
         </div>
       </div>
@@ -71,18 +68,8 @@ export default function BackgroundDisplay({ result, content, onClose }: Backgrou
       <div className="background-display">
         {/* Proficiencies */}
         {(actualContent.skillProficiencies || actualContent.languageProficiencies || actualContent.toolProficiencies) && (
-          <div className="background-proficiencies" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#f0f8ff',
-            borderRadius: '6px',
-            borderLeft: '4px solid #2196f3'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#1976d2',
-              fontSize: '1.1rem'
-            }}>
+          <div className="background-proficiencies">
+            <h4>
               Proficiencies
             </h4>
             <ProficiencyList
@@ -100,25 +87,15 @@ export default function BackgroundDisplay({ result, content, onClose }: Backgrou
 
         {/* Background Description */}
         {actualContent.entries && (
-          <div className="background-description" style={{ marginBottom: '1.5rem' }}>
+          <div className="background-description">
             <ContentEntries entries={actualContent.entries} />
           </div>
         )}
 
         {/* Personality Traits */}
         {actualContent.personality && actualContent.personality.length > 0 && (
-          <div className="personality-traits" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#fff3e0',
-            borderRadius: '6px',
-            borderLeft: '4px solid #ff9800'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#f57c00',
-              fontSize: '1.1rem'
-            }}>
+          <div className="personality-traits">
+            <h4>
               Suggested Personality Traits
             </h4>
             {formatTraits(actualContent.personality)}
@@ -127,18 +104,8 @@ export default function BackgroundDisplay({ result, content, onClose }: Backgrou
 
         {/* Ideals */}
         {actualContent.ideals && actualContent.ideals.length > 0 && (
-          <div className="ideals" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#e8f5e8',
-            borderRadius: '6px',
-            borderLeft: '4px solid #4caf50'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#2e7d32',
-              fontSize: '1.1rem'
-            }}>
+          <div className="ideals">
+            <h4>
               Suggested Ideals
             </h4>
             {formatTraits(actualContent.ideals)}
@@ -147,18 +114,8 @@ export default function BackgroundDisplay({ result, content, onClose }: Backgrou
 
         {/* Bonds */}
         {actualContent.bonds && actualContent.bonds.length > 0 && (
-          <div className="bonds" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#f3e5f5',
-            borderRadius: '6px',
-            borderLeft: '4px solid #9c27b0'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#7b1fa2',
-              fontSize: '1.1rem'
-            }}>
+          <div className="bonds">
+            <h4>
               Suggested Bonds
             </h4>
             {formatTraits(actualContent.bonds)}
@@ -167,17 +124,8 @@ export default function BackgroundDisplay({ result, content, onClose }: Backgrou
 
         {/* Flaws */}
         {actualContent.flaws && actualContent.flaws.length > 0 && (
-          <div className="flaws" style={{
-            padding: '1rem',
-            backgroundColor: '#ffebee',
-            borderRadius: '6px',
-            borderLeft: '4px solid #f44336'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#c62828',
-              fontSize: '1.1rem'
-            }}>
+          <div className="flaws">
+            <h4>
               Suggested Flaws
             </h4>
             {formatTraits(actualContent.flaws)}

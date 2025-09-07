@@ -1,0 +1,169 @@
+// Optional Feature Display Components
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.optional-feature-display {
+  .feature-type {
+    margin-bottom: $spacing-2xl;
+    padding: $spacing-lg;
+    border-radius: $border-radius-md;
+    border-left: 4px solid;
+
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+
+    // Feature type-specific styling
+    &[data-feature-type="EI"] {
+      background-color: rgba(#8b5cf6, 0.2);
+      border-left-color: #8b5cf6;
+      
+      h4 {
+        color: #8b5cf6;
+      }
+    }
+
+    &[data-feature-type="FS"] {
+      background-color: rgba(#ef4444, 0.2);
+      border-left-color: #ef4444;
+      
+      h4 {
+        color: #ef4444;
+      }
+    }
+
+    &[data-feature-type="MM"] {
+      background-color: rgba(#3b82f6, 0.2);
+      border-left-color: #3b82f6;
+      
+      h4 {
+        color: #3b82f6;
+      }
+    }
+
+    &[data-feature-type="PB"] {
+      background-color: rgba(#10b981, 0.2);
+      border-left-color: #10b981;
+      
+      h4 {
+        color: #10b981;
+      }
+    }
+
+    &[data-feature-type="ED"] {
+      background-color: rgba(#f59e0b, 0.2);
+      border-left-color: #f59e0b;
+      
+      h4 {
+        color: #f59e0b;
+      }
+    }
+
+    &[data-feature-type="AI"] {
+      background-color: rgba(#6366f1, 0.2);
+      border-left-color: #6366f1;
+      
+      h4 {
+        color: #6366f1;
+      }
+    }
+
+    &[data-feature-type="RN"] {
+      background-color: rgba(#22c55e, 0.2);
+      border-left-color: #22c55e;
+      
+      h4 {
+        color: #22c55e;
+      }
+    }
+
+    &[data-feature-type="MV"] {
+      background-color: rgba(#f97316, 0.2);
+      border-left-color: #f97316;
+      
+      h4 {
+        color: #f97316;
+      }
+    }
+
+    // Default fallback
+    &:not([data-feature-type]) {
+      background-color: rgba(#6c757d, 0.2);
+      border-left-color: #6c757d;
+      
+      h4 {
+        color: #6c757d;
+      }
+    }
+  }
+
+  .feature-properties {
+    margin-bottom: $spacing-2xl;
+    padding: $spacing-lg;
+    background-color: $gray-50;
+    border-radius: $border-radius-md;
+
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: $gray-700;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+
+    .charges-section {
+      margin-top: $spacing-sm;
+
+      strong {
+        color: $color-text-primary;
+      }
+
+      .charges-details {
+        margin-left: $spacing-lg;
+      }
+    }
+  }
+
+  .usage-info {
+    @include content-section($color-warning);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #f57c00;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .feature-description {
+    margin-bottom: $spacing-2xl;
+
+    h4 {
+      color: $gray-700;
+      margin-bottom: $spacing-lg;
+      border-bottom: 2px solid $gray-200;
+      padding-bottom: $spacing-sm;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .additional-sources {
+    @include content-section($color-success);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #2e7d32;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+
+    .source-item {
+      margin-bottom: $spacing-sm;
+
+      strong {
+        color: $color-text-primary;
+      }
+    }
+  }
+}

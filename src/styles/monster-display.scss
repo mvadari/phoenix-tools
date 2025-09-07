@@ -1,0 +1,121 @@
+// Monster Display Components
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.monster-display {
+  .monster-basic-info {
+    margin-bottom: $spacing-2xl;
+    padding: $spacing-lg;
+    background-color: $gray-50;
+    border-radius: $border-radius-md;
+    font-size: $font-size-lg;
+    font-style: italic;
+    text-align: center;
+    color: $gray-700;
+  }
+
+  .monster-proficiencies {
+    margin-top: $spacing-2xl;
+    padding: $spacing-lg;
+    background-color: $gray-50;
+    border-radius: $border-radius-md;
+  }
+
+  .monster-senses {
+    margin-top: $spacing-2xl;
+  }
+
+  .traits {
+    margin-top: $spacing-2xl;
+
+    h4 {
+      color: $gray-700;
+      margin-bottom: $spacing-lg;
+      border-bottom: 2px solid $gray-200;
+      padding-bottom: $spacing-sm;
+      @include heading-style($font-size-lg);
+    }
+
+    .trait-item {
+      margin-bottom: $spacing-lg;
+      padding-left: $spacing-lg;
+      border-left: 3px solid $color-success;
+
+      h5 {
+        margin: 0 0 $spacing-sm 0;
+        font-weight: $font-weight-bold;
+        color: $gray-700;
+        @include heading-style($font-size-base);
+      }
+    }
+  }
+
+  .monster-description {
+    margin-top: $spacing-2xl;
+
+    h4 {
+      color: $gray-700;
+      margin-bottom: $spacing-lg;
+      border-bottom: 2px solid $gray-200;
+      padding-bottom: $spacing-sm;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .source-selection-message {
+    text-align: center;
+    padding: $spacing-2xl;
+    color: $gray-500;
+  }
+
+  .monster-stats {
+    @include responsive-grid(200px, $spacing-lg);
+    padding: $spacing-2xl;
+    background: $gray-50;
+    border-radius: $border-radius-lg;
+    margin-bottom: $spacing-2xl;
+  }
+
+  .monster-abilities {
+    margin-bottom: $spacing-2xl;
+  }
+
+  .monster-actions {
+    .actions-section {
+      margin: $spacing-2xl 0;
+      
+      .section-title {
+        @include heading-style($font-size-xl);
+        color: $color-monster;
+        border-bottom: 2px solid rgba($color-monster, 0.3);
+        padding-bottom: $spacing-sm;
+        margin-bottom: $spacing-lg;
+      }
+    }
+  }
+
+  .legendary-actions {
+    @include content-section($color-monster);
+    
+    .legendary-header {
+      @include heading-style($font-size-lg);
+      color: $color-monster;
+      margin-bottom: $spacing-lg;
+    }
+  }
+
+  .monster-spellcasting {
+    @include content-section($color-spell);
+    
+    .spellcasting-header {
+      @include heading-style($font-size-lg);
+      color: $color-spell;
+      margin-bottom: $spacing-lg;
+    }
+  }
+}
+
+// Monster-specific details section (legacy support)
+.monster-details {
+  @include content-section($color-monster);
+}

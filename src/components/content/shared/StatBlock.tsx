@@ -45,27 +45,13 @@ export default function StatBlock({ ac, hp, cr, xp, proficiencyBonus }: StatBloc
   if (!hasStats) return null;
 
   return (
-    <div className="stat-block" style={{
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
-      gap: '1rem',
-      padding: '1rem',
-      backgroundColor: '#f8f9fa',
-      borderRadius: '6px',
-      border: '1px solid #dee2e6',
-      marginTop: '1rem'
-    }}>
+    <div className="stat-block">
       {ac && (
         <div className="stat-item">
-          <div style={{ 
-            fontWeight: 'bold', 
-            fontSize: '0.8rem', 
-            color: '#6c757d',
-            marginBottom: '0.25rem'
-          }}>
+          <div className="stat-label">
             ARMOR CLASS
           </div>
-          <div style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>
+          <div className="stat-value">
             {formatAC()}
           </div>
         </div>
@@ -73,15 +59,10 @@ export default function StatBlock({ ac, hp, cr, xp, proficiencyBonus }: StatBloc
       
       {hp && (
         <div className="stat-item">
-          <div style={{ 
-            fontWeight: 'bold', 
-            fontSize: '0.8rem', 
-            color: '#6c757d',
-            marginBottom: '0.25rem'
-          }}>
+          <div className="stat-label">
             HIT POINTS
           </div>
-          <div style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>
+          <div className="stat-value">
             {formatHP()}
           </div>
         </div>
@@ -89,15 +70,10 @@ export default function StatBlock({ ac, hp, cr, xp, proficiencyBonus }: StatBloc
       
       {cr && (
         <div className="stat-item">
-          <div style={{ 
-            fontWeight: 'bold', 
-            fontSize: '0.8rem', 
-            color: '#6c757d',
-            marginBottom: '0.25rem'
-          }}>
+          <div className="stat-label">
             CHALLENGE RATING
           </div>
-          <div style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>
+          <div className="stat-value">
             {formatCR()}
           </div>
         </div>
@@ -105,15 +81,10 @@ export default function StatBlock({ ac, hp, cr, xp, proficiencyBonus }: StatBloc
       
       {(cr || proficiencyBonus) && (
         <div className="stat-item">
-          <div style={{ 
-            fontWeight: 'bold', 
-            fontSize: '0.8rem', 
-            color: '#6c757d',
-            marginBottom: '0.25rem'
-          }}>
+          <div className="stat-label">
             PROFICIENCY BONUS
           </div>
-          <div style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>
+          <div className="stat-value">
             +{getProficiencyBonus()}
           </div>
         </div>

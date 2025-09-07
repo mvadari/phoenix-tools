@@ -26,39 +26,19 @@ export default function AbilityScores({ str, dex, con, int, wis, cha, className 
   if (abilities.length === 0) return null;
 
   return (
-    <div className={`ability-scores ${className}`} style={{
-      display: 'grid',
-      gridTemplateColumns: `repeat(${Math.min(abilities.length, 6)}, 1fr)`,
-      gap: '1rem',
-      marginTop: '1rem'
-    }}>
+    <div 
+      className={`ability-scores grid-layout ${className}`} 
+      data-columns={Math.min(abilities.length, 6)}
+    >
       {abilities.map(({ name, score }) => (
-        <div key={name} className="ability-score" style={{
-          textAlign: 'center',
-          padding: '0.5rem',
-          backgroundColor: '#f8f9fa',
-          borderRadius: '4px',
-          border: '1px solid #dee2e6'
-        }}>
-          <div style={{ 
-            fontWeight: 'bold', 
-            fontSize: '0.8rem', 
-            color: '#6c757d',
-            marginBottom: '0.25rem'
-          }}>
+        <div key={name} className="ability-score">
+          <div className="ability-name">
             {name}
           </div>
-          <div style={{ 
-            fontSize: '1.1rem', 
-            fontWeight: 'bold',
-            marginBottom: '0.125rem'
-          }}>
+          <div className="ability-value">
             {score}
           </div>
-          <div style={{ 
-            fontSize: '0.9rem', 
-            color: '#6c757d'
-          }}>
+          <div className="ability-modifier">
             ({getModifier(score!)})
           </div>
         </div>

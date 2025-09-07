@@ -37,7 +37,7 @@ export default function SpellDisplay({ result, content, onClose }: SpellDisplayP
           onSourceChange={handleSourceChange}
           primarySource={result.source}
         />
-        <div style={{ textAlign: 'center', padding: '2rem', color: '#6c757d' }}>
+        <div className="loading">
           Select a source above to view content
         </div>
       </BaseContentDisplay>
@@ -114,15 +114,7 @@ export default function SpellDisplay({ result, content, onClose }: SpellDisplayP
       )}
       <div className="spell-display">
         {/* Core Spell Information */}
-        <div className="spell-stats" style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '1rem',
-          padding: '1.5rem',
-          backgroundColor: '#f8f9fa',
-          borderRadius: '8px',
-          marginBottom: '1.5rem'
-        }}>
+        <div className="spell-stats">
           <div>
             <DetailRow 
               name="Level" 
@@ -142,25 +134,15 @@ export default function SpellDisplay({ result, content, onClose }: SpellDisplayP
 
         {/* Spell Description */}
         {spellContent.entries && (
-          <div className="spell-description" style={{ marginBottom: '1.5rem' }}>
+          <div className="spell-description">
             <ContentEntries entries={spellContent.entries} />
           </div>
         )}
 
         {/* At Higher Levels */}
         {spellContent.entriesHigherLevel && (
-          <div className="higher-level-section" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#e8f4fd',
-            borderRadius: '6px',
-            borderLeft: '4px solid #2196f3'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#1976d2',
-              fontSize: '1.1rem'
-            }}>
+          <div className="higher-level-section">
+            <h4>
               At Higher Levels
             </h4>
             <ContentEntries entries={spellContent.entriesHigherLevel} />
@@ -169,23 +151,13 @@ export default function SpellDisplay({ result, content, onClose }: SpellDisplayP
 
         {/* Scaling Level Dice */}
         {spellContent.scalingLevelDice && (
-          <div className="scaling-dice" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#fff3e0',
-            borderRadius: '6px',
-            borderLeft: '4px solid #ff9800'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#f57c00',
-              fontSize: '1.1rem'
-            }}>
+          <div className="scaling-dice">
+            <h4>
               Damage Scaling: {spellContent.scalingLevelDice.label}
             </h4>
-            <div style={{ fontFamily: 'monospace' }}>
+            <div className="scaling-info">
               {Object.entries(spellContent.scalingLevelDice.scaling).map(([level, dice]) => (
-                <div key={level} style={{ marginBottom: '0.25rem' }}>
+                <div key={level} className="scaling-level">
                   <strong>Level {level}:</strong> {dice as string}
                 </div>
               ))}
@@ -195,34 +167,16 @@ export default function SpellDisplay({ result, content, onClose }: SpellDisplayP
 
         {/* Available Classes */}
         {spellContent.classes && formatClasses(spellContent.classes).length > 0 && (
-          <div className="spell-classes" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#f3e5f5',
-            borderRadius: '6px',
-            borderLeft: '4px solid #9c27b0'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#7b1fa2',
-              fontSize: '1.1rem'
-            }}>
+          <div className="spell-classes">
+            <h4>
               Available to Classes
             </h4>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <div className="classes-list">
               {formatClasses(spellContent.classes).map((className) => (
                 <Link
                   key={className}
                   to={`/class/${className.toLowerCase()}`}
-                  style={{
-                    padding: '0.25rem 0.75rem',
-                    backgroundColor: '#e1bee7',
-                    color: '#4a148c',
-                    borderRadius: '16px',
-                    textDecoration: 'none',
-                    fontSize: '0.875rem',
-                    fontWeight: '500'
-                  }}
+                  className="class-link"
                 >
                   {className}
                 </Link>
@@ -233,17 +187,8 @@ export default function SpellDisplay({ result, content, onClose }: SpellDisplayP
 
         {/* Combat Information */}
         {(spellContent.savingThrow || spellContent.damageInflict || spellContent.conditionInflict) && (
-          <div className="combat-info" style={{
-            padding: '1rem',
-            backgroundColor: '#ffebee',
-            borderRadius: '6px',
-            borderLeft: '4px solid #f44336'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#c62828',
-              fontSize: '1.1rem'
-            }}>
+          <div className="combat-info">
+            <h4>
               Combat Effects
             </h4>
             {spellContent.savingThrow && (

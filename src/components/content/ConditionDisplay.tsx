@@ -10,48 +10,12 @@ interface ConditionDisplayProps {
 }
 
 export default function ConditionDisplay({ result, content, onClose }: ConditionDisplayProps) {
-  const getConditionColor = (conditionName: string): string => {
-    const name = conditionName.toLowerCase();
-    const colorMap: { [key: string]: string } = {
-      // Negative conditions - red spectrum
-      'blinded': '#dc3545',
-      'charmed': '#e83e8c',
-      'deafened': '#6610f2',
-      'frightened': '#fd7e14',
-      'grappled': '#20c997',
-      'incapacitated': '#dc3545',
-      'paralyzed': '#6f42c1',
-      'petrified': '#6c757d',
-      'poisoned': '#28a745',
-      'prone': '#ffc107',
-      'restrained': '#17a2b8',
-      'stunned': '#dc3545',
-      'unconscious': '#343a40',
-      // Diseases - darker colors
-      'disease': '#8b0000',
-      'madness': '#4b0082',
-      'curse': '#2f4f4f'
-    };
-    
-    // Check for disease or curse keywords
-    if (name.includes('disease') || name.includes('fever') || name.includes('plague')) return colorMap['disease'];
-    if (name.includes('madness') || name.includes('insanity')) return colorMap['madness'];
-    if (name.includes('curse') || name.includes('cursed')) return colorMap['curse'];
-    
-    return colorMap[name] || '#6c757d';
-  };
 
   const formatDuration = (duration: string): React.ReactNode => {
     if (!duration) return null;
     
     return (
-      <div style={{
-        padding: '0.5rem 1rem',
-        backgroundColor: '#fff3e0',
-        borderRadius: '6px',
-        fontSize: '0.9rem',
-        fontWeight: '500'
-      }}>
+      <div className="duration-info">
         <strong>Duration:</strong> {duration}
       </div>
     );
@@ -61,13 +25,7 @@ export default function ConditionDisplay({ result, content, onClose }: Condition
     if (!save) return null;
     
     return (
-      <div style={{
-        padding: '0.5rem 1rem',
-        backgroundColor: '#e8f5e8',
-        borderRadius: '6px',
-        fontSize: '0.9rem',
-        fontWeight: '500'
-      }}>
+      <div className="save-info">
         <strong>Save to End:</strong> {save}
       </div>
     );
@@ -99,32 +57,15 @@ export default function ConditionDisplay({ result, content, onClose }: Condition
     <BaseContentDisplay result={result} content={content} onClose={onClose}>
       <div className="condition-display">
         {/* Condition Type Header */}
-        <div className="condition-type" style={{
-          marginBottom: '1.5rem',
-          padding: '1rem',
-          backgroundColor: getConditionColor(result.name) + '20',
-          borderRadius: '6px',
-          borderLeft: `4px solid ${getConditionColor(result.name)}`,
-          textAlign: 'center'
-        }}>
-          <h4 style={{ 
-            margin: '0', 
-            color: getConditionColor(result.name),
-            fontSize: '1.2rem',
-            fontWeight: 'bold'
-          }}>
+        <div className="condition-type" data-condition={result.name.toLowerCase()}>
+          <h4>
             {getConditionType()}
           </h4>
         </div>
 
         {/* Duration and Save Information */}
         {(content.duration || content.save) && (
-          <div className="condition-mechanics" style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '1rem',
-            marginBottom: '1.5rem'
-          }}>
+          <div className="condition-mechanics">
             {content.duration && formatDuration(content.duration)}
             {content.save && formatSave(content.save)}
           </div>
@@ -132,18 +73,8 @@ export default function ConditionDisplay({ result, content, onClose }: Condition
 
         {/* Condition Effects */}
         {content.entries && (
-          <div className="condition-effects" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#f8f9fa',
-            borderRadius: '6px',
-            border: '1px solid #dee2e6'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#495057',
-              fontSize: '1.1rem'
-            }}>
+          <div className="condition-effects">
+            <h4>
               Effects
             </h4>
             <ContentEntries entries={content.entries} />
@@ -152,18 +83,8 @@ export default function ConditionDisplay({ result, content, onClose }: Condition
 
         {/* Severity (for diseases) */}
         {content.severity && (
-          <div className="condition-severity" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#ffebee',
-            borderRadius: '6px',
-            borderLeft: '4px solid #f44336'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#c62828',
-              fontSize: '1.1rem'
-            }}>
+          <div className="condition-severity">
+            <h4>
               Severity
             </h4>
             <DetailRow name="Level" value={content.severity} />
@@ -172,18 +93,8 @@ export default function ConditionDisplay({ result, content, onClose }: Condition
 
         {/* Transmission (for diseases) */}
         {content.transmission && (
-          <div className="condition-transmission" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#fff3e0',
-            borderRadius: '6px',
-            borderLeft: '4px solid #ff9800'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#f57c00',
-              fontSize: '1.1rem'
-            }}>
+          <div className="condition-transmission">
+            <h4>
               Transmission
             </h4>
             <ContentEntries entries={[content.transmission]} />
@@ -192,17 +103,8 @@ export default function ConditionDisplay({ result, content, onClose }: Condition
 
         {/* Treatment */}
         {content.treatment && (
-          <div className="condition-treatment" style={{
-            padding: '1rem',
-            backgroundColor: '#e8f5e8',
-            borderRadius: '6px',
-            borderLeft: '4px solid #4caf50'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#2e7d32',
-              fontSize: '1.1rem'
-            }}>
+          <div className="condition-treatment">
+            <h4>
               Treatment
             </h4>
             <ContentEntries entries={[content.treatment]} />

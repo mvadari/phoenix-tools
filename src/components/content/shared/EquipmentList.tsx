@@ -33,7 +33,7 @@ export default function EquipmentList({ equipment, title = "Starting Equipment" 
   const renderEquipmentGroup = (equipGroup: any, groupIndex: number) => {
     if (Array.isArray(equipGroup)) {
       return equipGroup.map((item, itemIndex) => (
-        <div key={`${groupIndex}-${itemIndex}`} style={{ marginBottom: '0.25rem' }}>
+        <div key={`${groupIndex}-${itemIndex}`} className="equipment-item">
           • {formatEquipmentItem(item)}
         </div>
       ));
@@ -41,7 +41,7 @@ export default function EquipmentList({ equipment, title = "Starting Equipment" 
     
     if (equipGroup._) {
       return equipGroup._.map((item: any, itemIndex: number) => (
-        <div key={`${groupIndex}-${itemIndex}`} style={{ marginBottom: '0.25rem' }}>
+        <div key={`${groupIndex}-${itemIndex}`} className="equipment-item">
           • {formatEquipmentItem(item)}
         </div>
       ));
@@ -49,11 +49,11 @@ export default function EquipmentList({ equipment, title = "Starting Equipment" 
     
     if (equipGroup.a) {
       return (
-        <div key={groupIndex} style={{ marginBottom: '0.5rem' }}>
+        <div key={groupIndex} className="equipment-choice-group">
           <strong>Choose one of:</strong>
-          <div style={{ marginLeft: '1rem' }}>
+          <div className="choice-options">
             {equipGroup.a.map((item: any, itemIndex: number) => (
-              <div key={itemIndex} style={{ marginBottom: '0.25rem' }}>
+              <div key={itemIndex} className="choice-item">
                 • {formatEquipmentItem(item)}
               </div>
             ))}
@@ -64,11 +64,11 @@ export default function EquipmentList({ equipment, title = "Starting Equipment" 
     
     if (equipGroup.b) {
       return (
-        <div key={groupIndex} style={{ marginBottom: '0.5rem' }}>
+        <div key={groupIndex} className="equipment-choice-group">
           <strong>Or choose:</strong>
-          <div style={{ marginLeft: '1rem' }}>
+          <div className="choice-options">
             {equipGroup.b.map((item: any, itemIndex: number) => (
-              <div key={itemIndex} style={{ marginBottom: '0.25rem' }}>
+              <div key={itemIndex} className="choice-item">
                 • {formatEquipmentItem(item)}
               </div>
             ))}
@@ -85,23 +85,12 @@ export default function EquipmentList({ equipment, title = "Starting Equipment" 
   };
 
   return (
-    <div className="equipment-list" style={{
-      marginTop: '1rem',
-      padding: '1rem',
-      backgroundColor: '#f8f9fa',
-      borderRadius: '6px',
-      border: '1px solid #dee2e6'
-    }}>
-      <h4 style={{ 
-        color: '#495057', 
-        marginBottom: '1rem',
-        borderBottom: '2px solid #dee2e6',
-        paddingBottom: '0.5rem'
-      }}>
+    <div className="equipment-list">
+      <h4>
         {title}
       </h4>
       
-      <div style={{ fontFamily: 'monospace', fontSize: '0.9rem' }}>
+      <div className="equipment-content">
         {equipment.map((equipGroup, groupIndex) => renderEquipmentGroup(equipGroup, groupIndex))}
       </div>
     </div>

@@ -66,11 +66,7 @@ export default function CategoryFilter({
         </button>
       ))}
       
-      <div className="category-divider" style={{
-        margin: '0 0.5rem',
-        borderLeft: '1px solid #dee2e6',
-        height: '30px'
-      }} />
+      <div className="category-divider" />
       
       {SECONDARY_CATEGORIES.map(category => (
         <button

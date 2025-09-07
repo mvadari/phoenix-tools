@@ -37,7 +37,7 @@ export default function ActionDisplay({ result, content, onClose }: ActionDispla
           onSourceChange={handleSourceChange}
           primarySource={result.source}
         />
-        <div style={{ textAlign: 'center', padding: '2rem', color: '#6c757d' }}>
+        <div className="source-selection-message">
           Select a source above to view content
         </div>
       </BaseContentDisplay>
@@ -64,7 +64,7 @@ export default function ActionDisplay({ result, content, onClose }: ActionDispla
     if (!seeAlso || seeAlso.length === 0) return null;
 
     return (
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+      <div className="action-tags">
         {seeAlso.map((actionRef) => {
           // Parse action reference like "Grapple" or "Disarm|DMG"
           const [actionName] = actionRef.split('|');
@@ -74,15 +74,7 @@ export default function ActionDisplay({ result, content, onClose }: ActionDispla
             <Link
               key={actionRef}
               to={`/action/${slug}`}
-              style={{
-                padding: '0.25rem 0.75rem',
-                backgroundColor: '#e3f2fd',
-                color: '#1565c0',
-                borderRadius: '16px',
-                textDecoration: 'none',
-                fontSize: '0.875rem',
-                fontWeight: '500'
-              }}
+              className="action-tag"
             >
               {actionName}
             </Link>
@@ -120,19 +112,6 @@ export default function ActionDisplay({ result, content, onClose }: ActionDispla
     }).join(', ');
   };
 
-  const getActionTypeColor = (time: any[]): string => {
-    if (!time || time.length === 0) return '#6c757d';
-    const actionType = time[0].unit?.toLowerCase();
-    const colorMap: { [key: string]: string } = {
-      'action': '#dc3545',
-      'bonus action': '#28a745',
-      'reaction': '#ffc107',
-      'minute': '#6f42c1',
-      'hour': '#17a2b8',
-      'free': '#20c997'
-    };
-    return colorMap[actionType] || '#6c757d';
-  };
 
   return (
     <BaseContentDisplay result={result} content={actionContent} onClose={onClose}>
@@ -147,18 +126,8 @@ export default function ActionDisplay({ result, content, onClose }: ActionDispla
       <div className="action-display">
         {/* Action Type and Timing */}
         {actionContent.time && (
-          <div className="action-timing" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: getActionTypeColor(actionContent.time) + '20',
-            borderRadius: '6px',
-            borderLeft: `4px solid ${getActionTypeColor(actionContent.time)}`
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: getActionTypeColor(actionContent.time),
-              fontSize: '1.1rem'
-            }}>
+          <div className="action-timing" data-action-type={actionContent.time[0]?.unit?.toLowerCase() || 'unknown'}>
+            <h4>
               Action Type
             </h4>
             <DetailRow name="Time" value={formatTime(actionContent.time)} />
@@ -168,18 +137,8 @@ export default function ActionDisplay({ result, content, onClose }: ActionDispla
 
         {/* Spell-like Properties */}
         {(actionContent.components || actionContent.duration || actionContent.school) && (
-          <div className="spell-properties" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#e8f4fd',
-            borderRadius: '6px',
-            borderLeft: '4px solid #2196f3'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#1976d2',
-              fontSize: '1.1rem'
-            }}>
+          <div className="spell-properties">
+            <h4>
               Spell Properties
             </h4>
             {actionContent.components && <DetailRow name="Components" value={formatComponents(actionContent.components)} />}
@@ -190,13 +149,8 @@ export default function ActionDisplay({ result, content, onClose }: ActionDispla
 
         {/* Action Description */}
         {actionContent.entries && (
-          <div className="action-description" style={{ marginBottom: '1.5rem' }}>
-            <h4 style={{ 
-              color: '#495057', 
-              marginBottom: '1rem',
-              borderBottom: '2px solid #dee2e6',
-              paddingBottom: '0.5rem'
-            }}>
+          <div className="action-description">
+            <h4>
               Description
             </h4>
             <ContentEntries entries={actionContent.entries} />
@@ -205,18 +159,8 @@ export default function ActionDisplay({ result, content, onClose }: ActionDispla
 
         {/* Higher Level Information */}
         {actionContent.entriesHigherLevel && (
-          <div className="higher-level-section" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#fff3e0',
-            borderRadius: '6px',
-            borderLeft: '4px solid #ff9800'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#f57c00',
-              fontSize: '1.1rem'
-            }}>
+          <div className="higher-level-section">
+            <h4>
               At Higher Levels
             </h4>
             <ContentEntries entries={actionContent.entriesHigherLevel} />
@@ -225,34 +169,16 @@ export default function ActionDisplay({ result, content, onClose }: ActionDispla
 
         {/* Classes that can use this action */}
         {actionContent.classes && (
-          <div className="action-classes" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#f3e5f5',
-            borderRadius: '6px',
-            borderLeft: '4px solid #9c27b0'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#7b1fa2',
-              fontSize: '1.1rem'
-            }}>
+          <div className="action-classes">
+            <h4>
               Available to Classes
             </h4>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <div className="class-tags">
               {actionContent.classes.fromClassList?.map((cls: any) => (
                 <Link
                   key={cls.name}
                   to={`/class/${cls.name.toLowerCase()}`}
-                  style={{
-                    padding: '0.25rem 0.75rem',
-                    backgroundColor: '#e1bee7',
-                    color: '#4a148c',
-                    borderRadius: '16px',
-                    textDecoration: 'none',
-                    fontSize: '0.875rem',
-                    fontWeight: '500'
-                  }}
+                  className="class-tag"
                 >
                   {cls.name}
                 </Link>
@@ -263,17 +189,8 @@ export default function ActionDisplay({ result, content, onClose }: ActionDispla
 
         {/* Related Actions */}
         {actionContent.seeAlsoAction && actionContent.seeAlsoAction.length > 0 && (
-          <div className="related-actions" style={{
-            padding: '1rem',
-            backgroundColor: '#e8f5e8',
-            borderRadius: '6px',
-            borderLeft: '4px solid #4caf50'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#2e7d32',
-              fontSize: '1.1rem'
-            }}>
+          <div className="related-actions">
+            <h4>
               Related Actions
             </h4>
             {formatSeeAlsoActions(actionContent.seeAlsoAction)}

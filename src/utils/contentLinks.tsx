@@ -89,11 +89,7 @@ export function processContentLinks(text: string): React.ReactNode {
       <Link
         key={`link-${index}`}
         to={path}
-        style={{
-          color: '#007bff',
-          textDecoration: 'underline',
-          textDecorationStyle: 'dotted'
-        }}
+        className="content-link"
         title={`Go to ${match.category}: ${match.match}`}
       >
         {match.match}
@@ -150,11 +146,11 @@ export function processEntry(entry: any): React.ReactNode {
     // Handle table entries
     if (entry.type === 'table' && entry.colLabels && entry.rows) {
       return (
-        <table style={{ marginTop: '1rem', marginBottom: '1rem', borderCollapse: 'collapse', width: '100%' }}>
+        <table className="content-table">
           <thead>
             <tr>
               {entry.colLabels.map((label: string, index: number) => (
-                <th key={index} style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f5f5f5' }}>
+                <th key={index}>
                   {processContentLinks(label)}
                 </th>
               ))}
@@ -164,7 +160,7 @@ export function processEntry(entry: any): React.ReactNode {
             {entry.rows.map((row: any[], rowIndex: number) => (
               <tr key={rowIndex}>
                 {row.map((cell: any, cellIndex: number) => (
-                  <td key={cellIndex} style={{ border: '1px solid #ddd', padding: '8px' }}>
+                  <td key={cellIndex}>
                     {processEntry(cell)}
                   </td>
                 ))}

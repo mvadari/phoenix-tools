@@ -50,24 +50,10 @@ export default function ContentPage() {
 
   if (error) {
     return (
-      <div className="content-error" style={{
-        padding: '2rem',
-        textAlign: 'center',
-        backgroundColor: '#f8f9fa',
-        borderRadius: '8px',
-        margin: '2rem'
-      }}>
+      <div className="content-error">
         <h2>Error</h2>
         <p>{error}</p>
-        <Link to="/" style={{
-          color: '#007bff',
-          textDecoration: 'none',
-          padding: '0.5rem 1rem',
-          backgroundColor: '#e9ecef',
-          borderRadius: '4px',
-          display: 'inline-block',
-          marginTop: '1rem'
-        }}>
+        <Link to="/" className="back-to-search-link">
           ← Back to Search
         </Link>
       </div>
@@ -76,13 +62,7 @@ export default function ContentPage() {
 
   if (!searchResult) {
     return (
-      <div className="content-loading" style={{
-        padding: '2rem',
-        textAlign: 'center',
-        backgroundColor: '#f8f9fa',
-        borderRadius: '8px',
-        margin: '2rem'
-      }}>
+      <div className="content-loading">
         <div>Loading content...</div>
       </div>
     );
@@ -92,13 +72,7 @@ export default function ContentPage() {
 
   if (contentState?.loading) {
     return (
-      <div className="content-loading" style={{
-        padding: '2rem',
-        textAlign: 'center',
-        backgroundColor: '#f8f9fa',
-        borderRadius: '8px',
-        margin: '2rem'
-      }}>
+      <div className="content-loading">
         <div>Loading {searchResult.name}...</div>
       </div>
     );
@@ -106,24 +80,10 @@ export default function ContentPage() {
 
   if (contentState?.error) {
     return (
-      <div className="content-error" style={{
-        padding: '2rem',
-        textAlign: 'center',
-        backgroundColor: '#f8f9fa',
-        borderRadius: '8px',
-        margin: '2rem'
-      }}>
+      <div className="content-error">
         <h2>Error Loading Content</h2>
         <p>{contentState.error}</p>
-        <Link to="/" style={{
-          color: '#007bff',
-          textDecoration: 'none',
-          padding: '0.5rem 1rem',
-          backgroundColor: '#e9ecef',
-          borderRadius: '4px',
-          display: 'inline-block',
-          marginTop: '1rem'
-        }}>
+        <Link to="/" className="back-to-search-link">
           ← Back to Search
         </Link>
       </div>
@@ -132,24 +92,10 @@ export default function ContentPage() {
 
   if (!contentState?.data) {
     return (
-      <div className="content-not-found" style={{
-        padding: '2rem',
-        textAlign: 'center',
-        backgroundColor: '#f8f9fa',
-        borderRadius: '8px',
-        margin: '2rem'
-      }}>
+      <div className="content-not-found">
         <h2>Content Not Found</h2>
         <p>The requested content could not be found.</p>
-        <Link to="/" style={{
-          color: '#007bff',
-          textDecoration: 'none',
-          padding: '0.5rem 1rem',
-          backgroundColor: '#e9ecef',
-          borderRadius: '4px',
-          display: 'inline-block',
-          marginTop: '1rem'
-        }}>
+        <Link to="/" className="back-to-search-link">
           ← Back to Search
         </Link>
       </div>
@@ -159,22 +105,16 @@ export default function ContentPage() {
   return (
     <div className="content-page">
       {/* Breadcrumb navigation */}
-      <div className="breadcrumb" style={{
-        padding: '1rem',
-        backgroundColor: '#f8f9fa',
-        borderRadius: '4px',
-        marginBottom: '1rem',
-        fontSize: '0.9rem'
-      }}>
-        <Link to="/" style={{ color: '#007bff', textDecoration: 'none' }}>
+      <div className="breadcrumb">
+        <Link to="/" className="breadcrumb-link">
           Search
         </Link>
-        <span style={{ margin: '0 0.5rem', color: '#6c757d' }}>→</span>
-        <span style={{ color: '#6c757d', textTransform: 'capitalize' }}>
+        <span className="breadcrumb-separator">→</span>
+        <span className="breadcrumb-category">
           {searchResult.category}
         </span>
-        <span style={{ margin: '0 0.5rem', color: '#6c757d' }}>→</span>
-        <span style={{ fontWeight: 'bold' }}>
+        <span className="breadcrumb-separator">→</span>
+        <span className="breadcrumb-current">
           {searchResult.name}
         </span>
       </div>

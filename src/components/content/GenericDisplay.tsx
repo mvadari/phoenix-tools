@@ -35,7 +35,7 @@ export default function GenericDisplay({ result, content, onClose }: GenericDisp
           onSourceChange={handleSourceChange}
           primarySource={result.source}
         />
-        <div style={{ textAlign: 'center', padding: '2rem', color: '#6c757d' }}>
+        <div className="source-selection-message">
           Select a source above to view content
         </div>
       </BaseContentDisplay>

@@ -37,7 +37,7 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
           onSourceChange={handleSourceChange}
           primarySource={result.source}
         />
-        <div style={{ textAlign: 'center', padding: '2rem', color: '#6c757d' }}>
+        <div className="loading-message">
           Select a source above to view content
         </div>
       </BaseContentDisplay>
@@ -57,9 +57,9 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
     if (!ability || ability.length === 0) return null;
 
     return ability.map((abilitySet, index) => (
-      <div key={index} style={{ marginBottom: '0.5rem' }}>
+      <div key={index} className="ability-increase-item">
         {Object.entries(abilitySet).map(([stat, value]) => (
-          <span key={stat} style={{ marginRight: '1rem' }}>
+          <span key={stat}>
             <strong>{stat.toUpperCase()}</strong> +{(value as number)}
           </span>
         ))}
@@ -95,18 +95,11 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
     if (!traitTags || traitTags.length === 0) return null;
 
     return (
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+      <div className="trait-tags-list">
         {traitTags.map((tag) => (
           <span
             key={tag}
-            style={{
-              padding: '0.25rem 0.75rem',
-              backgroundColor: '#e3f2fd',
-              color: '#1565c0',
-              borderRadius: '16px',
-              fontSize: '0.875rem',
-              fontWeight: '500'
-            }}
+            className="trait-tag"
           >
             {tag}
           </span>
@@ -126,16 +119,8 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
     return entries.map((trait, index) => {
       if (trait.type === 'entries' && trait.name) {
         return (
-          <div key={index} style={{ 
-            marginBottom: '1rem',
-            paddingLeft: '1rem',
-            borderLeft: '3px solid #2196f3'
-          }}>
-            <h5 style={{ 
-              margin: '0 0 0.5rem 0',
-              fontWeight: 'bold',
-              color: '#1976d2'
-            }}>
+          <div key={index} className="racial-trait">
+            <h5>
               {trait.name}
             </h5>
             <ContentEntries entries={trait.entries} />
@@ -150,24 +135,16 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
     if (!subraces || subraces.length === 0) return null;
 
     return subraces.map((subrace, index) => (
-      <div key={index} style={{ 
-        marginBottom: '1.5rem',
-        paddingBottom: '1rem',
-        borderBottom: index < subraces.length - 1 ? '1px solid #e0e0e0' : 'none'
-      }}>
-        <h5 style={{ 
-          margin: '0 0 1rem 0',
-          color: '#2e7d32',
-          fontWeight: 'bold'
-        }}>
+      <div key={index} className="subrace">
+        <h5>
           {subrace.name}
         </h5>
         
         {/* Subrace Ability Score Increases */}
         {subrace.ability && (
-          <div style={{ marginBottom: '0.75rem' }}>
+          <div className="subrace-section">
             <strong>Ability Score Increase:</strong>
-            <div style={{ marginLeft: '1rem' }}>
+            <div className="subrace-content">
               {formatAbilityScoreIncrease(subrace.ability)}
             </div>
           </div>
@@ -175,9 +152,9 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
 
         {/* Subrace Proficiencies */}
         {(subrace.skillProficiencies || subrace.languageProficiencies || subrace.toolProficiencies || subrace.weaponProficiencies || subrace.armorProficiencies) && (
-          <div style={{ marginBottom: '0.75rem' }}>
+          <div className="subrace-section">
             <strong>Additional Proficiencies:</strong>
-            <div style={{ marginLeft: '1rem' }}>
+            <div className="subrace-content">
               <ProficiencyList
                 skills={subrace.skillProficiencies}
                 languages={subrace.languageProficiencies}
@@ -207,29 +184,15 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
       )}
       <div className="race-display">
         {/* Basic Race Information */}
-        <div className="race-basic-info" style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '1rem',
-          marginBottom: '1.5rem'
-        }}>
+        <div className="race-basic-info">
           <DetailRow name="Size" value={formatSize(actualContent.size)} />
           {actualContent.age && <DetailRow name="Age" value={formatAge(actualContent.age)} />}
         </div>
 
         {/* Physical Characteristics */}
         {(actualContent.height || actualContent.weight) && (
-          <div className="physical-characteristics" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#f8f9fa',
-            borderRadius: '6px'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#495057',
-              fontSize: '1.1rem'
-            }}>
+          <div className="physical-characteristics">
+            <h4>
               Physical Characteristics
             </h4>
             {actualContent.height && <DetailRow name="Height" value={formatHeight(actualContent.height)} />}
@@ -242,18 +205,8 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
 
         {/* Ability Score Increases */}
         {actualContent.ability && (
-          <div className="ability-increases" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#e8f5e8',
-            borderRadius: '6px',
-            borderLeft: '4px solid #4caf50'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#2e7d32',
-              fontSize: '1.1rem'
-            }}>
+          <div className="ability-increases">
+            <h4>
               Ability Score Increase
             </h4>
             {formatAbilityScoreIncrease(actualContent.ability)}
@@ -262,18 +215,8 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
 
         {/* Proficiencies */}
         {(actualContent.skillProficiencies || actualContent.languageProficiencies || actualContent.toolProficiencies || actualContent.weaponProficiencies || actualContent.armorProficiencies) && (
-          <div className="race-proficiencies" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#f0f8ff',
-            borderRadius: '6px',
-            borderLeft: '4px solid #2196f3'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#1976d2',
-              fontSize: '1.1rem'
-            }}>
+          <div className="race-proficiencies">
+            <h4>
               Proficiencies
             </h4>
             <ProficiencyList
@@ -288,18 +231,8 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
 
         {/* Damage Resistances & Immunities */}
         {(actualContent.resist || actualContent.immune || actualContent.vulnerable) && (
-          <div className="resistances" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#fff3e0',
-            borderRadius: '6px',
-            borderLeft: '4px solid #ff9800'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#f57c00',
-              fontSize: '1.1rem'
-            }}>
+          <div className="resistances">
+            <h4>
               Damage Resistances & Immunities
             </h4>
             {actualContent.resist && <DetailRow name="Resistances" value={formatResistances(actualContent.resist)} />}
@@ -310,18 +243,8 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
 
         {/* Trait Tags */}
         {actualContent.traitTags && actualContent.traitTags.length > 0 && (
-          <div className="trait-tags" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#f3e5f5',
-            borderRadius: '6px',
-            borderLeft: '4px solid #9c27b0'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#7b1fa2',
-              fontSize: '1.1rem'
-            }}>
+          <div className="trait-tags">
+            <h4>
               Traits
             </h4>
             {formatTraitTags(actualContent.traitTags)}
@@ -330,13 +253,8 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
 
         {/* Racial Traits */}
         {actualContent.entries && (
-          <div className="racial-traits" style={{ marginBottom: '1.5rem' }}>
-            <h4 style={{ 
-              color: '#495057', 
-              marginBottom: '1rem',
-              borderBottom: '2px solid #dee2e6',
-              paddingBottom: '0.5rem'
-            }}>
+          <div className="racial-traits">
+            <h4>
               Racial Traits
             </h4>
             {formatRacialTraits(actualContent.entries)}
@@ -345,17 +263,8 @@ export default function RaceDisplay({ result, content, onClose }: RaceDisplayPro
 
         {/* Subraces */}
         {actualContent.subrace && actualContent.subrace.length > 0 && (
-          <div className="subraces" style={{
-            padding: '1rem',
-            backgroundColor: '#e8f5e8',
-            borderRadius: '6px',
-            borderLeft: '4px solid #4caf50'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#2e7d32',
-              fontSize: '1.1rem'
-            }}>
+          <div className="subraces">
+            <h4>
               Subraces
             </h4>
             {formatSubraces(actualContent.subrace)}

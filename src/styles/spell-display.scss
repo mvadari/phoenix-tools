@@ -1,0 +1,100 @@
+// Spell Display Components
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.spell-display {
+  .spell-stats {
+    @include responsive-grid(200px, $spacing-lg);
+    padding: $spacing-2xl;
+    background: $gray-50;
+    border-radius: $border-radius-lg;
+    margin-bottom: $spacing-2xl;
+  }
+
+  .spell-description {
+    margin-bottom: $spacing-2xl;
+  }
+
+  .higher-level-section {
+    @include content-section(#2196f3);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #1976d2;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .scaling-dice {
+    @include content-section(#ff9800);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #f57c00;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+    
+    .scaling-info {
+      font-family: $font-monospace;
+      
+      .scaling-level {
+        margin-bottom: $spacing-xs;
+        
+        strong {
+          color: $color-text-primary;
+        }
+      }
+    }
+  }
+
+  .spell-classes {
+    @include content-section($color-spell);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #7b1fa2;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+    
+    .classes-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: $spacing-sm;
+      
+      .class-link {
+        padding: $spacing-xs $spacing-md;
+        background: #e1bee7;
+        color: #4a148c;
+        border-radius: $border-radius-pill;
+        text-decoration: none;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
+        transition: all 0.3s ease;
+        
+        &:hover {
+          background: #ce93d8;
+          transform: translateY(-1px);
+        }
+      }
+    }
+  }
+
+  .combat-info {
+    @include content-section(#f44336);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #c62828;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+}
+
+// Spell-specific details section (legacy support)
+.spell-details {
+  @include content-section($color-spell);
+}

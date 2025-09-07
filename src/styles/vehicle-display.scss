@@ -1,0 +1,186 @@
+// Vehicle Display Components
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.vehicle-display {
+  .vehicle-header {
+    margin-bottom: $spacing-2xl;
+    padding: $spacing-lg;
+    border-radius: $border-radius-md;
+    border-left: 4px solid;
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+
+    .vehicle-basic-info {
+      @include responsive-grid(150px, $spacing-lg);
+    }
+
+    // Vehicle type-specific styling
+    &[data-vehicle-type="SHIP"] {
+      background-color: rgba(#1976d2, 0.2);
+      border-left-color: #1976d2;
+      
+      h4 {
+        color: #1976d2;
+      }
+    }
+
+    &[data-vehicle-type="INFWAR"] {
+      background-color: rgba(#d32f2f, 0.2);
+      border-left-color: #d32f2f;
+      
+      h4 {
+        color: #d32f2f;
+      }
+    }
+
+    &[data-vehicle-type="SPELLJAMMER"] {
+      background-color: rgba(#7b1fa2, 0.2);
+      border-left-color: #7b1fa2;
+      
+      h4 {
+        color: #7b1fa2;
+      }
+    }
+
+    &[data-vehicle-type="OBJECT"] {
+      background-color: rgba(#388e3c, 0.2);
+      border-left-color: #388e3c;
+      
+      h4 {
+        color: #388e3c;
+      }
+    }
+
+    &[data-vehicle-type="CREATURE"] {
+      background-color: rgba(#f57c00, 0.2);
+      border-left-color: #f57c00;
+      
+      h4 {
+        color: #f57c00;
+      }
+    }
+
+    // Default fallback
+    &:not([data-vehicle-type]) {
+      background-color: rgba(#6c757d, 0.2);
+      border-left-color: #6c757d;
+      
+      h4 {
+        color: #6c757d;
+      }
+    }
+  }
+
+  .vehicle-combat {
+    @include content-section(#f44336);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #c62828;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+
+    .combat-stats {
+      @include responsive-grid(150px, $spacing-lg);
+    }
+  }
+
+  .vehicle-capacity {
+    @include content-section(#2196f3);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #1976d2;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+
+    .capacity-info {
+      font-size: $font-size-base;
+    }
+  }
+
+  .vehicle-terrain {
+    @include content-section($color-success);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #2e7d32;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+
+    .terrain-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: $spacing-sm;
+
+      .terrain-tag {
+        padding: $spacing-xs $spacing-md;
+        background-color: #e3f2fd;
+        color: #1565c0;
+        border-radius: $border-radius-pill;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
+      }
+    }
+  }
+
+  .vehicle-description {
+    margin-bottom: $spacing-2xl;
+
+    h4 {
+      color: $gray-700;
+      margin-bottom: $spacing-lg;
+      border-bottom: 2px solid $gray-200;
+      padding-bottom: $spacing-sm;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .vehicle-actions {
+    @include content-section($color-warning);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #f57c00;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+
+    .action-item {
+      margin-bottom: $spacing-lg;
+      padding-left: $spacing-lg;
+      border-left: 3px solid #ffb74d;
+
+      h5 {
+        margin: 0 0 $spacing-sm 0;
+        font-weight: $font-weight-bold;
+        color: #ef6c00;
+        @include heading-style($font-size-base);
+      }
+    }
+  }
+
+  .vehicle-equipment {
+    @include content-section($color-spell);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #7b1fa2;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+}
+
+// Legacy vehicle-specific details section (for backwards compatibility)
+.vehicle-details {
+  @include content-section(#6c757d);
+}

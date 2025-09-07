@@ -1,0 +1,362 @@
+// Additional component styles that were in the original index.css
+@use 'variables' as *;
+@use 'mixins' as *;
+
+// Legacy category-specific result styling (from original index.css)
+.result-item {
+  &[data-category="spell"] {
+    @include category-accent($color-spell, '✦');
+  }
+
+  &[data-category="monster"] {
+    @include category-accent($color-monster, '⚔');
+  }
+
+  &[data-category="class"] {
+    @include category-accent($color-class, '⚡');
+  }
+
+  &[data-category="item"] {
+    @include category-accent($color-item, '◊');
+  }
+}
+
+// Legacy ability scores styling for monsters (from original index.css)
+.ability-scores {
+  background: linear-gradient(145deg, rgba($color-primary, 0.1) 0%, rgba($color-primary-light, 0.1) 100%);
+  border: 1px solid rgba($color-primary, 0.3);
+  border-radius: $border-radius-lg;
+  padding: $spacing-lg;
+  margin: $spacing-lg 0;
+
+  > div {
+    background: rgba($color-background-primary, 0.5);
+    border: 1px solid rgba($color-primary, 0.2);
+    border-radius: $border-radius-md;
+    padding: $spacing-md $spacing-sm;
+    font-family: $font-headings;
+
+    strong {
+      color: $color-primary;
+      font-size: $font-size-xs;
+      letter-spacing: 1px;
+    }
+  }
+}
+
+// Legacy spell-specific styling (from original index.css)
+.spell-details {
+  @include content-section($color-spell);
+}
+
+// Legacy monster-specific styling (from original index.css)
+.monster-details {
+  @include content-section($color-monster);
+}
+
+// Legacy class-specific styling (from original index.css)
+.class-details {
+  @include content-section($color-class);
+}
+
+// Legacy item-specific styling (from original index.css)
+.item-details {
+  @include content-section($color-item);
+}
+
+// Page-specific styles
+.content-page {
+  .page-header {
+    text-align: center;
+    margin: $spacing-3xl 0;
+    
+    .page-title {
+      @include heading-style($font-size-3xl);
+      margin-bottom: $spacing-lg;
+    }
+    
+    .page-subtitle {
+      color: $color-text-secondary;
+      font-size: $font-size-lg;
+      font-style: italic;
+    }
+  }
+  
+  .back-link {
+    @include fantasy-button;
+    display: inline-block;
+    margin-bottom: $spacing-2xl;
+    text-decoration: none;
+  }
+
+  .content-error, .content-loading, .content-not-found {
+    padding: $spacing-2xl;
+    text-align: center;
+    background-color: $gray-50;
+    border-radius: $border-radius-lg;
+    margin: $spacing-2xl;
+
+    h2 {
+      @include heading-style($font-size-xl);
+      margin-bottom: $spacing-lg;
+    }
+
+    .back-to-search-link {
+      color: #007bff;
+      text-decoration: none;
+      padding: $spacing-sm $spacing-lg;
+      background-color: $gray-100;
+      border-radius: $border-radius-sm;
+      display: inline-block;
+      margin-top: $spacing-lg;
+
+      &:hover {
+        background-color: $gray-200;
+        text-decoration: none;
+      }
+    }
+  }
+
+  .breadcrumb {
+    padding: $spacing-lg;
+    background-color: $gray-50;
+    border-radius: $border-radius-sm;
+    margin-bottom: $spacing-lg;
+    font-size: $font-size-sm;
+
+    .breadcrumb-link {
+      color: #007bff;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .breadcrumb-separator {
+      margin: 0 $spacing-sm;
+      color: $gray-500;
+    }
+
+    .breadcrumb-category {
+      color: $gray-500;
+      text-transform: capitalize;
+    }
+
+    .breadcrumb-current {
+      font-weight: $font-weight-bold;
+    }
+  }
+}
+
+// Search Results
+.search-results {
+  .error {
+    color: $color-error;
+    padding: $spacing-lg;
+    background-color: rgba($color-error, 0.1);
+    border: 1px solid rgba($color-error, 0.3);
+    border-radius: $border-radius-sm;
+  }
+
+  .loading {
+    text-align: center;
+    padding: $spacing-2xl;
+    color: $gray-500;
+  }
+
+  .search-help {
+    text-align: center;
+    color: $gray-500;
+    padding: $spacing-2xl;
+    font-style: italic;
+  }
+
+  .results-header {
+    margin-bottom: $spacing-lg;
+    padding: $spacing-sm 0;
+    border-bottom: 1px solid $gray-300;
+    color: $gray-500;
+
+    .results-hint {
+      font-size: $font-size-sm;
+      margin-left: $spacing-sm;
+    }
+  }
+
+  .no-results {
+    text-align: center;
+    color: $gray-500;
+    padding: $spacing-2xl;
+
+    .no-results-hint {
+      font-size: $font-size-sm;
+      margin-top: $spacing-xs;
+    }
+  }
+
+  .simple-results {
+    max-height: 60vh;
+    overflow-y: auto;
+    border: 1px solid $gray-300;
+    border-radius: $border-radius-md;
+  }
+
+  .grouped-results {
+    .category-group {
+      margin-bottom: $spacing-2xl;
+
+      h3 {
+        text-transform: capitalize;
+        color: $color-text-primary;
+        margin-bottom: $spacing-lg;
+        font-size: $font-size-lg;
+        font-weight: $font-weight-semibold;
+      }
+    }
+  }
+}
+
+// Search Input
+.search-input-container {
+  position: relative;
+
+  .search-input {
+    // Input styles handled by existing base styles
+  }
+
+  .search-loading-indicator {
+    position: absolute;
+    right: $spacing-md;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $gray-500;
+  }
+
+  .search-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid $gray-300;
+    border-radius: 0 0 $border-radius-md $border-radius-md;
+    box-shadow: $shadow-md;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+
+    .search-suggestion {
+      padding: $spacing-xs $spacing-md;
+      cursor: pointer;
+      border-bottom: 1px solid $gray-100;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &.selected,
+      &:hover {
+        background-color: $gray-50;
+      }
+    }
+  }
+}
+
+// Search Result
+.result-item {
+  .result-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .result-name {
+      font-weight: $font-weight-semibold;
+    }
+  }
+
+  .result-category {
+    display: inline-block;
+    padding: 2px $spacing-xs;
+    border-radius: $border-radius-full;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    text-transform: capitalize;
+    margin-left: $spacing-xs;
+  }
+
+  .available-sources {
+    font-size: $font-size-xs;
+    color: $gray-500;
+    margin-top: 2px;
+  }
+
+  .result-matches {
+    font-size: $font-size-sm;
+    color: $gray-500;
+    margin-top: $spacing-xs;
+  }
+}
+
+// Category Filter
+.category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xs;
+  align-items: center;
+
+  .category-filter {
+    // Button styles handled by existing base styles
+  }
+
+  .category-divider {
+    margin: 0 $spacing-sm;
+    border-left: 1px solid $gray-300;
+    height: 30px;
+  }
+
+  .category-count {
+    // Count styles handled by existing base styles
+  }
+}
+
+// Search Page
+.search-container {
+  .loading {
+    text-align: center;
+    padding: $spacing-2xl;
+    color: $gray-500;
+  }
+
+  .search-header {
+    margin-bottom: $spacing-xl;
+  }
+
+  .search-stats {
+    margin-top: $spacing-2xl;
+    padding: $spacing-lg;
+    background-color: $gray-50;
+    border-radius: $border-radius-md;
+    font-size: $font-size-sm;
+    color: $gray-500;
+    text-align: center;
+  }
+}
+
+// Generic Content Display
+.content-body {
+  .detail-row {
+    margin-bottom: $spacing-sm;
+    
+    strong {
+      color: $color-text-primary;
+      margin-right: $spacing-sm;
+    }
+  }
+
+  .source-selection-message {
+    text-align: center;
+    padding: $spacing-2xl;
+    color: $gray-500;
+  }
+}

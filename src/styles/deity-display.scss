@@ -1,0 +1,269 @@
+// Deity Display Components
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.deity-display {
+  .deity-header {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: $spacing-lg;
+    margin-bottom: $spacing-2xl;
+  }
+
+  .deity-pantheon {
+    margin-bottom: $spacing-2xl;
+    padding: $spacing-lg;
+    border-radius: $border-radius-md;
+    border-left: 4px solid;
+
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+
+    // Pantheon-specific styling
+    &[data-pantheon="Dwarven"] {
+      background-color: rgba(#8b4513, 0.2);
+      border-left-color: #8b4513;
+      h4 { color: #8b4513; }
+    }
+
+    &[data-pantheon="Elven"] {
+      background-color: rgba(#32cd32, 0.2);
+      border-left-color: #32cd32;
+      h4 { color: #32cd32; }
+    }
+
+    &[data-pantheon="Halfling"] {
+      background-color: rgba(#daa520, 0.2);
+      border-left-color: #daa520;
+      h4 { color: #daa520; }
+    }
+
+    &[data-pantheon="Human"] {
+      background-color: rgba(#4682b4, 0.2);
+      border-left-color: #4682b4;
+      h4 { color: #4682b4; }
+    }
+
+    &[data-pantheon="Draconic"] {
+      background-color: rgba(#dc143c, 0.2);
+      border-left-color: #dc143c;
+      h4 { color: #dc143c; }
+    }
+
+    &[data-pantheon="Orcish"] {
+      background-color: rgba(#8b0000, 0.2);
+      border-left-color: #8b0000;
+      h4 { color: #8b0000; }
+    }
+
+    &[data-pantheon="Goblinoid"] {
+      background-color: rgba(#556b2f, 0.2);
+      border-left-color: #556b2f;
+      h4 { color: #556b2f; }
+    }
+
+    &[data-pantheon="Giant"] {
+      background-color: rgba(#2f4f4f, 0.2);
+      border-left-color: #2f4f4f;
+      h4 { color: #2f4f4f; }
+    }
+
+    &[data-pantheon="Gnomish"] {
+      background-color: rgba(#9370db, 0.2);
+      border-left-color: #9370db;
+      h4 { color: #9370db; }
+    }
+
+    &[data-pantheon="Celtic"] {
+      background-color: rgba(#228b22, 0.2);
+      border-left-color: #228b22;
+      h4 { color: #228b22; }
+    }
+
+    &[data-pantheon="Greek"] {
+      background-color: rgba(#4169e1, 0.2);
+      border-left-color: #4169e1;
+      h4 { color: #4169e1; }
+    }
+
+    &[data-pantheon="Norse"] {
+      background-color: rgba(#1e90ff, 0.2);
+      border-left-color: #1e90ff;
+      h4 { color: #1e90ff; }
+    }
+
+    &[data-pantheon="Egyptian"] {
+      background-color: rgba(#ff8c00, 0.2);
+      border-left-color: #ff8c00;
+      h4 { color: #ff8c00; }
+    }
+
+    &[data-pantheon="Forgotten Realms"] {
+      background-color: rgba(#800080, 0.2);
+      border-left-color: #800080;
+      h4 { color: #800080; }
+    }
+
+    &[data-pantheon="Greyhawk"] {
+      background-color: rgba(#006400, 0.2);
+      border-left-color: #006400;
+      h4 { color: #006400; }
+    }
+
+    &[data-pantheon="Dragonlance"] {
+      background-color: rgba(#b22222, 0.2);
+      border-left-color: #b22222;
+      h4 { color: #b22222; }
+    }
+
+    // Default fallback
+    &:not([data-pantheon]) {
+      background-color: rgba(#6c757d, 0.2);
+      border-left-color: #6c757d;
+      h4 { color: #6c757d; }
+    }
+  }
+
+  .deity-alignment {
+    margin-bottom: $spacing-2xl;
+    padding: $spacing-lg;
+    border-radius: $border-radius-md;
+    border-left: 4px solid;
+
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+
+    .domains-section {
+      margin-top: $spacing-md;
+
+      strong {
+        color: $color-text-primary;
+      }
+
+      .domain-list {
+        margin-top: $spacing-sm;
+        display: flex;
+        flex-wrap: wrap;
+        gap: $spacing-sm;
+
+        .domain-tag {
+          padding: $spacing-xs $spacing-md;
+          background-color: #e3f2fd;
+          color: #1565c0;
+          border-radius: $border-radius-pill;
+          font-size: $font-size-sm;
+          font-weight: $font-weight-medium;
+        }
+      }
+    }
+
+    // Alignment-specific styling
+    &[data-alignment="LG"] {
+      background-color: rgba(#28a745, 0.2);
+      border-left-color: #28a745;
+      h4 { color: #28a745; }
+    }
+
+    &[data-alignment="NG"] {
+      background-color: rgba(#20c997, 0.2);
+      border-left-color: #20c997;
+      h4 { color: #20c997; }
+    }
+
+    &[data-alignment="CG"] {
+      background-color: rgba(#17a2b8, 0.2);
+      border-left-color: #17a2b8;
+      h4 { color: #17a2b8; }
+    }
+
+    &[data-alignment="LN"] {
+      background-color: rgba(#6f42c1, 0.2);
+      border-left-color: #6f42c1;
+      h4 { color: #6f42c1; }
+    }
+
+    &[data-alignment="N"] {
+      background-color: rgba(#6c757d, 0.2);
+      border-left-color: #6c757d;
+      h4 { color: #6c757d; }
+    }
+
+    &[data-alignment="CN"] {
+      background-color: rgba(#fd7e14, 0.2);
+      border-left-color: #fd7e14;
+      h4 { color: #fd7e14; }
+    }
+
+    &[data-alignment="LE"] {
+      background-color: rgba(#dc3545, 0.2);
+      border-left-color: #dc3545;
+      h4 { color: #dc3545; }
+    }
+
+    &[data-alignment="NE"] {
+      background-color: rgba(#e83e8c, 0.2);
+      border-left-color: #e83e8c;
+      h4 { color: #e83e8c; }
+    }
+
+    &[data-alignment="CE"] {
+      background-color: rgba(#343a40, 0.2);
+      border-left-color: #343a40;
+      h4 { color: #343a40; }
+    }
+
+    // Default fallback
+    &:not([data-alignment]) {
+      background-color: rgba(#6c757d, 0.2);
+      border-left-color: #6c757d;
+      h4 { color: #6c757d; }
+    }
+  }
+
+  .divine-details {
+    margin-bottom: $spacing-2xl;
+    padding: $spacing-lg;
+    background-color: $gray-50;
+    border-radius: $border-radius-md;
+
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: $gray-700;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .deity-description {
+    margin-bottom: $spacing-2xl;
+
+    h4 {
+      color: $gray-700;
+      margin-bottom: $spacing-lg;
+      border-bottom: 2px solid $gray-200;
+      padding-bottom: $spacing-sm;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .deity-altnames {
+    @include content-section($color-warning);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #f57c00;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+
+    .altnames-list {
+      font-style: italic;
+    }
+  }
+}

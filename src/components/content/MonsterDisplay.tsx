@@ -45,7 +45,7 @@ export default function MonsterDisplay({ result, content, onClose }: MonsterDisp
           onSourceChange={handleSourceChange}
           primarySource={result.source}
         />
-        <div style={{ textAlign: 'center', padding: '2rem', color: '#6c757d' }}>
+        <div className="source-selection-message">
           Select a source above to view content
         </div>
       </BaseContentDisplay>
@@ -102,16 +102,7 @@ export default function MonsterDisplay({ result, content, onClose }: MonsterDisp
       )}
       <div className="monster-display">
         {/* Basic Information */}
-        <div className="monster-basic-info" style={{
-          marginBottom: '1.5rem',
-          padding: '1rem',
-          backgroundColor: '#f8f9fa',
-          borderRadius: '6px',
-          fontSize: '1.1rem',
-          fontStyle: 'italic',
-          textAlign: 'center',
-          color: '#495057'
-        }}>
+        <div className="monster-basic-info">
           {formatSize(monsterContent.size)} {formatType(monsterContent.type)}, {formatAlignment(monsterContent.alignment)}
         </div>
 
@@ -138,12 +129,7 @@ export default function MonsterDisplay({ result, content, onClose }: MonsterDisp
 
         {/* Skills, Saves, and Proficiencies */}
         {(monsterContent.save || monsterContent.skill) && (
-          <div style={{
-            marginTop: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#f8f9fa',
-            borderRadius: '6px'
-          }}>
+          <div className="monster-proficiencies">
             <ProficiencyList 
               saves={monsterContent.save}
               skills={monsterContent.skill}
@@ -161,7 +147,7 @@ export default function MonsterDisplay({ result, content, onClose }: MonsterDisp
         />
 
         {/* Senses and Languages */}
-        <div style={{ marginTop: '1.5rem' }}>
+        <div className="monster-senses">
           {monsterContent.senses && <DetailRow name="Senses" value={formatSenses(monsterContent.senses)} />}
           <DetailRow name="Languages" value={formatLanguages(monsterContent.languages)} />
           {monsterContent.passive && <DetailRow name="Passive Perception" value={monsterContent.passive} />}
@@ -169,27 +155,14 @@ export default function MonsterDisplay({ result, content, onClose }: MonsterDisp
 
         {/* Traits */}
         {monsterContent.trait && monsterContent.trait.length > 0 && (
-          <div className="traits" style={{ marginTop: '1.5rem' }}>
-            <h4 style={{ 
-              color: '#495057', 
-              marginBottom: '1rem',
-              borderBottom: '2px solid #dee2e6',
-              paddingBottom: '0.5rem'
-            }}>
+          <div className="traits">
+            <h4>
               Traits
             </h4>
             {monsterContent.trait.map((trait: any, index: number) => (
-              <div key={index} style={{ 
-                marginBottom: '1rem',
-                paddingLeft: '1rem',
-                borderLeft: '3px solid #28a745'
-              }}>
+              <div key={index} className="trait-item">
                 {trait.name && (
-                  <h5 style={{ 
-                    margin: '0 0 0.5rem 0',
-                    fontWeight: 'bold',
-                    color: '#495057'
-                  }}>
+                  <h5>
                     {trait.name}
                   </h5>
                 )}
@@ -215,13 +188,8 @@ export default function MonsterDisplay({ result, content, onClose }: MonsterDisp
 
         {/* Description */}
         {monsterContent.entries && (
-          <div style={{ marginTop: '1.5rem' }}>
-            <h4 style={{ 
-              color: '#495057', 
-              marginBottom: '1rem',
-              borderBottom: '2px solid #dee2e6',
-              paddingBottom: '0.5rem'
-            }}>
+          <div className="monster-description">
+            <h4>
               Description
             </h4>
             <ContentEntries entries={monsterContent.entries} />

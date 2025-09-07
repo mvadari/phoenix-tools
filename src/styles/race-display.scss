@@ -1,0 +1,169 @@
+// Race Display Components
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.race-display {
+  .race-basic-info {
+    @include responsive-grid(200px, $spacing-lg);
+    margin-bottom: $spacing-2xl;
+  }
+
+  .physical-characteristics {
+    margin-bottom: $spacing-2xl;
+    padding: $spacing-lg;
+    background-color: $gray-50;
+    border-radius: $border-radius-md;
+
+    h4 {
+      @include heading-style($font-size-lg);
+      margin: 0 0 $spacing-lg 0;
+      color: $gray-700;
+    }
+  }
+
+  .ability-increases {
+    @include content-section($color-success);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #2e7d32;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+
+    .ability-increase-item {
+      margin-bottom: $spacing-sm;
+
+      span {
+        margin-right: $spacing-lg;
+
+        strong {
+          color: $color-text-primary;
+        }
+      }
+    }
+  }
+
+  .race-proficiencies {
+    @include content-section(#2196f3);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #1976d2;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .resistances {
+    @include content-section($color-warning);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #f57c00;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+  }
+
+  .trait-tags {
+    @include content-section($color-spell);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #7b1fa2;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+
+    .trait-tags-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: $spacing-sm;
+
+      .trait-tag {
+        padding: $spacing-xs $spacing-md;
+        background-color: #e3f2fd;
+        color: #1565c0;
+        border-radius: $border-radius-pill;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
+      }
+    }
+  }
+
+  .racial-traits {
+    margin-bottom: $spacing-2xl;
+
+    h4 {
+      color: $gray-700;
+      margin-bottom: $spacing-lg;
+      border-bottom: 2px solid $gray-200;
+      padding-bottom: $spacing-sm;
+      @include heading-style($font-size-lg);
+    }
+
+    .racial-trait {
+      margin-bottom: $spacing-lg;
+      padding-left: $spacing-lg;
+      border-left: 3px solid #2196f3;
+
+      h5 {
+        margin: 0 0 $spacing-sm 0;
+        font-weight: $font-weight-bold;
+        color: #1976d2;
+        @include heading-style($font-size-base);
+      }
+    }
+  }
+
+  .subraces {
+    @include content-section($color-success);
+    
+    h4 {
+      margin: 0 0 $spacing-lg 0;
+      color: #2e7d32;
+      font-size: $font-size-lg;
+      @include heading-style($font-size-lg);
+    }
+
+    .subrace {
+      margin-bottom: $spacing-2xl;
+      padding-bottom: $spacing-lg;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid $gray-300;
+      }
+
+      h5 {
+        margin: 0 0 $spacing-lg 0;
+        color: #2e7d32;
+        font-weight: $font-weight-bold;
+        @include heading-style($font-size-base);
+      }
+
+      .subrace-section {
+        margin-bottom: $spacing-md;
+
+        strong {
+          color: $color-text-primary;
+        }
+
+        .subrace-content {
+          margin-left: $spacing-lg;
+        }
+      }
+    }
+  }
+
+  .loading-message {
+    text-align: center;
+    padding: $spacing-3xl;
+    color: $gray-600;
+  }
+}
+
+// Legacy race-specific details section (for backwards compatibility)
+.race-details {
+  @include content-section($color-race);
+}

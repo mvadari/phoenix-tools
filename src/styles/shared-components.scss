@@ -1,0 +1,552 @@
+// Shared Components Styling
+@use 'variables' as *;
+@use 'mixins' as *;
+
+// Ability Scores
+.ability-scores {
+  @include stat-block;
+
+  &.grid-layout {
+    @include ability-scores-grid;
+  }
+
+  .ability-score {
+    @include stat-block;
+    text-align: center;
+    padding: $spacing-sm;
+    background: rgba($color-background-primary, 0.5);
+    border-radius: $border-radius-sm;
+    border: 1px solid rgba($color-primary, 0.2);
+
+    .ability-name {
+      font-weight: $font-weight-bold;
+      font-size: $font-size-xs;
+      color: $gray-600;
+      margin-bottom: $spacing-xs;
+    }
+
+    .ability-value {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-bold;
+      margin-bottom: 2px;
+    }
+
+    .ability-modifier {
+      font-size: $font-size-sm;
+      color: $gray-600;
+    }
+  }
+}
+
+// Source Tabs
+.source-tabs {
+  margin-bottom: $spacing-2xl;
+  border-bottom: 2px solid $gray-200;
+
+  .tab-container {
+    display: flex;
+    gap: $spacing-sm;
+    overflow-x: auto;
+    padding-bottom: $spacing-sm;
+
+    .source-tab {
+      padding: $spacing-md $spacing-lg;
+      border: none;
+      border-radius: $border-radius-md $border-radius-md 0 0;
+      cursor: pointer;
+      font-size: $font-size-sm;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+
+      &.inactive {
+        background-color: $gray-50;
+        color: $gray-700;
+        font-weight: $font-weight-normal;
+
+        &:hover {
+          background-color: $gray-100;
+        }
+      }
+
+      &.active {
+        background-color: #007bff;
+        color: white;
+        font-weight: $font-weight-semibold;
+      }
+
+      .source-code {
+        font-weight: $font-weight-bold;
+        margin-right: $spacing-sm;
+      }
+
+      .source-name {
+        font-size: $font-size-xs;
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .tab-info {
+    font-size: $font-size-xs;
+    color: $gray-500;
+    font-style: italic;
+    margin-top: $spacing-xs;
+  }
+
+  .source-tab {
+    @include fantasy-button;
+    font-size: $font-size-xs;
+    padding: $spacing-sm $spacing-lg;
+    text-transform: none;
+    letter-spacing: normal;
+
+    &.active {
+      background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+      color: $color-text-light;
+      border-color: $color-accent;
+    }
+  }
+}
+
+// Speed Display  
+.speed-display {
+  .speed-item {
+    display: inline-block;
+    margin-right: $spacing-lg;
+    
+    .speed-type {
+      font-weight: $font-weight-medium;
+      color: $color-text-primary;
+    }
+    
+    .speed-value {
+      font-family: $font-monospace;
+      font-weight: $font-weight-bold;
+    }
+  }
+}
+
+// Stat Block
+.stat-block {
+  @include stat-block;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: $spacing-lg;
+  padding: $spacing-lg;
+  background-color: $gray-50;
+  border-radius: $border-radius-md;
+  border: 1px solid $gray-200;
+  margin-top: $spacing-lg;
+  
+  .stat-item {
+    .stat-label {
+      font-weight: $font-weight-bold;
+      font-size: $font-size-xs;
+      color: $gray-500;
+      margin-bottom: $spacing-xs;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-value {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-bold;
+    }
+  }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: $spacing-lg;
+    margin: $spacing-lg 0;
+  }
+}
+
+// Damage Resistance Block  
+.damage-resistance-block {
+  @include content-section($color-monster);
+  margin-top: $spacing-lg;
+  padding: $spacing-lg;
+  background-color: $gray-50;
+  border-radius: $border-radius-md;
+  border: 1px solid $gray-200;
+
+  .detail-row {
+    margin-bottom: $spacing-sm;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .vulnerability-label {
+      color: #dc3545;
+    }
+
+    .resistance-label {
+      color: #28a745;
+    }
+
+    .immunity-label {
+      color: #007bff;
+    }
+
+    .condition-immunity-label {
+      color: #6f42c1;
+    }
+  }
+  
+  .resistance-type {
+    font-weight: $font-weight-medium;
+    margin-bottom: $spacing-sm;
+  }
+  
+  .resistance-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    
+    .resistance-item {
+      background: rgba($color-monster, 0.1);
+      padding: $spacing-xs $spacing-sm;
+      border-radius: $border-radius-sm;
+      font-size: $font-size-sm;
+      border: 1px solid rgba($color-monster, 0.2);
+    }
+  }
+}
+
+// Spellcasting Block
+.spellcasting-block {
+  @include content-section($color-spell);
+  margin-top: $spacing-2xl;
+  padding: $spacing-lg;
+  background-color: #f0f8ff;
+  border-radius: $border-radius-md;
+  border: 1px solid #b3d9ff;
+
+  h4 {
+    color: #0056b3;
+    margin-bottom: $spacing-lg;
+    border-bottom: 2px solid #b3d9ff;
+    padding-bottom: $spacing-sm;
+    @include heading-style($font-size-lg);
+  }
+
+  .spellcaster {
+    margin-bottom: $spacing-2xl;
+
+    h5 {
+      margin: 0 0 $spacing-sm 0;
+      color: #0056b3;
+      @include heading-style($font-size-base);
+    }
+
+    .spell-levels {
+      margin-top: $spacing-sm;
+
+      .spell-level {
+        margin-bottom: $spacing-md;
+        margin-left: $spacing-lg;
+
+        strong {
+          color: $color-text-primary;
+        }
+
+        .spell-link {
+          color: #007bff;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+  
+  .spell-level {
+    margin: $spacing-lg 0 $spacing-sm 0;
+    
+    .level-header {
+      @include heading-style($font-size-base);
+      color: $color-spell;
+      margin-bottom: $spacing-sm;
+    }
+    
+    .spell-slots {
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+      margin-bottom: $spacing-sm;
+    }
+  }
+  
+  .spell-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    
+    .spell-link {
+      @include fantasy-button($color-spell, $color-spell, white);
+      font-size: $font-size-xs;
+      padding: $spacing-xs $spacing-sm;
+      text-decoration: none;
+      background: rgba($color-spell, 0.1);
+      color: $color-spell;
+      
+      &:hover {
+        background: $color-spell;
+        color: white;
+      }
+    }
+  }
+}
+
+// Actions List
+.actions-list {
+  margin-top: $spacing-2xl;
+
+  .action-group {
+    margin-top: $spacing-2xl;
+
+    h4 {
+      margin-bottom: $spacing-lg;
+      border-bottom: 2px solid $gray-200;
+      padding-bottom: $spacing-sm;
+      @include heading-style($font-size-lg);
+    }
+
+    .action-item {
+      margin-bottom: $spacing-lg;
+      padding-left: $spacing-lg;
+      border-left: 3px solid $gray-200;
+
+      h5 {
+        margin: 0 0 $spacing-sm 0;
+        font-weight: $font-weight-bold;
+        color: $gray-700;
+        @include heading-style($font-size-base);
+      }
+    }
+
+    // Action group type-specific styling
+    &[data-action-group="actions"] {
+      h4 {
+        color: #28a745;
+      }
+    }
+
+    &[data-action-group="reactions"] {
+      h4 {
+        color: #ffc107;
+      }
+    }
+
+    &[data-action-group="legendary"] {
+      h4 {
+        color: #dc3545;
+      }
+    }
+
+    &[data-action-group="lair"] {
+      h4 {
+        color: #6f42c1;
+      }
+    }
+
+    &[data-action-group="mythic"] {
+      h4 {
+        color: #fd7e14;
+      }
+    }
+
+    // Default fallback
+    &:not([data-action-group]) {
+      h4 {
+        color: #495057;
+      }
+    }
+  }
+
+  .action-item {
+    margin: $spacing-lg 0;
+    padding: $spacing-lg;
+    background: rgba($gray-50, 0.5);
+    border-radius: $border-radius-md;
+    border-left: 3px solid $color-primary;
+    
+    .action-name {
+      @include heading-style($font-size-lg);
+      margin-bottom: $spacing-sm;
+    }
+    
+    .action-type {
+      font-size: $font-size-xs;
+      text-transform: uppercase;
+      color: $color-text-secondary;
+      font-weight: $font-weight-semibold;
+      margin-bottom: $spacing-sm;
+    }
+  }
+}
+
+// Equipment List
+.equipment-list {
+  margin-top: $spacing-lg;
+  padding: $spacing-lg;
+  background-color: $gray-50;
+  border-radius: $border-radius-md;
+  border: 1px solid $gray-200;
+
+  h4 {
+    color: $gray-700;
+    margin-bottom: $spacing-lg;
+    border-bottom: 2px solid $gray-200;
+    padding-bottom: $spacing-sm;
+    @include heading-style($font-size-lg);
+  }
+
+  .equipment-content {
+    font-family: $font-monospace;
+    font-size: $font-size-sm;
+
+    .equipment-item {
+      margin-bottom: $spacing-xs;
+    }
+
+    .equipment-choice-group {
+      margin-bottom: $spacing-sm;
+
+      strong {
+        color: $color-text-primary;
+      }
+
+      .choice-options {
+        margin-left: $spacing-lg;
+
+        .choice-item {
+          margin-bottom: $spacing-xs;
+        }
+      }
+    }
+  }
+
+  .equipment-section {
+    margin: $spacing-lg 0;
+    
+    .section-header {
+      @include heading-style($font-size-base);
+      border-bottom: 1px solid rgba($color-primary, 0.3);
+      padding-bottom: $spacing-xs;
+      margin-bottom: $spacing-md;
+    }
+  }
+  
+  .equipment-grid {
+    @include responsive-grid(250px, $spacing-md);
+    
+    .equipment-item {
+      padding: $spacing-md;
+      background: rgba($gray-50, 0.5);
+      border-radius: $border-radius-md;
+      border: 1px solid rgba($color-primary, 0.2);
+      
+      .item-name {
+        font-weight: $font-weight-semibold;
+        color: $color-text-primary;
+        margin-bottom: $spacing-xs;
+      }
+      
+      .item-details {
+        font-size: $font-size-sm;
+        color: $color-text-secondary;
+      }
+    }
+  }
+}
+
+// Prerequisite Display
+.prerequisite-display {
+  margin-top: $spacing-lg;
+  padding: $spacing-lg;
+  background-color: #fff3cd;
+  border-radius: $border-radius-md;
+  border: 1px solid #ffeaa7;
+
+  .detail-row {
+    strong {
+      color: #856404;
+    }
+
+    span {
+      color: #856404;
+    }
+  }
+
+  background: rgba($color-warning, 0.1);
+  border-left: 3px solid $color-warning;
+  
+  .prerequisite-header {
+    @include heading-style($font-size-sm);
+    color: $color-warning;
+    margin-bottom: $spacing-sm;
+  }
+}
+
+// Proficiency List
+.proficiency-list {
+  &.inline {
+    display: inline;
+
+    .inline-label {
+      margin-left: $spacing-sm;
+    }
+
+    .proficiency-item {
+      display: inline;
+      margin-right: $spacing-sm;
+    }
+  }
+
+  &.block {
+    margin-top: $spacing-sm;
+
+    .block-content {
+      margin-left: $spacing-lg;
+
+      .proficiency-item {
+        margin-bottom: $spacing-xs;
+
+        .proficiency-type-label {
+          font-size: $font-size-xs;
+          color: $gray-500;
+          margin-right: $spacing-sm;
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+
+  .proficiency-section {
+    margin: $spacing-md 0;
+    
+    .proficiency-type {
+      font-weight: $font-weight-semibold;
+      color: $color-text-primary;
+      margin-bottom: $spacing-sm;
+    }
+    
+    .proficiency-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: $spacing-sm;
+      
+      .proficiency-item {
+        background: rgba($color-primary, 0.1);
+        padding: $spacing-xs $spacing-sm;
+        border-radius: $border-radius-sm;
+        font-size: $font-size-sm;
+        border: 1px solid rgba($color-primary, 0.2);
+      }
+    }
+  }
+}

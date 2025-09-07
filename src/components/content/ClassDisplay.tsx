@@ -37,7 +37,7 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
           onSourceChange={handleSourceChange}
           primarySource={result.source}
         />
-        <div style={{ textAlign: 'center', padding: '2rem', color: '#6c757d' }}>
+        <div className="loading-message">
           Select a source above to view content
         </div>
       </BaseContentDisplay>
@@ -98,20 +98,11 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
         {Object.entries(featuresByLevel)
           .sort(([a], [b]) => parseInt(a) - parseInt(b))
           .map(([level, features]) => (
-            <div key={level} style={{
-              display: 'flex',
-              marginBottom: '0.5rem',
-              paddingBottom: '0.5rem',
-              borderBottom: '1px solid #e9ecef'
-            }}>
-              <div style={{
-                minWidth: '60px',
-                fontWeight: 'bold',
-                color: '#495057'
-              }}>
+            <div key={level} className="feature-level">
+              <div className="level-label">
                 Level {level}:
               </div>
-              <div style={{ flex: 1 }}>
+              <div className="features-list">
                 {features.join(', ')}
               </div>
             </div>
@@ -138,9 +129,9 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
           <DetailRow name="Requirements" value={formatRequirements(multiclassing.requirements)} />
         )}
         {multiclassing.proficienciesGained && (
-          <div style={{ marginTop: '0.5rem' }}>
+          <div className="multiclassing-section">
             <strong>Proficiencies Gained:</strong>
-            <div style={{ marginLeft: '1rem' }}>
+            <div className="multiclassing-content">
               <ProficiencyList
                 armor={multiclassing.proficienciesGained.armor}
                 weapons={multiclassing.proficienciesGained.weapons}
@@ -158,15 +149,15 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
     if (!featProgression || featProgression.length === 0) return null;
 
     return featProgression.map((prog, index) => (
-      <div key={index} style={{ marginBottom: '0.5rem' }}>
+      <div key={index} className="feat-item">
         <strong>{prog.name}:</strong> 
         {prog.progression && Object.entries((prog.progression as Record<string, number>)).map(([level, count]) => (
-          <span key={level} style={{ marginLeft: '0.5rem' }}>
+          <span key={level} className="feat-details">
             Level {level} ({count} choice{count > 1 ? 's' : ''})
           </span>
         ))}
         {prog.category && (
-          <span style={{ marginLeft: '0.5rem', fontSize: '0.9rem', color: '#6c757d' }}>
+          <span className="feat-category">
             [{prog.category.join(', ')}]
           </span>
         )}
@@ -187,18 +178,8 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
       <div className="class-display">
         {/* Primary Ability Scores */}
         {classContent.primaryAbility && (
-          <div className="primary-abilities" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#e8f4fd',
-            borderRadius: '6px',
-            borderLeft: '4px solid #2196f3'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#1976d2',
-              fontSize: '1.1rem'
-            }}>
+          <div className="primary-abilities">
+            <h4>
               Primary Abilities
             </h4>
             <DetailRow name="Recommended" value={formatAbilityScores(classContent.primaryAbility)} />
@@ -206,12 +187,7 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
         )}
 
         {/* Core Class Information */}
-        <div className="class-core-info" style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '1rem',
-          marginBottom: '1.5rem'
-        }}>
+        <div className="class-core-info">
           <div>
             <DetailRow name="Hit Die" value={formatHitDie(classContent.hd)} />
             <DetailRow name="Saving Throws" value={formatSavingThrows(classContent.proficiency)} />
@@ -223,18 +199,8 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
 
         {/* Starting Proficiencies */}
         {classContent.startingProficiencies && (
-          <div className="starting-proficiencies" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#f0f8ff',
-            borderRadius: '6px',
-            borderLeft: '4px solid #2196f3'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#1976d2',
-              fontSize: '1.1rem'
-            }}>
+          <div className="starting-proficiencies">
+            <h4>
               Starting Proficiencies
             </h4>
             <ProficiencyList
@@ -253,18 +219,8 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
 
         {/* Multiclassing */}
         {classContent.multiclassing && (
-          <div className="multiclassing" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#fff3e0',
-            borderRadius: '6px',
-            borderLeft: '4px solid #ff9800'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#f57c00',
-              fontSize: '1.1rem'
-            }}>
+          <div className="multiclassing">
+            <h4>
               Multiclassing
             </h4>
             {formatMulticlassing(classContent.multiclassing)}
@@ -273,18 +229,8 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
 
         {/* Feat Progression */}
         {(classContent.featProgression || classContent.optionalfeatureProgression) && (
-          <div className="feat-progression" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#f3e5f5',
-            borderRadius: '6px',
-            borderLeft: '4px solid #9c27b0'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#7b1fa2',
-              fontSize: '1.1rem'
-            }}>
+          <div className="feat-progression">
+            <h4>
               Optional Features & Feats
             </h4>
             {classContent.featProgression && formatFeatProgression(classContent.featProgression)}
@@ -294,18 +240,8 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
 
         {/* Class Features Progression */}
         {classContent.classFeatures && classContent.classFeatures.length > 0 && (
-          <div className="class-features" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#e8f5e8',
-            borderRadius: '6px',
-            borderLeft: '4px solid #4caf50'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#2e7d32',
-              fontSize: '1.1rem'
-            }}>
+          <div className="class-features">
+            <h4>
               Class Features by Level
             </h4>
             {formatClassFeatures(classContent.classFeatures)}
@@ -314,13 +250,8 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
 
         {/* Class Description */}
         {classContent.entries && (
-          <div className="class-description" style={{ marginBottom: '1.5rem' }}>
-            <h4 style={{ 
-              color: '#495057', 
-              marginBottom: '1rem',
-              borderBottom: '2px solid #dee2e6',
-              paddingBottom: '0.5rem'
-            }}>
+          <div className="class-description">
+            <h4>
               Description
             </h4>
             <ContentEntries entries={classContent.entries} />
@@ -329,38 +260,17 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
 
         {/* Subclass Information */}
         {classContent.subclass && classContent.subclass.length > 0 && (
-          <div className="subclasses" style={{
-            padding: '1rem',
-            backgroundColor: '#ffebee',
-            borderRadius: '6px',
-            borderLeft: '4px solid #f44336'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#c62828',
-              fontSize: '1.1rem'
-            }}>
+          <div className="subclasses">
+            <h4>
               {classContent.subclassTitle || 'Subclasses'}
             </h4>
             {classContent.subclass.map((subclass: any, index: number) => (
-              <div key={index} style={{ 
-                marginBottom: '1rem',
-                paddingBottom: '1rem',
-                borderBottom: index < classContent.subclass.length - 1 ? '1px solid #ffcdd2' : 'none'
-              }}>
-                <h5 style={{ 
-                  margin: '0 0 0.5rem 0',
-                  color: '#c62828',
-                  fontWeight: 'bold'
-                }}>
+              <div key={index} className="subclass">
+                <h5>
                   {subclass.name} {subclass.shortName && `(${subclass.shortName})`}
                 </h5>
                 {subclass.source && (
-                  <div style={{ 
-                    fontSize: '0.9rem', 
-                    color: '#6c757d',
-                    marginBottom: '0.5rem'
-                  }}>
+                  <div className="subclass-source">
                     Source: {subclass.source}
                   </div>
                 )}

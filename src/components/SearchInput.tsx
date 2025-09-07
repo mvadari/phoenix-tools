@@ -101,7 +101,7 @@ export default function SearchInput({
   }, [suggestions, value]);
 
   return (
-    <div className="search-input-container" style={{ position: 'relative' }}>
+    <div className="search-input-container">
       <input
         ref={inputRef}
         type="text"
@@ -116,13 +116,7 @@ export default function SearchInput({
       />
       
       {loading && (
-        <div className="search-loading-indicator" style={{
-          position: 'absolute',
-          right: '12px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          color: '#6c757d'
-        }}>
+        <div className="search-loading-indicator">
           ⏳
         </div>
       )}
@@ -131,31 +125,12 @@ export default function SearchInput({
         <div 
           ref={suggestionsRef}
           className="search-suggestions"
-          style={{
-            position: 'absolute',
-            top: '100%',
-            left: 0,
-            right: 0,
-            background: 'white',
-            border: '1px solid #dee2e6',
-            borderRadius: '0 0 6px 6px',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-            zIndex: 1000,
-            maxHeight: '200px',
-            overflowY: 'auto'
-          }}
         >
           {suggestions.map((suggestion, index) => (
             <div
               key={suggestion}
               className={`search-suggestion ${index === selectedIndex ? 'selected' : ''}`}
               onClick={() => handleSuggestionClick(suggestion)}
-              style={{
-                padding: '8px 12px',
-                cursor: 'pointer',
-                borderBottom: index < suggestions.length - 1 ? '1px solid #f8f9fa' : 'none',
-                backgroundColor: index === selectedIndex ? '#f8f9fa' : 'transparent'
-              }}
               onMouseEnter={() => setSelectedIndex(index)}
             >
               {suggestion}

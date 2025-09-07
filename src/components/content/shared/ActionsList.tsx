@@ -20,31 +20,18 @@ export default function ActionsList({
   
   if (!hasActions) return null;
 
-  const renderActionGroup = (actionList: any[], groupTitle: string, titleColor: string = '#495057') => {
+  const renderActionGroup = (actionList: any[], groupTitle: string, groupType: string) => {
     if (!actionList?.length) return null;
 
     return (
-      <div className="action-group" style={{ marginTop: '1.5rem' }}>
-        <h4 style={{ 
-          color: titleColor, 
-          marginBottom: '1rem',
-          borderBottom: '2px solid #dee2e6',
-          paddingBottom: '0.5rem'
-        }}>
+      <div className="action-group" data-action-group={groupType}>
+        <h4>
           {groupTitle}
         </h4>
         {actionList.map((action, index) => (
-          <div key={index} className="action-item" style={{ 
-            marginBottom: '1rem',
-            paddingLeft: '1rem',
-            borderLeft: '3px solid #dee2e6'
-          }}>
+          <div key={index} className="action-item">
             {action.name && (
-              <h5 style={{ 
-                margin: '0 0 0.5rem 0',
-                fontWeight: 'bold',
-                color: '#495057'
-              }}>
+              <h5>
                 {action.name}
               </h5>
             )}
@@ -56,12 +43,12 @@ export default function ActionsList({
   };
 
   return (
-    <div className="actions-list" style={{ marginTop: '1.5rem' }}>
-      {actions && renderActionGroup(actions, "Actions", '#28a745')}
-      {reactions && renderActionGroup(reactions, "Reactions", '#ffc107')}
-      {legendary && renderActionGroup(legendary, "Legendary Actions", '#dc3545')}
-      {lair && renderActionGroup(lair, "Lair Actions", '#6f42c1')}
-      {mythic && renderActionGroup(mythic, "Mythic Actions", '#fd7e14')}
+    <div className="actions-list">
+      {actions && renderActionGroup(actions, "Actions", 'actions')}
+      {reactions && renderActionGroup(reactions, "Reactions", 'reactions')}
+      {legendary && renderActionGroup(legendary, "Legendary Actions", 'legendary')}
+      {lair && renderActionGroup(lair, "Lair Actions", 'lair')}
+      {mythic && renderActionGroup(mythic, "Mythic Actions", 'mythic')}
     </div>
   );
 }

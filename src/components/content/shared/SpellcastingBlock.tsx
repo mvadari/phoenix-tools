@@ -28,13 +28,13 @@ export default function SpellcastingBlock({ spellcasting, title = "Spellcasting"
       const spellList = spellData.spells || [];
 
       return (
-        <div key={level} style={{ marginBottom: '0.75rem', marginLeft: '1rem' }}>
+        <div key={level} className="spell-level">
           <strong>{levelLabel}{spellInfo}:</strong>{' '}
           {spellList.map((spell: string, index: number) => (
             <span key={spell}>
               <Link 
                 to={`/spell/phb/${spell.toLowerCase().replace(/\s+/g, '-')}`}
-                style={{ color: '#007bff', textDecoration: 'none' }}
+                className="spell-link"
               >
                 {spell}
               </Link>
@@ -47,26 +47,15 @@ export default function SpellcastingBlock({ spellcasting, title = "Spellcasting"
   };
 
   return (
-    <div className="spellcasting-block" style={{
-      marginTop: '1.5rem',
-      padding: '1rem',
-      backgroundColor: '#f0f8ff',
-      borderRadius: '6px',
-      border: '1px solid #b3d9ff'
-    }}>
-      <h4 style={{ 
-        color: '#0056b3', 
-        marginBottom: '1rem',
-        borderBottom: '2px solid #b3d9ff',
-        paddingBottom: '0.5rem'
-      }}>
+    <div className="spellcasting-block">
+      <h4>
         {title}
       </h4>
       
       {spellcasting.map((caster, index) => (
-        <div key={index} className="spellcaster" style={{ marginBottom: '1.5rem' }}>
+        <div key={index} className="spellcaster">
           {caster.name && (
-            <h5 style={{ margin: '0 0 0.5rem 0', color: '#0056b3' }}>
+            <h5>
               {caster.name}
             </h5>
           )}
@@ -74,7 +63,7 @@ export default function SpellcastingBlock({ spellcasting, title = "Spellcasting"
           {caster.headerEntries && <ContentEntries entries={caster.headerEntries} />}
           
           {caster.spells && (
-            <div style={{ marginTop: '0.5rem' }}>
+            <div className="spell-levels">
               {renderSpellList(caster.spells)}
             </div>
           )}

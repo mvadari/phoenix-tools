@@ -62,16 +62,10 @@ export default function PrerequisiteDisplay({ prerequisite, label = "Prerequisit
   const allPrereqs = prerequisite.map(formatPrerequisite);
 
   return (
-    <div className="prerequisite-display" style={{
-      marginTop: '1rem',
-      padding: '1rem',
-      backgroundColor: '#fff3cd',
-      borderRadius: '6px',
-      border: '1px solid #ffeaa7'
-    }}>
+    <div className="prerequisite-display">
       <div className="detail-row">
-        <strong style={{ color: '#856404' }}>{label}:</strong>{' '}
-        <span style={{ color: '#856404' }}>
+        <strong>{label}:</strong>{' '}
+        <span>
           {allPrereqs.join(' or ')}
         </span>
       </div>

@@ -44,18 +44,11 @@ export default function VehicleDisplay({ result, content, onClose }: VehicleDisp
     };
 
     return (
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+      <div className="terrain-list">
         {terrain.map((t) => (
           <span
             key={t}
-            style={{
-              padding: '0.25rem 0.75rem',
-              backgroundColor: '#e3f2fd',
-              color: '#1565c0',
-              borderRadius: '16px',
-              fontSize: '0.875rem',
-              fontWeight: '500'
-            }}
+            className="terrain-tag"
           >
             {terrainMap[t] || t}
           </span>
@@ -64,16 +57,6 @@ export default function VehicleDisplay({ result, content, onClose }: VehicleDisp
     );
   };
 
-  const getVehicleTypeColor = (vehicleType: string): string => {
-    const colorMap: { [key: string]: string } = {
-      'SHIP': '#1976d2',
-      'INFWAR': '#d32f2f',
-      'SPELLJAMMER': '#7b1fa2',
-      'OBJECT': '#388e3c',
-      'CREATURE': '#f57c00'
-    };
-    return colorMap[vehicleType] || '#6c757d';
-  };
 
   const formatCapacity = (capCrew?: number, capPassenger?: number, capCargo?: number): React.ReactNode => {
     const capacities: string[] = [];
@@ -98,21 +81,11 @@ export default function VehicleDisplay({ result, content, onClose }: VehicleDisp
     <BaseContentDisplay result={result} content={content} onClose={onClose}>
       <div className="vehicle-display">
         {/* Vehicle Type and Size */}
-        <div className="vehicle-header" style={{
-          marginBottom: '1.5rem',
-          padding: '1rem',
-          backgroundColor: getVehicleTypeColor(content.vehicleType) + '20',
-          borderRadius: '6px',
-          borderLeft: `4px solid ${getVehicleTypeColor(content.vehicleType)}`
-        }}>
-          <h4 style={{ 
-            margin: '0 0 1rem 0', 
-            color: getVehicleTypeColor(content.vehicleType),
-            fontSize: '1.1rem'
-          }}>
+        <div className="vehicle-header" data-vehicle-type={content.vehicleType}>
+          <h4>
             Vehicle Information
           </h4>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
+          <div className="vehicle-basic-info">
             <DetailRow name="Type" value={formatVehicleType(content.vehicleType)} />
             {content.size && <DetailRow name="Size" value={formatSize(content.size)} />}
           </div>
@@ -120,21 +93,11 @@ export default function VehicleDisplay({ result, content, onClose }: VehicleDisp
 
         {/* Combat Statistics */}
         {(content.ac || content.hp) && (
-          <div className="vehicle-combat" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#ffebee',
-            borderRadius: '6px',
-            borderLeft: '4px solid #f44336'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#c62828',
-              fontSize: '1.1rem'
-            }}>
+          <div className="vehicle-combat">
+            <h4>
               Combat Statistics
             </h4>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
+            <div className="combat-stats">
               {content.ac && <DetailRow name="Armor Class" value={content.ac} />}
               {content.hp && <DetailRow name="Hit Points" value={formatHitPoints(content.hp)} />}
             </div>
@@ -146,21 +109,11 @@ export default function VehicleDisplay({ result, content, onClose }: VehicleDisp
 
         {/* Capacity Information */}
         {(content.capCrew || content.capPassenger || content.capCargo) && (
-          <div className="vehicle-capacity" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#f0f8ff',
-            borderRadius: '6px',
-            borderLeft: '4px solid #2196f3'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#1976d2',
-              fontSize: '1.1rem'
-            }}>
+          <div className="vehicle-capacity">
+            <h4>
               Capacity
             </h4>
-            <div style={{ fontSize: '0.95rem' }}>
+            <div className="capacity-info">
               {formatCapacity(content.capCrew, content.capPassenger, content.capCargo)}
             </div>
           </div>
@@ -168,18 +121,8 @@ export default function VehicleDisplay({ result, content, onClose }: VehicleDisp
 
         {/* Terrain */}
         {content.terrain && content.terrain.length > 0 && (
-          <div className="vehicle-terrain" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#e8f5e8',
-            borderRadius: '6px',
-            borderLeft: '4px solid #4caf50'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#2e7d32',
-              fontSize: '1.1rem'
-            }}>
+          <div className="vehicle-terrain">
+            <h4>
               Operating Terrain
             </h4>
             {formatTerrain(content.terrain)}
@@ -196,13 +139,8 @@ export default function VehicleDisplay({ result, content, onClose }: VehicleDisp
 
         {/* Vehicle Description */}
         {content.entries && (
-          <div className="vehicle-description" style={{ marginBottom: '1.5rem' }}>
-            <h4 style={{ 
-              color: '#495057', 
-              marginBottom: '1rem',
-              borderBottom: '2px solid #dee2e6',
-              paddingBottom: '0.5rem'
-            }}>
+          <div className="vehicle-description">
+            <h4>
               Description
             </h4>
             <ContentEntries entries={content.entries} />
@@ -211,32 +149,14 @@ export default function VehicleDisplay({ result, content, onClose }: VehicleDisp
 
         {/* Actions/Weapons */}
         {content.action && content.action.length > 0 && (
-          <div className="vehicle-actions" style={{
-            marginBottom: '1.5rem',
-            padding: '1rem',
-            backgroundColor: '#fff3e0',
-            borderRadius: '6px',
-            borderLeft: '4px solid #ff9800'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#f57c00',
-              fontSize: '1.1rem'
-            }}>
+          <div className="vehicle-actions">
+            <h4>
               Actions & Weapons
             </h4>
             {content.action.map((action: any, index: number) => (
-              <div key={index} style={{ 
-                marginBottom: '1rem',
-                paddingLeft: '1rem',
-                borderLeft: '3px solid #ffb74d'
-              }}>
+              <div key={index} className="action-item">
                 {action.name && (
-                  <h5 style={{ 
-                    margin: '0 0 0.5rem 0',
-                    fontWeight: 'bold',
-                    color: '#ef6c00'
-                  }}>
+                  <h5>
                     {action.name}
                   </h5>
                 )}
@@ -248,17 +168,8 @@ export default function VehicleDisplay({ result, content, onClose }: VehicleDisp
 
         {/* Special Equipment */}
         {content.equipment && (
-          <div className="vehicle-equipment" style={{
-            padding: '1rem',
-            backgroundColor: '#f3e5f5',
-            borderRadius: '6px',
-            borderLeft: '4px solid #9c27b0'
-          }}>
-            <h4 style={{ 
-              margin: '0 0 1rem 0', 
-              color: '#7b1fa2',
-              fontSize: '1.1rem'
-            }}>
+          <div className="vehicle-equipment">
+            <h4>
               Special Equipment
             </h4>
             <ContentEntries entries={content.equipment} />

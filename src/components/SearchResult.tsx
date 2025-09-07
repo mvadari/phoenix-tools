@@ -94,28 +94,6 @@ export default function SearchResult({ result, onSelect }: SearchResultProps) {
     return categoryNames[category] || category.charAt(0).toUpperCase() + category.slice(1);
   };
 
-  const getCategoryColor = (category: string): string => {
-    const colors: Record<string, string> = {
-      spell: '#8b5cf6',
-      monster: '#ef4444',
-      item: '#f59e0b',
-      class: '#10b981',
-      background: '#06b6d4',
-      feat: '#f97316',
-      race: '#ec4899',
-      action: '#6366f1',
-      deity: '#f59e0b',
-      condition: '#dc2626',
-      optionalfeature: '#8b5cf6',
-      vehicle: '#1976d2',
-      reward: '#9c27b0',
-      psionics: '#673ab7',
-      adventure: '#795548',
-      'variant-rule': '#607d8b',
-      table: '#9e9e9e'
-    };
-    return colors[category] || '#6b7280';
-  };
 
   const highlightMatches = (text: string): React.ReactNode => {
     // This is a simple implementation - could be enhanced to highlight actual matches
@@ -130,17 +108,7 @@ export default function SearchResult({ result, onSelect }: SearchResultProps) {
         </div>
         <div 
           className="result-category"
-          style={{
-            display: 'inline-block',
-            padding: '2px 8px',
-            borderRadius: '12px',
-            fontSize: '0.75rem',
-            fontWeight: '500',
-            textTransform: 'capitalize',
-            backgroundColor: getCategoryColor(result.category) + '20',
-            color: getCategoryColor(result.category),
-            marginLeft: '8px'
-          }}
+          data-category={result.category}
         >
           {formatCategoryName(result.category)}
         </div>
@@ -151,21 +119,13 @@ export default function SearchResult({ result, onSelect }: SearchResultProps) {
       </div>
 
       {result.availableSources && result.availableSources.length > 1 && (
-        <div className="available-sources" style={{
-          fontSize: '0.75rem',
-          color: '#6c757d',
-          marginTop: '2px'
-        }}>
+        <div className="available-sources">
           Available in: {result.availableSources.join(', ')}
         </div>
       )}
       
       {result.matches && result.matches.length > 0 && (
-        <div className="result-matches" style={{
-          fontSize: '0.8rem',
-          color: '#6c757d',
-          marginTop: '4px'
-        }}>
+        <div className="result-matches">
           Matches: {result.matches.join(', ')}
         </div>
       )}
