@@ -320,6 +320,174 @@
   }
 }
 
+// Spellcasting Tables
+.class-display {
+  // Spellcasting information section
+  h4 {
+    color: $color-spell;
+    margin-bottom: $spacing-lg;
+    @include heading-style($font-size-lg);
+  }
+
+  .spellcasting-table {
+    margin: $spacing-2xl 0;
+    border-radius: $border-radius-lg;
+    overflow: hidden;
+    box-shadow: $shadow-lg;
+    background: rgba($color-background-primary, 0.7);
+    border: 2px solid rgba($color-class, 0.3);
+  }
+
+  .class-progression-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: transparent;
+    font-size: $font-size-sm;
+    margin: 0;
+
+    thead {
+      background: linear-gradient(135deg, rgba($color-class, 0.9) 0%, rgba($color-class, 0.7) 100%);
+      color: white;
+
+      th {
+        padding: $spacing-md $spacing-sm;
+        text-align: center;
+        font-family: $font-headings;
+        font-weight: $font-weight-semibold;
+        font-size: $font-size-xs;
+        border-right: 1px solid rgba(255,255,255,0.2);
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+
+        &:last-child {
+          border-right: none;
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        transition: background-color 0.2s ease;
+
+        &:nth-child(even) {
+          background: rgba($color-background-primary, 0.3);
+        }
+
+        &:hover {
+          background: rgba($color-class, 0.1);
+        }
+
+        // Highlight milestone levels (5th, 11th, 17th)
+        &:nth-child(5),
+        &:nth-child(11), 
+        &:nth-child(17),
+        &.milestone-row {
+          background: rgba($color-warning, 0.15);
+          border-left: 3px solid $color-warning;
+        }
+
+        td {
+          padding: $spacing-sm;
+          text-align: center;
+          border-right: 1px solid rgba($color-class, 0.2);
+          border-bottom: 1px solid rgba($color-class, 0.1);
+          font-weight: $font-weight-medium;
+
+          &:last-child {
+            border-right: none;
+          }
+
+          &.level-cell {
+            font-weight: $font-weight-bold;
+            color: $color-class;
+
+            &.milestone-level {
+              color: $color-warning;
+              font-weight: $font-weight-bold;
+            }
+          }
+
+          &.progression-cell {
+            &:hover {
+              background: rgba($color-class, 0.05);
+            }
+          }
+        }
+
+        &:last-child td {
+          border-bottom: none;
+        }
+      }
+    }
+  }
+
+  // Pact Magic explanation
+  .pact-magic-explanation {
+    margin: $spacing-lg 0;
+    padding: $spacing-lg;
+    background: rgba($color-spell, 0.1);
+    border-left: 4px solid $color-spell;
+    border-radius: $border-radius-md;
+
+    strong {
+      color: $color-spell;
+    }
+  }
+
+  // Mobile responsiveness
+  @media (max-width: 768px) {
+    .spellcasting-table {
+      margin: $spacing-lg 0;
+      border-radius: $border-radius-md;
+    }
+    
+    .class-progression-table {
+      font-size: $font-size-xs;
+
+      th,
+      td {
+        padding: $spacing-sm $spacing-xs;
+      }
+
+      th {
+        font-size: $font-size-xs;
+        padding: $spacing-md $spacing-sm;
+      }
+    }
+  }
+
+  @media (max-width: 600px) {
+    .spellcasting-table {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: $border-radius-sm;
+      box-shadow: $shadow-md;
+    }
+    
+    .class-progression-table {
+      min-width: 500px;
+      font-size: $font-size-xs;
+
+      th,
+      td {
+        padding: $spacing-xs;
+      }
+
+      .level-cell {
+        font-size: $font-size-sm;
+      }
+
+      // Simplify hover effects on mobile
+      tbody tr:hover {
+        transform: none;
+      }
+
+      .progression-cell:hover {
+        transform: none;
+      }
+    }
+  }
+}
+
 // Class-specific details section (legacy support)
 .class-details {
   @include content-section($color-class);

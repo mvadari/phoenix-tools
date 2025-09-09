@@ -197,6 +197,141 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
           )}
         </div>
 
+        {/* Spellcasting Information */}
+        {(classContent?.spellcastingAbility || classContent?.casterProgression) && (
+          <div>
+            <h4>Spellcasting</h4>
+            {classContent.spellcastingAbility && (
+              <DetailRow 
+                name="Spellcasting Ability" 
+                value={classContent.spellcastingAbility.toUpperCase() === 'CHA' ? 'Charisma' : 
+                       classContent.spellcastingAbility.toUpperCase() === 'INT' ? 'Intelligence' : 
+                       classContent.spellcastingAbility.toUpperCase() === 'WIS' ? 'Wisdom' : 
+                       classContent.spellcastingAbility.toUpperCase()}
+              />
+            )}
+            {classContent.casterProgression && (
+              <DetailRow 
+                name="Casting Type" 
+                value={classContent.casterProgression === 'pact' ? 'Pact Magic' : 
+                       classContent.casterProgression === 'full' ? 'Full Caster' : 
+                       classContent.casterProgression === 'half' ? 'Half Caster' : 
+                       classContent.casterProgression === 'artificer' ? 'Artificer Spellcasting' : 
+                       classContent.casterProgression}
+              />
+            )}
+            {classContent.cantripProgression && (
+              <DetailRow 
+                name="Cantrips at 1st Level" 
+                value={classContent.cantripProgression[0].toString()}
+              />
+            )}
+            {classContent.spellsKnownProgression && (
+              <DetailRow 
+                name="Spells Known at 1st Level" 
+                value={classContent.spellsKnownProgression[0].toString()}
+              />
+            )}
+            {classContent.preparedSpells && (
+              <DetailRow 
+                name="Spells Prepared" 
+                value={classContent.preparedSpells
+                  .replace('<$level$>', 'class level')
+                  .replace('<$int_mod$>', 'Intelligence modifier')
+                  .replace('<$wis_mod$>', 'Wisdom modifier')
+                  .replace('<$cha_mod$>', 'Charisma modifier')}
+              />
+            )}
+          </div>
+        )}
+
+        {/* Spellcasting Progression Tables */}
+        {classContent?.classTableGroups && classContent.classTableGroups.map((tableGroup: any, groupIndex: number) => {
+          const rows = tableGroup.rowsSpellProgression || tableGroup.rows;
+          if (!rows) return null;
+          
+          // Check if this is a Pact Magic table (Warlock)
+          const isPactMagic = classContent.casterProgression === 'pact';
+          const tableTitle = tableGroup.title || (groupIndex === 0 ? 'Spell Progression' : 'Additional Spell Information');
+          
+          return (
+            <div key={groupIndex}>
+              <h4>{tableTitle}</h4>
+              {/* Add explanation for Pact Magic */}
+              {isPactMagic && groupIndex === 0 && (
+                <div className="pact-magic-explanation">
+                  <strong>Pact Magic:</strong> Unlike other spellcasters, all Warlock spell slots are cast at the "Slot Level" shown. 
+                  You don't get multiple spell slot levels - instead, you get a smaller number of higher-level slots that recharge on a short rest.
+                </div>
+              )}
+              <div className="spellcasting-table">
+                <table className="class-progression-table">
+                  <thead>
+                    <tr>
+                      <th>Level</th>
+                      {tableGroup.colLabels.map((label: string, index: number) => {
+                        // For Pact Magic, combine "Spell Slots" and "Slot Level" columns
+                        const cleanLabel = label.replace(/\{@filter ([^|]+)\|[^}]+\}/g, '$1').replace(/\{@[^}]+\}/g, '');
+                        if (isPactMagic && (cleanLabel === 'Spell Slots' || cleanLabel === 'Slot Level')) {
+                          if (cleanLabel === 'Spell Slots') {
+                            return <th key={index}>Pact Magic Slots</th>;
+                          } else {
+                            // Skip the "Slot Level" column as we'll combine it
+                            return null;
+                          }
+                        }
+                        return <th key={index}>{cleanLabel}</th>;
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rows.map((row: any[], rowIndex: number) => {
+                      const isMilestone = rowIndex === 4 || rowIndex === 10 || rowIndex === 16; // 5th, 11th, 17th levels
+                      return (
+                        <tr key={rowIndex} className={isMilestone ? 'milestone-row' : ''}>
+                          <td className={`level-cell ${isMilestone ? 'milestone-level' : ''}`}>{rowIndex + 1}</td>
+                          {row.map((cell: string | number, cellIndex: number) => {
+                            // For Pact Magic, combine spell slots and slot level into one cell
+                            if (isPactMagic && tableGroup.colLabels) {
+                              const cleanLabel = tableGroup.colLabels[cellIndex]?.replace(/\{@filter ([^|]+)\|[^}]+\}/g, '$1').replace(/\{@[^}]+\}/g, '');
+                              
+                              if (cleanLabel === 'Spell Slots') {
+                                // Combine with the next cell (Slot Level)
+                                const slotCount = cell;
+                                const slotLevel = row[cellIndex + 1];
+                                const cleanSlotLevel = typeof slotLevel === 'string' ? 
+                                  slotLevel.replace(/\{@filter ([^|]+)\|[^}]+\}/g, '$1').replace(/\{@[^}]+\}/g, '') : 
+                                  slotLevel;
+                                
+                                return (
+                                  <td key={cellIndex} className="progression-cell">
+                                    {slotCount} × {cleanSlotLevel}
+                                  </td>
+                                );
+                              } else if (cleanLabel === 'Slot Level') {
+                                // Skip this cell as it's been combined with the previous one
+                                return null;
+                              }
+                            }
+                            
+                            return (
+                              <td key={cellIndex} className="progression-cell">
+                                {typeof cell === 'string' ? 
+                                  cell.replace(/\{@filter ([^|]+)\|[^}]+\}/g, '$1').replace(/\{@[^}]+\}/g, '') : 
+                                  cell}
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          );
+        })}
+
         {/* Starting Proficiencies */}
         {classContent.startingProficiencies && (
           <div className="starting-proficiencies">

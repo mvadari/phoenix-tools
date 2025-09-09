@@ -7,3 +7,5 @@ export { default as ActionsList } from './ActionsList';
 export { default as SpellcastingBlock } from './SpellcastingBlock';
 export { default as EquipmentList } from './EquipmentList';
 export { default as PrerequisiteDisplay } from './PrerequisiteDisplay';
+export { default as SpellcastingInfo } from './SpellcastingInfo';
+export { default as SpellcastingTable } from './SpellcastingTable';
