@@ -352,6 +352,154 @@ header h1 {
   color: #2d1810;
 }
 
+/* Fluff content styling */
+.fluff-content {
+  background: 
+    linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(255, 215, 0, 0.08) 100%);
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 8px;
+  margin: 1rem 0 2rem 0;
+  padding: 2rem 2.5rem;
+  font-style: italic;
+  position: relative;
+  line-height: 1.7;
+}
+
+.fluff-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #d4af37 0%, #ffd700 50%, #d4af37 100%);
+  border-radius: 2px 2px 0 0;
+}
+
+.fluff-content p {
+  margin: 1rem 0;
+  text-indent: 1.5em;
+}
+
+.fluff-content h3 {
+  font-family: 'Cinzel', serif;
+  color: #8b4513;
+  margin: 0 0 1rem 0;
+  padding: 0.8rem 1.5rem;
+  font-weight: 600;
+  font-style: normal;
+  letter-spacing: 0.5px;
+  background: rgba(139, 69, 19, 0.08);
+  border: 1px solid rgba(139, 69, 19, 0.15);
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(139, 69, 19, 0.1);
+}
+
+.fluff-content h4 {
+  font-family: 'Cinzel', serif;
+  color: #8b4513;
+  margin: 1.2rem 0 0.8rem 0;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  font-style: normal;
+  letter-spacing: 0.3px;
+  font-size: 1.1em;
+  background: rgba(139, 69, 19, 0.05);
+  border: 1px solid rgba(139, 69, 19, 0.1);
+  border-radius: 4px;
+}
+
+.fluff-content > div {
+  margin: 1.2rem 0;
+}
+
+.fluff-content > div:first-child {
+  margin-top: 0;
+}
+
+.fluff-content > div:last-child {
+  margin-bottom: 0;
+}
+
+
+/* Content inset styling (for special highlighted boxes) */
+.content-inset {
+  background: rgba(139, 69, 19, 0.08);
+  border: 1px solid rgba(139, 69, 19, 0.2);
+  border-radius: 6px;
+  padding: 1.2rem;
+  margin: 1.5rem 0;
+  font-style: normal;
+}
+
+.content-inset h4 {
+  margin-top: 0 !important;
+  color: #6b3410;
+}
+
+.fluff-content .content-inset {
+  font-style: normal;
+}
+
+/* Unknown content types fallback styling */
+.content-unknown {
+  margin: 1rem 0;
+}
+
+.content-unknown h5 {
+  font-family: 'Cinzel', serif;
+  color: #8b4513;
+  margin: 1rem 0 0.6rem 0;
+  font-weight: 600;
+  font-style: normal;
+  letter-spacing: 0.3px;
+  font-size: 1em;
+}
+
+.content-debug {
+  background: rgba(255, 0, 0, 0.05);
+  border: 1px solid rgba(255, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 0.8rem;
+  margin: 0.5rem 0;
+  font-size: 0.8em;
+  color: #666;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+/* Quote styling */
+.content-quote {
+  background: rgba(212, 175, 55, 0.05);
+  border-left: 4px solid #d4af37;
+  margin: 1.5rem 0;
+  padding: 1rem 1.5rem;
+  font-style: italic;
+  position: relative;
+}
+
+.content-quote cite {
+  display: block;
+  margin-top: 0.8rem;
+  font-style: normal;
+  color: #8b4513;
+  font-weight: 600;
+  font-size: 0.9em;
+}
+
+/* Table group styling */
+.content-table-group {
+  margin: 1.5rem 0;
+}
+
+.content-table-group h4 {
+  margin-bottom: 1rem;
+}
+
+.content-table-group .content-table {
+  margin: 1rem 0;
+}
+
 .detail-row {
   margin: 0.75rem 0;
   padding: 0.5rem 0;

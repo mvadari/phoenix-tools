@@ -225,6 +225,68 @@ export function processEntry(entry: any): React.ReactNode {
       );
     }
 
+    // Handle section entries (similar to entries but for larger sections)
+    if (entry.type === 'section' && entry.entries) {
+      return (
+        <div>
+          {entry.name && <h3>{processContentLinks(entry.name)}</h3>}
+          {entry.entries.map((subEntry: any, index: number) => (
+            <div key={index}>{processEntry(subEntry)}</div>
+          ))}
+        </div>
+      );
+    }
+
+    // Handle inset entries (special highlighted boxes)
+    if (entry.type === 'inset' && entry.entries) {
+      return (
+        <div className="content-inset">
+          {entry.name && <h4>{processContentLinks(entry.name)}</h4>}
+          {entry.entries.map((subEntry: any, index: number) => (
+            <div key={index}>{processEntry(subEntry)}</div>
+          ))}
+        </div>
+      );
+    }
+
+    // Handle quote entries
+    if (entry.type === 'quote' && entry.entries) {
+      return (
+        <blockquote className="content-quote">
+          {entry.entries.map((subEntry: any, index: number) => (
+            <div key={index}>{processEntry(subEntry)}</div>
+          ))}
+          {entry.by && <cite>— {processContentLinks(entry.by)}</cite>}
+        </blockquote>
+      );
+    }
+
+    // Handle cell entries (table cells with roll data)
+    if (entry.type === 'cell') {
+      if (entry.roll) {
+        // Handle dice roll cells
+        if (entry.roll.min !== undefined && entry.roll.max !== undefined) {
+          return `${entry.roll.min}-${entry.roll.max}`;
+        }
+        if (entry.roll.exact !== undefined) {
+          return entry.roll.exact.toString();
+        }
+      }
+      return entry.text || JSON.stringify(entry);
+    }
+
+    // Handle tableGroup entries
+    if (entry.type === 'tableGroup' && entry.tables) {
+      return (
+        <div className="content-table-group">
+          {entry.name && <h4>{processContentLinks(entry.name)}</h4>}
+          {entry.tables.map((table: any, index: number) => (
+            <div key={index}>{processEntry(table)}</div>
+          ))}
+        </div>
+      );
+    }
+
     // Handle table entries
     if (entry.type === 'table' && entry.colLabels && entry.rows) {
       return (
@@ -254,6 +316,36 @@ export function processEntry(entry: any): React.ReactNode {
     }
   }
 
-  // If we can't process it, return as string or null for React safety
-  return typeof entry === 'string' ? entry : JSON.stringify(entry);
+  // If we can't process it, try to extract useful information
+  if (typeof entry === 'string') {
+    return entry;
+  }
+  
+  if (typeof entry === 'object' && entry !== null) {
+    // Try to extract readable content from unknown types
+    if (entry.entries && Array.isArray(entry.entries)) {
+      return (
+        <div className="content-unknown">
+          {entry.name && <h5>{processContentLinks(entry.name)}</h5>}
+          {entry.entries.map((subEntry: any, index: number) => (
+            <div key={index}>{processEntry(subEntry)}</div>
+          ))}
+        </div>
+      );
+    }
+    
+    // If it has a text or content field, use that
+    if (entry.text) {
+      return processContentLinks(entry.text);
+    }
+    
+    if (entry.content) {
+      return processContentLinks(entry.content);
+    }
+    
+    // As a last resort, return the JSON, but wrapped nicely
+    return <pre className="content-debug">{JSON.stringify(entry, null, 2)}</pre>;
+  }
+
+  return null;
 }

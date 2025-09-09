@@ -225,5 +225,6 @@ export interface IndexFile {
 export interface DataService {
   loadIndex(category: DataCategory): Promise<SearchIndexItem[]>;
   loadFullData(category: DataCategory, source: string): Promise<any[]>;
+  loadFluff(category: DataCategory, name: string, source: string): Promise<any | null>;
   search(query: string, category?: DataCategory): Promise<SearchResult[]>;
 }

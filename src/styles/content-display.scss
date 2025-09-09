@@ -123,3 +123,17 @@
   border: 3px solid $color-primary;
   box-shadow: $shadow-xl, inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(0, 0, 0, 0.05);
 }
+
+// Fluff content styling
+.fluff-content {
+  margin: $spacing-xl $spacing-2xl $spacing-2xl $spacing-2xl;
+
+  .content-entries .content-entry {
+    background: linear-gradient(145deg, rgba($color-background-primary, 0.95) 0%, rgba($color-background-secondary, 0.95) 100%);
+    border: 2px solid $color-primary;
+    border-radius: $border-radius-md;
+    padding: $spacing-3xl;
+    margin: $spacing-xl 0;
+    box-shadow: $shadow-md;
+  }
+}

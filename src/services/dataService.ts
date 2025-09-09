@@ -14,6 +14,29 @@ import { CacheService } from './cacheService';
 class DataServiceClass {
   private indexCache = new Map<DataCategory, SearchIndexItem[]>();
   private dataCache = new Map<string, any[]>();
+  private fluffCache = new Map<string, any[]>();
+  
+  // Fluff file mapping
+  private fluffFileMap: Record<DataCategory, string> = {
+    item: 'fluff-items.json',
+    race: 'fluff-races.json',
+    background: 'fluff-backgrounds.json',
+    feat: 'fluff-feats.json',
+    condition: 'fluff-conditionsdiseases.json',
+    optionalfeature: 'fluff-optionalfeatures.json',
+    reward: 'fluff-rewards.json',
+    vehicle: 'fluff-vehicles.json',
+    // Categories without fluff files (or special handling)
+    spell: '', 
+    class: '', // Special handling in loadFluff method
+    monster: '',
+    action: '',
+    adventure: '',
+    deity: '',
+    'variant-rule': '',
+    table: '',
+    psionics: ''
+  };
   
   // Category configuration
   private categoryConfig: Record<DataCategory, {
@@ -298,6 +321,98 @@ class DataServiceClass {
     }
     
     return allItems;
+  }
+
+  async loadFluff(category: DataCategory, name: string, source: string): Promise<any | null> {
+    // Special handling for classes - they have individual fluff files
+    if (category === 'class') {
+      return this.loadClassFluff(name, source);
+    }
+
+    const fluffFileName = this.fluffFileMap[category];
+    if (!fluffFileName) {
+      return null; // Category doesn't have fluff data
+    }
+
+    const cacheKey = `fluff-${category}`;
+    
+    // Check memory cache first
+    if (!this.fluffCache.has(cacheKey)) {
+      try {
+        const response = await fetch(`/phoenix-tools/data/${fluffFileName}`);
+        if (!response.ok) {
+          console.warn(`Failed to load fluff file: ${fluffFileName}`);
+          return null;
+        }
+        
+        const fluffData = await response.json();
+        const fluffKey = this.getFluffKey(category);
+        const fluffEntries = fluffData[fluffKey] || [];
+        
+        this.fluffCache.set(cacheKey, fluffEntries);
+      } catch (error) {
+        console.error(`Error loading fluff for ${category}:`, error);
+        return null;
+      }
+    }
+
+    // Find matching fluff entry - case insensitive name matching
+    const fluffEntries = this.fluffCache.get(cacheKey) || [];
+    const fluffEntry = fluffEntries.find((entry: any) => 
+      entry.name.toLowerCase() === name.toLowerCase() && entry.source === source
+    );
+
+    return fluffEntry || null;
+  }
+
+  private async loadClassFluff(name: string, source: string): Promise<any | null> {
+    const className = name.toLowerCase();
+    const cacheKey = `fluff-class-${className}`;
+    const fluffUrl = `/phoenix-tools/data/class/fluff-class-${className}.json`;
+    
+    // Check memory cache first
+    if (!this.fluffCache.has(cacheKey)) {
+      try {
+        const response = await fetch(fluffUrl);
+        
+        if (!response.ok) {
+          console.warn(`Failed to load class fluff file for: ${name} - Status: ${response.status}`);
+          return null;
+        }
+        
+        const fluffData = await response.json();
+        const fluffEntries = fluffData.classFluff || [];
+        
+        this.fluffCache.set(cacheKey, fluffEntries);
+      } catch (error) {
+        console.error(`Error loading class fluff for ${name}:`, error);
+        return null;
+      }
+    }
+
+    // Find matching fluff entry - case insensitive name matching
+    const fluffEntries = this.fluffCache.get(cacheKey) || [];
+    const fluffEntry = fluffEntries.find((entry: any) => 
+      entry.name.toLowerCase() === name.toLowerCase() && entry.source === source
+    );
+    
+    return fluffEntry || null;
+  }
+
+  private getFluffKey(category: DataCategory): string {
+    // Map categories to their fluff data keys
+    const fluffKeyMap: Record<string, string> = {
+      item: 'itemFluff',
+      race: 'raceFluff',
+      background: 'backgroundFluff',
+      feat: 'featFluff',
+      condition: 'conditionFluff',
+      optionalfeature: 'optionalfeatureFluff',
+      reward: 'rewardFluff',
+      vehicle: 'vehicleFluff'
+    };
+    
+    return fluffKeyMap[category] || `${category}Fluff`;
   }
 
   async search(query: string, category?: DataCategory): Promise<SearchResult[]> {
