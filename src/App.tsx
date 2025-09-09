@@ -43,7 +43,7 @@ function App() {
   }, []);
 
   return (
-    <Router basename="/phoenix-tools">
+    <Router basename="/">
       <div className="App">
         <AppHeader />
         <main className="app-main">
