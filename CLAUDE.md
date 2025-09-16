@@ -16,7 +16,7 @@ This is a D&D 5e tools website project called "Phoenix Tools" built with Vite, T
 
 ### Build System
 - **Vite 7.1.3** with TypeScript and React support
-- Single-page React application with `/phoenix-tools` base path
+- Single-page React application with `/` base path
 - Modern ES modules with TypeScript strict configuration
 
 ### Current Structure
@@ -103,7 +103,7 @@ The project has an established React component architecture:
 - React JSX configured for modern React transform (`react-jsx`)
 - Strict linting with unused locals/parameters checking
 - Jest configured for testing (minimal setup)
-- Project deployed with `/phoenix-tools` base path
+- Project deployed with `/` base path
 - Component composition pattern with shared utility components for D&D-specific data display
 
 ### Development Patterns & Best Practices
