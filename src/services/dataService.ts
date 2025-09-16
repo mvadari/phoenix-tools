@@ -216,6 +216,35 @@ class DataServiceClass {
     return typeof type === 'string' ? type : (type.type || 'unknown');
   }
 
+  private mergeSubclassesIntoClasses(classes: any[], subclasses: any[], subclassFeatures: any[] = []): any[] {
+    return classes.map(classItem => {
+      // Find all subclasses that belong to this class
+      const classSubclasses = subclasses.filter(subclass => 
+        subclass.className === classItem.name && subclass.classSource === classItem.source
+      );
+      
+      // For each subclass, attach its feature details
+      const enrichedSubclasses = classSubclasses.map(subclass => {
+        const subclassFeatureDetails = subclassFeatures.filter(feature =>
+          feature.className === subclass.className &&
+          feature.classSource === subclass.classSource &&
+          feature.subclassShortName === subclass.shortName &&
+          feature.subclassSource === subclass.source
+        );
+        
+        return {
+          ...subclass,
+          featureDetails: subclassFeatureDetails
+        };
+      });
+      
+      return {
+        ...classItem,
+        subclass: enrichedSubclasses
+      };
+    });
+  }
+
   async loadFullData(category: DataCategory, source: string): Promise<any[]> {
     const cacheKey = `${category}-${source}`;
     
@@ -244,7 +273,9 @@ class DataServiceClass {
         // IMPROVED: Load from ALL files and combine results, then filter by source
         // This is less efficient but more reliable than trying to find the "right" file
         const allItems: any[] = [];
+        const allSubclassFeatures: any[] = [];
         
+        // First pass: load all items and collect subclass features
         for (const [_indexKey, candidateFilename] of Object.entries(indexData)) {
           try {
             const fileResponse = await fetch(`${config.basePath}/${candidateFilename}`);
@@ -253,19 +284,66 @@ class DataServiceClass {
             const fileData: DataFile = await fileResponse.json();
             const items = fileData[config.dataKey] || [];
             allItems.push(...items);
+            
+            // Collect subclass features separately
+            if (category === 'class') {
+              // Look for any items that look like subclass features
+              Object.keys(fileData).forEach(key => {
+                if (Array.isArray(fileData[key])) {
+                  const featuresInSection = fileData[key].filter((item: any) => item.subclassSource);
+                  allSubclassFeatures.push(...featuresInSection);
+                }
+              });
+            }
           } catch (error) {
             console.warn(`Failed to load ${candidateFilename}:`, error);
             continue;
           }
         }
         
+        // Second pass: for class data, merge subclasses and features
+        let processedItems = allItems;
+        if (category === 'class') {
+          
+          // Group items by file and reprocess with subclass merging
+          const fileDataMap = new Map();
+          
+          for (const [_indexKey, candidateFilename] of Object.entries(indexData)) {
+            try {
+              const fileResponse = await fetch(`${config.basePath}/${candidateFilename}`);
+              if (!fileResponse.ok) continue;
+              
+              const fileData: DataFile = await fileResponse.json();
+              if (fileData.subclass) {
+                const items = fileData[config.dataKey] || [];
+                const mergedItems = this.mergeSubclassesIntoClasses(items, fileData.subclass, allSubclassFeatures);
+                fileDataMap.set(candidateFilename, mergedItems);
+              }
+            } catch (error) {
+              continue;
+            }
+          }
+          
+          // Combine all processed items
+          processedItems = [];
+          for (const items of fileDataMap.values()) {
+            processedItems.push(...items);
+          }
+        }
+        
         // Filter all items by source and return directly
-        const items = allItems.filter((item: any) => item.source === source);
+        const items = processedItems.filter((item: any) => item.source === source);
+        
+        // For class data, merge subclass features
+        let finalItems = items;
+        if (category === 'class') {
+          finalItems = this.mergeSubclassesIntoClasses(items, [], allSubclassFeatures);
+        }
         
         // Cache the result
-        this.dataCache.set(cacheKey, items);
-        await CacheService.cacheFullData(category, source, items);
-        return items;
+        this.dataCache.set(cacheKey, finalItems);
+        await CacheService.cacheFullData(category, source, finalItems);
+        return finalItems;
       } else {
         // Non-indexed categories: load from single file
         const filename = config.fileName || `${category}s.json`;

@@ -130,35 +130,352 @@
     }
   }
 
-  .subclasses {
-    @include content-section(#f44336);
+  // Subclass Tabs System
+  .subclass-tabs-container {
+    @include content-section($color-race);
     
     h4 {
       margin: 0 0 $spacing-lg 0;
-      color: #c62828;
+      color: $color-race;
       font-size: $font-size-lg;
       @include heading-style($font-size-lg);
     }
 
-    .subclass {
+    .subclass-tab-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: $spacing-xs;
       margin-bottom: $spacing-lg;
-      padding-bottom: $spacing-lg;
+      border-bottom: 2px solid rgba($color-race, 0.2);
+      padding-bottom: $spacing-sm;
 
-      &:not(:last-child) {
-        border-bottom: 1px solid #ffcdd2;
-      }
-
-      h5 {
-        margin: 0 0 $spacing-sm 0;
-        color: #c62828;
-        font-weight: $font-weight-bold;
-        @include heading-style($font-size-base);
-      }
-
-      .subclass-source {
+      .subclass-tab {
+        background: rgba($color-race, 0.1);
+        border: 2px solid rgba($color-race, 0.3);
+        border-bottom: none;
+        border-radius: $border-radius-md $border-radius-md 0 0;
+        padding: $spacing-sm $spacing-lg;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: $font-headings;
+        font-weight: $font-weight-semibold;
         font-size: $font-size-sm;
-        color: $gray-600;
-        margin-bottom: $spacing-sm;
+        color: $color-race;
+        position: relative;
+        top: 2px;
+
+        &:hover {
+          background: rgba($color-race, 0.15);
+          border-color: rgba($color-race, 0.5);
+          transform: translateY(-1px);
+        }
+
+        &.active {
+          background: $color-background-primary;
+          border-color: $color-race;
+          color: $color-race;
+          font-weight: $font-weight-bold;
+          box-shadow: 0 -2px 8px rgba($color-race, 0.1);
+        }
+      }
+    }
+
+    .subclass-tab-content {
+      animation: fadeIn 0.3s ease-in-out;
+      
+      .subclass-content {
+        background: rgba($color-background-primary, 0.5);
+        border-radius: $border-radius-md;
+        padding: $spacing-lg;
+        margin-top: $spacing-sm;
+        
+        .subclass-header {
+          margin-bottom: $spacing-md;
+          padding-bottom: $spacing-sm;
+          border-bottom: 2px solid rgba($color-race, 0.2);
+          
+          h5 {
+            margin: 0 0 $spacing-sm 0;
+            color: $color-race;
+            font-weight: $font-weight-bold;
+            @include heading-style($font-size-lg);
+          }
+
+          .subclass-source {
+            font-size: $font-size-sm;
+            color: $gray-600;
+            font-style: italic;
+          }
+        }
+
+        .expanded-spell-list {
+          margin: $spacing-lg 0;
+          
+          h6 {
+            color: $color-spell;
+            margin-bottom: $spacing-md;
+            @include heading-style($font-size-base);
+            border-bottom: 1px solid rgba($color-spell, 0.3);
+            padding-bottom: $spacing-xs;
+          }
+
+          .subclass-spell-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: $border-radius-md;
+            overflow: hidden;
+            box-shadow: $shadow-sm;
+
+            thead {
+              background: linear-gradient(135deg, $color-spell 0%, rgba($color-spell, 0.8) 100%);
+              color: white;
+
+              th {
+                padding: $spacing-sm $spacing-md;
+                text-align: left;
+                font-family: $font-headings;
+                font-weight: $font-weight-semibold;
+                font-size: $font-size-sm;
+              }
+            }
+
+            tbody {
+              tr {
+                border-bottom: 1px solid $gray-200;
+
+                &:nth-child(even) {
+                  background: rgba($color-spell, 0.02);
+                }
+
+                &:hover {
+                  background: rgba($color-spell, 0.05);
+                }
+
+                td {
+                  padding: $spacing-sm $spacing-md;
+                  font-size: $font-size-sm;
+
+                  &.spell-level-cell {
+                    font-weight: $font-weight-semibold;
+                    color: $color-spell;
+                    width: 100px;
+                  }
+
+                  &.spell-list-cell {
+                    font-style: italic;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        .subclass-feature-progression {
+          margin: $spacing-lg 0;
+          
+          h6 {
+            color: $color-success;
+            margin-bottom: $spacing-md;
+            @include heading-style($font-size-base);
+            border-bottom: 1px solid rgba($color-success, 0.3);
+            padding-bottom: $spacing-xs;
+          }
+
+          .feature-timeline {
+            .feature-level-section {
+              margin-bottom: $spacing-lg;
+              
+              .feature-level-header {
+                color: $color-success;
+                margin-bottom: $spacing-md;
+                padding: $spacing-sm;
+                background: linear-gradient(135deg, $color-success 0%, rgba($color-success, 0.8) 100%);
+                color: white;
+                border-radius: $border-radius-md;
+                font-family: $font-headings;
+                font-weight: $font-weight-bold;
+                text-align: center;
+              }
+              
+              .feature-detail {
+                margin-bottom: $spacing-md;
+                padding: $spacing-md;
+                background: white;
+                border-radius: $border-radius-md;
+                border-left: 4px solid $color-success;
+                box-shadow: $shadow-sm;
+                
+                .feature-name {
+                  margin: 0 0 $spacing-sm 0;
+                  color: $color-success;
+                  font-family: $font-headings;
+                  font-weight: $font-weight-bold;
+                  font-size: $font-size-base;
+                  border-bottom: 1px solid rgba($color-success, 0.2);
+                  padding-bottom: $spacing-xs;
+                }
+                
+                .feature-description {
+                  line-height: 1.6;
+                  
+                  p {
+                    margin-bottom: $spacing-sm;
+                    
+                    &:last-child {
+                      margin-bottom: 0;
+                    }
+                  }
+                  
+                  ul, ol {
+                    margin: $spacing-sm 0;
+                    padding-left: $spacing-lg;
+                    
+                    li {
+                      margin-bottom: 0;
+                    }
+                  }
+                  
+                  // Clean up any weird formatting
+                  em {
+                    font-style: italic;
+                    color: rgba($color-text-secondary, 0.8);
+                  }
+                  
+                  strong {
+                    font-weight: $font-weight-bold;
+                    color: $color-success;
+                  }
+                }
+              }
+            }
+            
+            // Fallback styles for basic feature display
+            .feature-level-item {
+              display: flex;
+              margin-bottom: $spacing-sm;
+              padding: $spacing-sm;
+              background: rgba($color-success, 0.05);
+              border-radius: $border-radius-md;
+              border-left: 3px solid $color-success;
+
+              .feature-level-label {
+                min-width: 80px;
+                font-weight: $font-weight-bold;
+                color: $color-success;
+                font-family: $font-headings;
+              }
+
+              .feature-list {
+                flex: 1;
+                font-style: italic;
+              }
+            }
+          }
+        }
+
+        .subclass-description {
+          margin-top: $spacing-lg;
+          
+          p {
+            margin-bottom: $spacing-sm;
+            line-height: 1.5;
+          }
+        }
+      }
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  // Mobile responsiveness for subclass tabs
+  @media (max-width: 768px) {
+    .subclass-tabs-container {
+      .subclass-tab-nav {
+        .subclass-tab {
+          padding: $spacing-sm $spacing-md;
+          font-size: $font-size-xs;
+        }
+      }
+
+      .subclass-tab-content {
+        .subclass-content {
+          padding: $spacing-lg;
+          
+          .expanded-spell-list {
+            .subclass-spell-table {
+              font-size: $font-size-xs;
+              
+              thead th,
+              tbody td {
+                padding: $spacing-sm;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 600px) {
+    .subclass-tabs-container {
+      .subclass-tab-nav {
+        gap: $spacing-xs;
+        
+        .subclass-tab {
+          flex: 1;
+          text-align: center;
+          padding: $spacing-sm;
+          font-size: $font-size-xs;
+          min-width: 0; // Allow text to wrap
+          word-wrap: break-word;
+        }
+      }
+
+      .subclass-tab-content {
+        .subclass-content {
+          padding: $spacing-md;
+          margin-top: $spacing-sm;
+          
+          .subclass-header {
+            h5 {
+              font-size: $font-size-base;
+            }
+          }
+
+          .expanded-spell-list {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            
+            .subclass-spell-table {
+              min-width: 400px;
+              font-size: $font-size-xs;
+            }
+          }
+
+          .subclass-feature-progression {
+            .feature-timeline {
+              .feature-level-item {
+                flex-direction: column;
+                gap: $spacing-xs;
+                
+                .feature-level-label {
+                  min-width: auto;
+                  font-size: $font-size-sm;
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

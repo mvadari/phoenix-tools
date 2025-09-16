@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { SearchResult } from '../../types';
 import BaseContentDisplay from './BaseContentDisplay';
 import ContentEntries from './ContentEntries';
 import DetailRow from '../basic/DetailRow';
 import { ProficiencyList, EquipmentList } from './shared';
 import SourceTabs from './shared/SourceTabs';
+import SubclassTabs from './shared/SubclassTabs';
 
 interface ClassDisplayProps {
   result: SearchResult;
@@ -19,6 +20,22 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
   const isMultiSource = content && typeof content === 'object' && 
     !content.name && // If it has a name, it's probably a single class object
     Object.keys(content).some(key => content[key]?.name); // Check if values look like class objects
+
+  // Auto-select the primary source for multi-source content
+  useEffect(() => {
+    if (isMultiSource && !currentContent && content) {
+      const primarySource = result.source;
+      const availableKeys = Object.keys(content);
+      
+      // Try to use the primary source first, otherwise use the first available
+      const defaultKey = availableKeys.includes(primarySource) ? primarySource : availableKeys[0];
+      
+      if (defaultKey && content[defaultKey]) {
+        setCurrentContent(content[defaultKey]);
+      }
+    }
+  }, [isMultiSource, currentContent, content, result.source]);
+
 
   const handleSourceChange = (_source: string, sourceContent: any) => {
     setCurrentContent(sourceContent);
@@ -314,11 +331,25 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
                               }
                             }
                             
+                            const formatCell = (cell: any): string => {
+                              if (typeof cell === 'string') {
+                                return cell.replace(/\{@filter ([^|]+)\|[^}]+\}/g, '$1').replace(/\{@[^}]+\}/g, '');
+                              } else if (typeof cell === 'number') {
+                                return cell.toString();
+                              } else if (cell && typeof cell === 'object') {
+                                // Handle dice roll objects like {type: "dice", toRoll: [{number: 1, faces: 6}]}
+                                if (cell.type === 'dice' && cell.toRoll) {
+                                  return cell.toRoll.map((dice: any) => `${dice.number}d${dice.faces}`).join(' + ');
+                                }
+                                // Fallback for other objects
+                                return JSON.stringify(cell);
+                              }
+                              return String(cell || '');
+                            };
+                            
                             return (
                               <td key={cellIndex} className="progression-cell">
-                                {typeof cell === 'string' ? 
-                                  cell.replace(/\{@filter ([^|]+)\|[^}]+\}/g, '$1').replace(/\{@[^}]+\}/g, '') : 
-                                  cell}
+                                {formatCell(cell)}
                               </td>
                             );
                           })}
@@ -395,24 +426,10 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
 
         {/* Subclass Information */}
         {classContent.subclass && classContent.subclass.length > 0 && (
-          <div className="subclasses">
-            <h4>
-              {classContent.subclassTitle || 'Subclasses'}
-            </h4>
-            {classContent.subclass.map((subclass: any, index: number) => (
-              <div key={index} className="subclass">
-                <h5>
-                  {subclass.name} {subclass.shortName && `(${subclass.shortName})`}
-                </h5>
-                {subclass.source && (
-                  <div className="subclass-source">
-                    Source: {subclass.source}
-                  </div>
-                )}
-                {subclass.entries && <ContentEntries entries={subclass.entries} />}
-              </div>
-            ))}
-          </div>
+          <SubclassTabs 
+            subclasses={classContent.subclass}
+            subclassTitle={classContent.subclassTitle}
+          />
         )}
       </div>
     </BaseContentDisplay>
