@@ -337,7 +337,15 @@ class DataServiceClass {
         // For class data, merge subclass features
         let finalItems = items;
         if (category === 'class') {
-          finalItems = this.mergeSubclassesIntoClasses(items, [], allSubclassFeatures);
+          // Extract all subclasses from the loaded class items
+          const allSubclasses: any[] = [];
+          items.forEach(classItem => {
+            if (classItem.subclass && Array.isArray(classItem.subclass)) {
+              allSubclasses.push(...classItem.subclass);
+            }
+          });
+          
+          finalItems = this.mergeSubclassesIntoClasses(items, allSubclasses, allSubclassFeatures);
         }
         
         // Cache the result
