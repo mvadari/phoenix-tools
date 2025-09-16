@@ -12,6 +12,26 @@ interface BaseContentDisplayProps {
 
 export default function BaseContentDisplay({ result, content, children }: BaseContentDisplayProps) {
   const [fluffContent, setFluffContent] = useState<any>(null);
+  const [showFluff, setShowFluff] = useState<boolean>(() => {
+    // Load from localStorage, default to open
+    try {
+      const saved = localStorage.getItem('fluffContentVisible');
+      return saved !== null ? JSON.parse(saved) : true;
+    } catch (error) {
+      // If there's any issue with localStorage, default to open
+      return true;
+    }
+  });
+
+  const toggleFluff = () => {
+    const newValue = !showFluff;
+    setShowFluff(newValue);
+    try {
+      localStorage.setItem('fluffContentVisible', JSON.stringify(newValue));
+    } catch (error) {
+      console.warn('Failed to save fluff visibility preference:', error);
+    }
+  };
 
   useEffect(() => {
     const loadFluff = async () => {
@@ -49,7 +69,17 @@ export default function BaseContentDisplay({ result, content, children }: BaseCo
       {/* Fluff content section - displayed at the top */}
       {fluffContent && fluffContent.entries && (
         <div className="fluff-content">
-          <ContentEntries entries={fluffContent.entries} />
+          <h4 className="fluff-toggle" onClick={toggleFluff}>
+            <span>Description</span>
+            <span className={`toggle-icon ${showFluff ? 'expanded' : 'collapsed'}`}>
+              ▼
+            </span>
+          </h4>
+          {showFluff && (
+            <div className="fluff-content-body">
+              <ContentEntries entries={fluffContent.entries} />
+            </div>
+          )}
         </div>
       )}
       

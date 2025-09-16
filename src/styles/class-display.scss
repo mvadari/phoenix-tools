@@ -121,12 +121,42 @@
   .class-description {
     margin-bottom: $spacing-2xl;
 
-    h4 {
+    .description-toggle {
       color: $gray-700;
       margin-bottom: $spacing-lg;
       border-bottom: 2px solid $gray-200;
       padding-bottom: $spacing-sm;
       @include heading-style($font-size-lg);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s ease;
+      user-select: none;
+
+      &:hover {
+        color: $color-primary;
+        border-bottom-color: rgba($color-primary, 0.3);
+      }
+
+      .toggle-icon {
+        font-size: $font-size-sm;
+        transition: transform 0.2s ease;
+        color: $gray-500;
+
+        &.expanded {
+          transform: rotate(180deg);
+        }
+
+        &.collapsed {
+          transform: rotate(0deg);
+        }
+      }
+    }
+
+    .description-content {
+      animation: fadeIn 0.3s ease-in-out;
+      overflow: hidden;
     }
   }
 

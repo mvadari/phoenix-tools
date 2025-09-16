@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { SearchResult } from '../../types';
 import BaseContentDisplay from './BaseContentDisplay';
-import ContentEntries from './ContentEntries';
 import DetailRow from '../basic/DetailRow';
 import { ProficiencyList, EquipmentList } from './shared';
 import SourceTabs from './shared/SourceTabs';
@@ -414,15 +413,6 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
           </div>
         )}
 
-        {/* Class Description */}
-        {classContent.entries && (
-          <div className="class-description">
-            <h4>
-              Description
-            </h4>
-            <ContentEntries entries={classContent.entries} />
-          </div>
-        )}
 
         {/* Subclass Information */}
         {classContent.subclass && classContent.subclass.length > 0 && (

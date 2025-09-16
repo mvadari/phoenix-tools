@@ -128,12 +128,50 @@
 .fluff-content {
   margin: $spacing-xl $spacing-2xl $spacing-2xl $spacing-2xl;
 
-  .content-entries .content-entry {
-    background: linear-gradient(145deg, rgba($color-background-primary, 0.95) 0%, rgba($color-background-secondary, 0.95) 100%);
-    border: 2px solid $color-primary;
-    border-radius: $border-radius-md;
-    padding: $spacing-3xl;
-    margin: $spacing-xl 0;
-    box-shadow: $shadow-md;
+  .fluff-toggle {
+    color: $gray-700;
+    margin-bottom: $spacing-md;
+    border-bottom: 2px solid $gray-200;
+    padding-bottom: $spacing-sm;
+    @include heading-style($font-size-lg);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+    user-select: none;
+
+    &:hover {
+      color: $color-primary;
+      border-bottom-color: rgba($color-primary, 0.3);
+    }
+
+    .toggle-icon {
+      font-size: $font-size-sm;
+      transition: transform 0.2s ease;
+      color: $gray-500;
+
+      &.expanded {
+        transform: rotate(180deg);
+      }
+
+      &.collapsed {
+        transform: rotate(0deg);
+      }
+    }
+  }
+
+  .fluff-content-body {
+    animation: fadeIn 0.3s ease-in-out;
+    overflow: hidden;
+
+    .content-entries .content-entry {
+      background: linear-gradient(145deg, rgba($color-background-primary, 0.95) 0%, rgba($color-background-secondary, 0.95) 100%);
+      border: 2px solid $color-primary;
+      border-radius: $border-radius-md;
+      padding: $spacing-3xl;
+      margin: $spacing-xl 0;
+      box-shadow: $shadow-md;
+    }
   }
 }
