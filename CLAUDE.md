@@ -29,7 +29,7 @@ The project has an established React component architecture:
     - `ActionDisplay.tsx` - D&D actions and bonus actions
     - `BackgroundDisplay.tsx` - Character backgrounds with proficiencies and traits
     - `BaseContentDisplay.tsx` - Common layout wrapper for all content pages
-    - `ClassDisplay.tsx` - Character classes with progression, features, and subclass tabs
+    - `ClassDisplay.tsx` - Character classes with progression, detailed class features, and subclass tabs
     - `ContentEntries.tsx` - Generic content entry renderer
     - `FeatDisplay.tsx` - Feats with prerequisites and abilities
     - `ItemDisplay.tsx` - Magic items and equipment with properties
@@ -67,8 +67,28 @@ The project has an established React component architecture:
 - **Responsive Design**: Clean, modern interface with consistent styling patterns
 - **Collapsible Content System**: Toggle-based UI density controls with localStorage persistence
 - **Subclass Integration**: Full subclass feature loading with rich descriptions and spell lists
+- **Class Feature Details**: Complete class feature descriptions with level-based organization and rich D&D formatting
 
 ### Recent Feature Implementations
+
+#### Class Feature Details System (2025)
+- **Location**: `src/components/content/ClassDisplay.tsx` 
+- **Purpose**: Complete class feature display with detailed descriptions
+- **Features**:
+  - Level-grouped class features with comprehensive descriptions
+  - Rich D&D content rendering through `ContentEntries` component
+  - Proper handling of subclass feature references
+  - Dense layout optimized for information consumption
+  - Enhanced content processing for D&D-specific data types
+- **Data Integration**: 
+  - Enhanced `dataService.ts` with `mergeClassFeaturesIntoClasses()` method
+  - Automatic extraction of class features from JSON files
+  - Feature matching by `className`, `classSource`, and `level` properties
+- **Content Processing**: Enhanced `contentLinks.tsx` with:
+  - Proper handling of `refClassFeature` and `refSubclassFeature` references
+  - Support for dice, damage, ability, skill, and bonus content types
+  - Improved fallback with collapsible JSON display for unknown types
+- **Styling**: Flattened CSS structure in `class-display.scss` with semantic class organization
 
 #### Subclass Tabs System (2025)
 - **Location**: `src/components/content/shared/SubclassTabs.tsx`
@@ -93,10 +113,11 @@ The project has an established React component architecture:
 - **Styling**: Consistent toggle pattern in `content-display.scss` with transition animations
 
 #### Data Service Enhancements
-- **Enhanced Class Loading**: Automatic merging of subclass features from multiple JSON files
-- **Feature Details**: Loading of rich subclass feature descriptions with level and header sorting
-- **Caching Strategy**: Robust localStorage caching with error handling
-- **Data Structure**: Support for complex subclass feature references with `subclassSource` property
+- **Enhanced Class Loading**: Automatic merging of both subclass and class features from multiple JSON files
+- **Feature Details**: Loading of rich feature descriptions with level and header sorting for both subclasses and classes
+- **Caching Strategy**: Robust localStorage caching with error handling and cache version management (`2.1.1`)
+- **Data Structure**: Support for complex feature references with `subclassSource` and class feature properties
+- **Class Feature Integration**: `mergeClassFeaturesIntoClasses()` method for enriching classes with detailed feature descriptions
 
 ### Development Notes
 - Uses ES2022 target with strict TypeScript configuration
@@ -121,13 +142,26 @@ The project has an established React component architecture:
 - **Animation**: Use `fadeIn` animation for expanding content, `transition: all 0.2s ease` for interactions
 
 #### Data Loading Patterns
-- **Subclass Features**: Use `mergeSubclassesIntoClasses()` method for enriching class data
+- **Class Features**: Use `mergeClassFeaturesIntoClasses()` method for enriching class data with detailed descriptions
+- **Subclass Features**: Use `mergeSubclassesIntoClasses()` method for enriching class data with subclass information
 - **Feature Sorting**: Sort by level first, then by header property for consistent display
 - **Content Processing**: Use `ContentEntries` component for rendering rich D&D content with links
-- **Fallback Content**: Always provide graceful degradation when detailed data unavailable
+- **Content Type Handling**: Enhanced `processEntry()` function handles dice, abilities, skills, damage, and references
+- **Fallback Content**: Always provide graceful degradation when detailed data unavailable, with collapsible JSON for debugging
 
 #### Component Architecture
 - **Shared Components**: Place reusable D&D-specific components in `src/components/content/shared/`
 - **Conditional Rendering**: Use feature detection (`classContent.entries`) rather than hard-coded assumptions
 - **Props Interface**: Define clear TypeScript interfaces for component props
-- **CSS Classes**: Use semantic class names like `.feature-level-section`, `.subclass-tab-nav`
+- **CSS Classes**: Use semantic class names like `.feature-level-section`, `.subclass-tab-nav`, `.class-feature-item`
+
+#### Content Processing Best Practices
+- **D&D Content Types**: The `processEntry()` function in `contentLinks.tsx` handles specialized D&D content:
+  - `refClassFeature`/`refSubclassFeature` - Feature references (displayed as feature names)
+  - `dice` - Dice roll notation (styled with monospace font and colored background)
+  - `damage` - Damage values (colored red)
+  - `ability` - Ability score references (converted to full names, colored)
+  - `skill` - Skill references (italicized)
+  - `bonus` - Numeric bonuses (monospace, with + sign)
+- **Fallback Strategy**: Unknown content types display in collapsible `<details>` elements with JSON fallback
+- **CSS Styling**: Each content type has specific styling classes for consistent visual presentation

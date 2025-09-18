@@ -343,8 +343,60 @@ export function processEntry(entry: any): React.ReactNode {
       return processContentLinks(entry.content);
     }
     
-    // As a last resort, return the JSON, but wrapped nicely
-    return <pre className="content-debug">{JSON.stringify(entry, null, 2)}</pre>;
+    // Handle refClassFeature and refSubclassFeature references
+    if (entry.type === 'refClassFeature' || entry.type === 'refSubclassFeature') {
+      const featureName = entry.classFeature || entry.subclassFeature || 'Feature';
+      return <span className="content-reference">{featureName.split('|')[0]}</span>;
+    }
+
+    // Handle dice entries
+    if (entry.type === 'dice' && entry.toRoll) {
+      const diceStr = entry.toRoll.map((dice: any) => `${dice.number}d${dice.faces}`).join(' + ');
+      return <span className="content-dice">{diceStr}</span>;
+    }
+
+    // Handle damage entries
+    if (entry.type === 'damage' && entry.damage) {
+      return <span className="content-damage">{entry.damage}</span>;
+    }
+
+    // Handle ability entries (ability score references)
+    if (entry.type === 'ability') {
+      const abilities = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
+      const abilityNames = ['Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma'];
+      const abilityName = abilities.includes(entry.name?.toLowerCase()) 
+        ? abilityNames[abilities.indexOf(entry.name.toLowerCase())]
+        : entry.name;
+      return <span className="content-ability">{abilityName}</span>;
+    }
+
+    // Handle skill entries
+    if (entry.type === 'skill') {
+      return <span className="content-skill">{entry.name}</span>;
+    }
+
+    // Handle bonus entries (like +1, +2 etc)
+    if (entry.type === 'bonus' && entry.value !== undefined) {
+      const sign = entry.value >= 0 ? '+' : '';
+      return <span className="content-bonus">{sign}{entry.value}</span>;
+    }
+
+    // As a fallback, try to extract any displayable content from string properties
+    const displayableContent = Object.keys(entry).find(key => 
+      typeof entry[key] === 'string' && entry[key].length > 0 && 
+      !key.startsWith('_') && key !== 'type'
+    );
+    
+    if (displayableContent) {
+      return processContentLinks(entry[displayableContent]);
+    }
+    
+    // Final fallback: display JSON but style it better in a collapsible way
+    console.warn('Unknown content entry type:', entry);
+    return <details className="content-debug">
+      <summary>Unknown content type: {entry.type || 'object'}</summary>
+      <pre>{JSON.stringify(entry, null, 2)}</pre>
+    </details>;
   }
 
   return null;

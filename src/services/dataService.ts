@@ -245,6 +245,20 @@ class DataServiceClass {
     });
   }
 
+  private mergeClassFeaturesIntoClasses(classes: any[], classFeatures: any[] = []): any[] {
+    return classes.map(classItem => {
+      // Find all class features that belong to this class
+      const classFeatureDetails = classFeatures.filter(feature =>
+        feature.className === classItem.name && feature.classSource === classItem.source
+      );
+      
+      return {
+        ...classItem,
+        classFeatureDetails: classFeatureDetails
+      };
+    });
+  }
+
   async loadFullData(category: DataCategory, source: string): Promise<any[]> {
     const cacheKey = `${category}-${source}`;
     
@@ -274,8 +288,9 @@ class DataServiceClass {
         // This is less efficient but more reliable than trying to find the "right" file
         const allItems: any[] = [];
         const allSubclassFeatures: any[] = [];
+        const allClassFeatures: any[] = [];
         
-        // First pass: load all items and collect subclass features
+        // First pass: load all items and collect subclass features and class features
         for (const [_indexKey, candidateFilename] of Object.entries(indexData)) {
           try {
             const fileResponse = await fetch(`${config.basePath}/${candidateFilename}`);
@@ -285,7 +300,7 @@ class DataServiceClass {
             const items = fileData[config.dataKey] || [];
             allItems.push(...items);
             
-            // Collect subclass features separately
+            // Collect subclass features and class features separately
             if (category === 'class') {
               // Look for any items that look like subclass features
               Object.keys(fileData).forEach(key => {
@@ -294,6 +309,11 @@ class DataServiceClass {
                   allSubclassFeatures.push(...featuresInSection);
                 }
               });
+              
+              // Collect class features
+              if (fileData.classFeature && Array.isArray(fileData.classFeature)) {
+                allClassFeatures.push(...fileData.classFeature);
+              }
             }
           } catch (error) {
             console.warn(`Failed to load ${candidateFilename}:`, error);
@@ -305,7 +325,7 @@ class DataServiceClass {
         let processedItems = allItems;
         if (category === 'class') {
           
-          // Group items by file and reprocess with subclass merging
+          // Group items by file and reprocess with subclass and class feature merging
           const fileDataMap = new Map();
           
           for (const [_indexKey, candidateFilename] of Object.entries(indexData)) {
@@ -316,7 +336,8 @@ class DataServiceClass {
               const fileData: DataFile = await fileResponse.json();
               if (fileData.subclass) {
                 const items = fileData[config.dataKey] || [];
-                const mergedItems = this.mergeSubclassesIntoClasses(items, fileData.subclass, allSubclassFeatures);
+                let mergedItems = this.mergeSubclassesIntoClasses(items, fileData.subclass, allSubclassFeatures);
+                mergedItems = this.mergeClassFeaturesIntoClasses(mergedItems, allClassFeatures);
                 fileDataMap.set(candidateFilename, mergedItems);
               }
             } catch (error) {
@@ -334,7 +355,7 @@ class DataServiceClass {
         // Filter all items by source and return directly
         const items = processedItems.filter((item: any) => item.source === source);
         
-        // For class data, merge subclass features
+        // For class data, merge subclass features and class features
         let finalItems = items;
         if (category === 'class') {
           // Extract all subclasses from the loaded class items
@@ -346,6 +367,7 @@ class DataServiceClass {
           });
           
           finalItems = this.mergeSubclassesIntoClasses(items, allSubclasses, allSubclassFeatures);
+          finalItems = this.mergeClassFeaturesIntoClasses(finalItems, allClassFeatures);
         }
         
         // Cache the result

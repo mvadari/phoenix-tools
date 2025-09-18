@@ -5,6 +5,7 @@ import DetailRow from '../basic/DetailRow';
 import { ProficiencyList, EquipmentList } from './shared';
 import SourceTabs from './shared/SourceTabs';
 import SubclassTabs from './shared/SubclassTabs';
+import ContentEntries from './ContentEntries';
 
 interface ClassDisplayProps {
   result: SearchResult;
@@ -77,14 +78,23 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
     return proficiency.map(save => save.toUpperCase()).join(', ');
   };
 
-  const formatClassFeatures = (classFeatures: any[]): React.ReactNode => {
+  const formatClassFeatures = (classFeatures: any[], classFeatureDetails?: any[]): React.ReactNode => {
     if (!classFeatures || classFeatures.length === 0) return null;
 
-    const featuresByLevel: { [key: number]: string[] } = {};
+    const featuresByLevel: { [key: number]: { name: string; details?: any; isSubclassFeature?: boolean }[] } = {};
+    
+    // Helper function to find feature details
+    const findFeatureDetails = (featureName: string, level: number) => {
+      if (!classFeatureDetails) return null;
+      return classFeatureDetails.find(detail => 
+        detail.name === featureName && detail.level === level
+      );
+    };
     
     classFeatures.forEach(feature => {
       let featureName = '';
       let level = 1;
+      let isSubclassFeature = false;
       
       if (typeof feature === 'string') {
         const parts = feature.split('|');
@@ -99,14 +109,20 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
           level = parseInt(parts[3]) || 1;
         }
         if (feature.gainSubclassFeature) {
-          featureName += ' (Subclass Feature)';
+          isSubclassFeature = true;
         }
       }
       
       if (!featuresByLevel[level]) {
         featuresByLevel[level] = [];
       }
-      featuresByLevel[level].push(featureName);
+      
+      const details = findFeatureDetails(featureName, level);
+      featuresByLevel[level].push({
+        name: featureName,
+        details,
+        isSubclassFeature
+      });
     });
 
     return (
@@ -119,7 +135,19 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
                 Level {level}:
               </div>
               <div className="features-list">
-                {features.join(', ')}
+                {features.map((feature, index) => (
+                  <div key={index} className="class-feature-item">
+                    <div className="feature-name">
+                      {feature.name}
+                      {feature.isSubclassFeature && ' (Subclass Feature)'}
+                    </div>
+                    {feature.details && feature.details.entries && (
+                      <div className="feature-description">
+                        <ContentEntries entries={feature.details.entries} />
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
           ))}
@@ -409,7 +437,7 @@ export default function ClassDisplay({ result, content, onClose }: ClassDisplayP
             <h4>
               Class Features by Level
             </h4>
-            {formatClassFeatures(classContent.classFeatures)}
+            {formatClassFeatures(classContent.classFeatures, classContent.classFeatureDetails)}
           </div>
         )}
 
