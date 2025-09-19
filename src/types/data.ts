@@ -182,6 +182,7 @@ export interface SearchIndexItem {
   type?: string;
   rarity?: string;
   school?: string;
+  searchableText?: string; // Enhanced content for better search
 }
 
 export interface SearchResult extends SearchIndexItem {

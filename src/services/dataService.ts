@@ -170,34 +170,55 @@ class DataServiceClass {
         page: item.page,
       };
 
-      // Add category-specific metadata
+      // Add category-specific metadata and enhanced searchable content
       switch (category) {
         case 'spell':
           const spell = item as Spell;
-          return { 
-            ...baseItem, 
-            level: spell.level ?? undefined, 
-            school: spell.school || undefined 
+          return {
+            ...baseItem,
+            level: spell.level ?? undefined,
+            school: spell.school || undefined,
+            // Add searchable spell content
+            searchableText: this.extractSpellSearchText(spell)
           };
-        
+
         case 'monster':
           const monster = item as Monster;
-          return { 
-            ...baseItem, 
-            cr: monster.cr ?? undefined, 
-            type: this.getMonsterType(monster.type) 
+          return {
+            ...baseItem,
+            cr: monster.cr ?? undefined,
+            type: this.getMonsterType(monster.type),
+            // Add searchable monster content
+            searchableText: this.extractMonsterSearchText(monster)
           };
-        
+
         case 'item':
           const itemData = item as Item;
-          return { 
-            ...baseItem, 
-            type: itemData.type || undefined, 
-            rarity: itemData.rarity || undefined 
+          return {
+            ...baseItem,
+            type: itemData.type || undefined,
+            rarity: itemData.rarity || undefined,
+            // Add searchable item content
+            searchableText: this.extractItemSearchText(itemData)
           };
-        
+
+        case 'race':
+          return {
+            ...baseItem,
+            searchableText: this.extractRaceSearchText(item)
+          };
+
+        case 'feat':
+          return {
+            ...baseItem,
+            searchableText: this.extractFeatSearchText(item)
+          };
+
         default:
-          return baseItem;
+          return {
+            ...baseItem,
+            searchableText: this.extractGenericSearchText(item)
+          };
       }
     } catch (error) {
       console.warn(`Failed to create search index item for ${item.name || 'unknown'} in ${category}:`, error);
@@ -207,6 +228,7 @@ class DataServiceClass {
         source,
         category,
         page: item.page,
+        searchableText: ''
       };
     }
   }
@@ -214,6 +236,166 @@ class DataServiceClass {
   private getMonsterType(type: string | { type: string; tags?: string[] } | undefined | null): string {
     if (!type) return 'unknown';
     return typeof type === 'string' ? type : (type.type || 'unknown');
+  }
+
+  // Extract searchable text from spells
+  private extractSpellSearchText(spell: any): string {
+    const searchParts: string[] = [];
+
+    // Add spell components
+    if (spell.components) {
+      if (spell.components.v) searchParts.push('verbal');
+      if (spell.components.s) searchParts.push('somatic');
+      if (spell.components.m) searchParts.push('material');
+    }
+
+    // Add duration info
+    if (spell.duration) {
+      searchParts.push(...spell.duration.map((d: any) => d.type || '').filter(Boolean));
+    }
+
+    // Add range info
+    if (spell.range?.type) {
+      searchParts.push(spell.range.type);
+    }
+
+    // Extract text from entries
+    if (spell.entries) {
+      searchParts.push(...this.extractTextFromEntries(spell.entries));
+    }
+
+    return searchParts.join(' ').toLowerCase();
+  }
+
+  // Extract searchable text from monsters
+  private extractMonsterSearchText(monster: any): string {
+    const searchParts: string[] = [];
+
+    // Add size and alignment
+    if (monster.size) searchParts.push(...monster.size);
+    if (monster.alignment) searchParts.push(...monster.alignment);
+
+    // Add speed information - crucial for finding flying creatures!
+    if (monster.speed) {
+      Object.keys(monster.speed).forEach(speedType => {
+        searchParts.push(speedType); // This will catch "fly", "flying", etc.
+        if (speedType === 'fly') {
+          searchParts.push('flying', 'flight'); // Add variants
+        }
+      });
+    }
+
+    // Add traits, actions, reactions
+    if (monster.trait) {
+      searchParts.push(...this.extractTextFromEntries(monster.trait));
+    }
+    if (monster.action) {
+      searchParts.push(...this.extractTextFromEntries(monster.action));
+    }
+    if (monster.reaction) {
+      searchParts.push(...this.extractTextFromEntries(monster.reaction));
+    }
+
+    // Add senses
+    if (monster.senses) {
+      searchParts.push(...monster.senses);
+    }
+
+    return searchParts.join(' ').toLowerCase();
+  }
+
+  // Extract searchable text from items
+  private extractItemSearchText(item: any): string {
+    const searchParts: string[] = [];
+
+    // Add item properties
+    if (item.property) {
+      searchParts.push(...item.property);
+    }
+
+    // Add weapon/armor specific info
+    if (item.weapon) searchParts.push('weapon');
+    if (item.armor) searchParts.push('armor');
+    if (item.shield) searchParts.push('shield');
+    if (item.wondrous) searchParts.push('wondrous');
+
+    // Add attunement info
+    if (item.reqAttune) {
+      searchParts.push('attunement', 'requires attunement');
+    }
+
+    // Extract text from entries
+    if (item.entries) {
+      searchParts.push(...this.extractTextFromEntries(item.entries));
+    }
+
+    return searchParts.join(' ').toLowerCase();
+  }
+
+  // Extract searchable text from races
+  private extractRaceSearchText(race: any): string {
+    const searchParts: string[] = [];
+
+    // Add size and speed
+    if (race.size) searchParts.push(...race.size);
+    if (race.speed) {
+      if (typeof race.speed === 'object') {
+        Object.keys(race.speed).forEach(speedType => {
+          searchParts.push(speedType);
+          if (speedType === 'fly') {
+            searchParts.push('flying', 'flight');
+          }
+        });
+      }
+    }
+
+    // Extract trait text
+    if (race.entries) {
+      searchParts.push(...this.extractTextFromEntries(race.entries));
+    }
+
+    return searchParts.join(' ').toLowerCase();
+  }
+
+  // Extract searchable text from feats
+  private extractFeatSearchText(feat: any): string {
+    const searchParts: string[] = [];
+
+    // Extract text from entries
+    if (feat.entries) {
+      searchParts.push(...this.extractTextFromEntries(feat.entries));
+    }
+
+    return searchParts.join(' ').toLowerCase();
+  }
+
+  // Generic text extraction for other categories
+  private extractGenericSearchText(item: any): string {
+    const searchParts: string[] = [];
+
+    if (item.entries) {
+      searchParts.push(...this.extractTextFromEntries(item.entries));
+    }
+
+    return searchParts.join(' ').toLowerCase();
+  }
+
+  // Helper to extract text from D&D entries arrays
+  private extractTextFromEntries(entries: any[]): string[] {
+    const textParts: string[] = [];
+
+    entries.forEach(entry => {
+      if (typeof entry === 'string') {
+        textParts.push(entry);
+      } else if (entry && typeof entry === 'object') {
+        // Extract from common entry properties
+        if (entry.name) textParts.push(entry.name);
+        if (entry.entries) textParts.push(...this.extractTextFromEntries(entry.entries));
+        if (entry.text) textParts.push(entry.text);
+      }
+    });
+
+    return textParts;
   }
 
   private mergeSubclassesIntoClasses(classes: any[], subclasses: any[], subclassFeatures: any[] = []): any[] {

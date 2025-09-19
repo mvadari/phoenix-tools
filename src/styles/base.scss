@@ -33,9 +33,14 @@ body {
 
 // App layout styles for header and main content
 .app-header {
-  background-color: $gray-50;
-  padding: $spacing-lg $spacing-2xl;
-  border-bottom: 1px solid $gray-300;
+  background: linear-gradient(135deg, rgba($color-primary, 0.95) 0%, rgba($color-primary-light, 0.95) 100%);
+  padding: $spacing-md $spacing-lg;
+  border-bottom: 3px solid $color-accent;
+  box-shadow: $shadow-lg;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
 
   .header-content {
     display: flex;
@@ -43,37 +48,72 @@ body {
     justify-content: space-between;
     max-width: 1200px;
     margin: 0 auto;
+    gap: $spacing-lg;
   }
 
   .app-title-link {
     text-decoration: none;
-    color: $color-text-primary;
+    color: $color-text-light;
     display: flex;
     align-items: center;
     gap: $spacing-sm;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+      text-shadow: 0 0 10px rgba($color-accent, 0.5);
+    }
 
     h1 {
       margin: 0;
-      font-size: $font-size-xl;
+      font-family: $font-headings;
+      font-size: $font-size-2xl;
+      font-weight: $font-weight-bold;
+      @include text-shadow-gold;
+      letter-spacing: 1px;
     }
+  }
+
+  .header-search {
+    flex: 1;
+    max-width: 500px;
+    margin: 0 $spacing-lg;
   }
 
   .app-nav {
     display: flex;
-    gap: $spacing-lg;
+    gap: $spacing-md;
     align-items: center;
+    flex-shrink: 0;
 
     .nav-link {
-      color: $color-primary;
+      @include fantasy-button;
+      color: $color-text-light;
       text-decoration: none;
-      padding: $spacing-sm $spacing-lg;
-      background-color: $gray-100;
-      border-radius: $border-radius-sm;
       font-weight: $font-weight-medium;
+      font-size: $font-size-sm;
+      padding: $spacing-sm $spacing-md;
+      border: 1px solid rgba($color-text-light, 0.3);
+      background: rgba($color-text-light, 0.1);
 
       &:hover {
-        background-color: $gray-200;
+        background: rgba($color-text-light, 0.2);
+        border-color: $color-accent;
         text-decoration: none;
+        transform: translateY(-1px);
+      }
+
+      &.desktop-only {
+        @media (max-width: 768px) {
+          display: none;
+        }
+      }
+    }
+
+    .mobile-search-toggle {
+      @media (min-width: 769px) {
+        display: none;
       }
     }
   }
@@ -83,6 +123,51 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 $spacing-2xl;
+}
+
+// Mobile responsive styles for header
+@media (max-width: 768px) {
+  .app-header {
+    padding: $spacing-sm $spacing-md;
+
+    .header-content {
+      gap: $spacing-md;
+    }
+
+    .app-title-link {
+      h1 {
+        font-size: $font-size-xl;
+      }
+    }
+
+    .header-search {
+      display: none; // Hide desktop search on mobile
+    }
+
+    .app-nav {
+      gap: $spacing-sm;
+    }
+  }
+
+  .app-main {
+    padding: 0 $spacing-lg;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-header {
+    padding: $spacing-sm;
+
+    .app-title-link {
+      h1 {
+        font-size: $font-size-lg;
+      }
+    }
+  }
+
+  .app-main {
+    padding: 0 $spacing-md;
+  }
 }
 
 header {
@@ -127,6 +212,19 @@ header {
   font-family: $font-headings;
   font-size: $font-size-lg;
   font-style: italic;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-md;
+
+  .loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba($color-primary, 0.2);
+    border-top: 3px solid $color-primary;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
 }
 
 .error {

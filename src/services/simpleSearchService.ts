@@ -17,11 +17,12 @@ class SimpleSearchServiceClass {
     // Create Lunr index
     const index = lunr(function() {
       this.ref('id');
-      this.field('name', { boost: 10 });
-      this.field('source', { boost: 2 });
+      this.field('name', { boost: 15 }); // Increased boost for exact name matches
+      this.field('searchableText', { boost: 5 }); // High boost for content text
+      this.field('type', { boost: 4 }); // Increased for types like "flying"
+      this.field('school', { boost: 4 });
       this.field('category', { boost: 3 });
-      this.field('type', { boost: 3 });
-      this.field('school', { boost: 3 });
+      this.field('source', { boost: 2 });
       this.field('rarity', { boost: 2 });
 
       // Add documents to index
@@ -34,9 +35,10 @@ class SimpleSearchServiceClass {
           category: item.category,
           type: item.type || '',
           school: item.school || '',
-          rarity: item.rarity || ''
+          rarity: item.rarity || '',
+          searchableText: item.searchableText || '' // Include enhanced searchable content
         };
-        
+
         documentsById.set(id, item);
         this.add(doc);
       });
@@ -92,10 +94,10 @@ class SimpleSearchServiceClass {
         // Add fuzzy matching for each term
         const terms = query.split(/\s+/).filter(term => term.length > 0);
         searchQuery = terms.map(term => {
-          if (term.length > 3) {
-            return `${term}~1 ${term}*`; // fuzzy + wildcard
+          if (term.length >= 3) {
+            return `${term}~1 ${term}*`; // fuzzy + wildcard for 3+ chars
           } else {
-            return `${term}*`; // just wildcard for short terms
+            return `${term}*`; // just wildcard for very short terms
           }
         }).join(' ');
       }
@@ -193,7 +195,7 @@ class SimpleSearchServiceClass {
     const queryLower = query.toLowerCase();
     const queryWords = queryLower.split(/\s+/).filter(word => word.length > 0);
 
-    const fields = ['name', 'source', 'type', 'school', 'category'];
+    const fields = ['name', 'source', 'type', 'school', 'category', 'searchableText'];
     
     fields.forEach(field => {
       const value = (item as any)[field];

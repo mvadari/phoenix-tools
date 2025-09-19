@@ -26,9 +26,10 @@ export function slugToText(slug: string): string {
  */
 export function createContentPath(result: SearchResult): string {
   const categorySlug = createSlug(result.category);
+  const sourceSlug = createSlug(result.source);
   const nameSlug = createSlug(result.name);
-  
-  return `/${categorySlug}/${nameSlug}`;
+
+  return `/${categorySlug}/${sourceSlug}/${nameSlug}`;
 }
 
 /**

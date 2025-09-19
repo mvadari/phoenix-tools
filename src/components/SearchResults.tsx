@@ -28,11 +28,12 @@ export default function SearchResults({
     );
   }
 
-  if (loading) {
+  if (loading && results.length === 0) {
     return (
       <div className="search-results">
         <div className="loading">
-          Searching...
+          <div className="loading-spinner"></div>
+          <span>Searching for "{query}"...</span>
         </div>
       </div>
     );
@@ -49,14 +50,14 @@ export default function SearchResults({
       );
     }
 
-    // Show all items when no query
-    const displayItems = allItems.slice(0, 50); // Limit to first 50 items for performance
+    // Show all items when no query (remove artificial limit for better browsing)
+    const displayItems = allItems.slice(0, 200); // Show more items for better browsing
     
     return (
       <div className="search-results">
         <div className="results-header">
           Showing {displayItems.length} of {allItems.length.toLocaleString()} items
-          {allItems.length > 50 && (
+          {allItems.length > 200 && (
             <span className="results-hint">
               (start typing to search all items)
             </span>
@@ -76,13 +77,13 @@ export default function SearchResults({
     );
   }
 
-  if (results.length === 0) {
+  if (results.length === 0 && query.trim()) {
     return (
       <div className="search-results">
         <div className="no-results">
           <div>No results found for "<strong>{query}</strong>"</div>
           <div className="no-results-hint">
-            Try searching with different keywords or check your spelling.
+            Try searching with different keywords, check your spelling, or browse by category above.
           </div>
         </div>
       </div>

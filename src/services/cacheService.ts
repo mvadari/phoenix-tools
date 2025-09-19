@@ -14,7 +14,7 @@ interface CachedData<T = any> {
 }
 
 class CacheServiceClass {
-  private readonly CACHE_VERSION = '2.1.1';
+  private readonly CACHE_VERSION = '2.2.0'; // Updated for enhanced search index
   private readonly CACHE_EXPIRY_MS = 24 * 60 * 60 * 1000; // 24 hours
   
   private indexStore: LocalForage;

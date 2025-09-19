@@ -18,18 +18,17 @@ export default function SearchPage() {
     }
   }, [searchParams]);
   
-  const { 
-    query, 
-    setQuery, 
-    results, 
-    suggestions, 
-    loading, 
-    error, 
+  const {
+    query,
+    setQuery,
+    results,
+    loading,
+    error,
     initialized,
-    indexItems 
-  } = useSearch({ 
+    indexItems
+  } = useSearch({
     category: selectedCategory,
-    debounceMs: 300,
+    debounceMs: 100, // Faster response for search page
     initialQuery: searchParams.get('q') || ''
   });
 
@@ -152,10 +151,10 @@ export default function SearchPage() {
         <SearchInput
           value={query}
           onChange={handleQueryChange}
-          suggestions={suggestions}
+          suggestions={[]} // Remove dropdown suggestions - use card results instead
           loading={loading}
-          placeholder={selectedCategory ? 
-            `Search ${selectedCategory}s...` : 
+          placeholder={selectedCategory ?
+            `Search ${selectedCategory}s...` :
             "Search all D&D 5e content..."
           }
         />

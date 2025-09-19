@@ -4,6 +4,8 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 @use 'base';
+@use 'homepage';
+@use 'global-search';
 @use 'search';
 @use 'content-display';
 @use 'spell-display';
