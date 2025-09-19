@@ -4,15 +4,15 @@
 
 .spell-display {
   .spell-stats {
-    @include responsive-grid(200px, $spacing-lg);
-    padding: $spacing-2xl;
+    @include responsive-grid(200px, $spacing-md);
+    padding: $spacing-lg;
     background: $gray-50;
     border-radius: $border-radius-lg;
-    margin-bottom: $spacing-2xl;
+    margin-bottom: $spacing-lg;
   }
 
   .spell-description {
-    margin-bottom: $spacing-2xl;
+    margin-bottom: $spacing-lg;
   }
 
   .higher-level-section {
@@ -97,4 +97,213 @@
 // Spell-specific details section (legacy support)
 .spell-details {
   @include content-section($color-spell);
+}
+
+// Mobile optimizations for spell display
+@media (max-width: 768px) {
+  .spell-display {
+    .spell-stats {
+      padding: $spacing-md;
+      margin-bottom: $spacing-md;
+    }
+
+    .spell-description {
+      margin-bottom: $spacing-md;
+    }
+
+    .higher-level-section {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .scaling-dice {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+
+      .scaling-info {
+        .scaling-level {
+          margin-bottom: $spacing-xs;
+        }
+      }
+    }
+
+    .spell-classes {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+
+      .classes-list {
+        gap: $spacing-xs;
+
+        .class-link {
+          padding: $spacing-xs $spacing-sm;
+          font-size: $font-size-xs;
+        }
+      }
+    }
+
+    .combat-info {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .spell-display {
+    .spell-stats {
+      padding: $spacing-sm;
+      margin-bottom: $spacing-sm;
+    }
+
+    .spell-description {
+      margin-bottom: $spacing-sm;
+    }
+
+    .higher-level-section {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .scaling-dice {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+
+      .scaling-info {
+        .scaling-level {
+          margin-bottom: 2px;
+        }
+      }
+    }
+
+    .spell-classes {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+
+      .classes-list {
+        gap: 2px;
+
+        .class-link {
+          padding: 2px $spacing-xs;
+          font-size: $font-size-xs;
+        }
+      }
+    }
+
+    .combat-info {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .spell-display {
+    .spell-stats {
+      padding: $spacing-xs;
+      margin-bottom: $spacing-xs;
+    }
+
+    .spell-description {
+      margin-bottom: $spacing-xs;
+    }
+
+    .higher-level-section {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .scaling-dice {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+
+      .scaling-info {
+        .scaling-level {
+          margin-bottom: 1px;
+        }
+      }
+    }
+
+    .spell-classes {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+
+      .classes-list {
+        gap: 1px;
+
+        .class-link {
+          padding: 1px $spacing-xs;
+          font-size: 10px;
+        }
+      }
+    }
+
+    .combat-info {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .spell-display {
+    .spell-stats {
+      padding: $spacing-2xs;
+      margin-bottom: $spacing-2xs;
+    }
+
+    .spell-description {
+      margin-bottom: $spacing-2xs;
+    }
+
+    .higher-level-section {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .scaling-dice {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+
+      .scaling-info {
+        .scaling-level {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .spell-classes {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+
+      .classes-list {
+        gap: 0;
+
+        .class-link {
+          padding: 0 2px;
+          font-size: 9px;
+        }
+      }
+    }
+
+    .combat-info {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+  }
 }

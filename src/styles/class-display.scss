@@ -5,7 +5,7 @@
 .class-display {
   .loading-message {
     text-align: center;
-    padding: $spacing-3xl;
+    padding: $spacing-xl;
     color: $gray-600;
   }
 
@@ -21,8 +21,49 @@
   }
 
   .class-core-info {
-    @include responsive-grid(200px, $spacing-lg);
-    margin-bottom: $spacing-2xl;
+    @include responsive-grid(200px, $spacing-xs);
+    margin-bottom: $spacing-xs;
+
+    // Compress the grid even more on mobile
+    @media (max-width: 768px) {
+      gap: 2px;
+      margin-bottom: 2px;
+    }
+
+    @media (max-width: 480px) {
+      gap: 1px;
+      margin-bottom: 1px;
+      grid-template-columns: 1fr; // Single column on small mobile
+    }
+
+    @media (max-width: 360px) {
+      gap: 0.5px;
+      margin-bottom: 0.5px;
+    }
+  }
+
+  // Make feature descriptions progressively smaller on mobile
+  @media (max-width: 768px) {
+    .class-feature-item .feature-description,
+    .feature-description {
+      font-size: $font-size-xs;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .class-feature-item .feature-description,
+    .feature-description {
+      font-size: 0.75rem;
+      line-height: 1.5;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .class-feature-item .feature-description,
+    .feature-description {
+      font-size: 0.7rem;
+      line-height: 1.4;
+    }
   }
 
   .starting-proficiencies {
@@ -124,7 +165,7 @@
     padding: $spacing-md;
     background: white;
     border-radius: $border-radius-md;
-    border-left: 4px solid $color-success;
+    border-left: 1px solid $gray-200;
     box-shadow: $shadow-sm;
     
     &:last-child {
@@ -144,6 +185,7 @@
 
   .class-feature-item .feature-description {
     line-height: 1.6;
+    font-size: $font-size-sm;
     
     p {
       margin-bottom: $spacing-sm;
@@ -458,7 +500,7 @@
                 padding: $spacing-md;
                 background: white;
                 border-radius: $border-radius-md;
-                border-left: 4px solid $color-success;
+                border-left: 1px solid $gray-100;
                 box-shadow: $shadow-sm;
                 
                 .feature-name {
@@ -473,6 +515,7 @@
                 
                 .feature-description {
                   line-height: 1.6;
+                  font-size: $font-size-sm;
                   
                   p {
                     margin-bottom: $spacing-sm;
@@ -512,7 +555,7 @@
               padding: $spacing-sm;
               background: rgba($color-success, 0.05);
               border-radius: $border-radius-md;
-              border-left: 3px solid $color-success;
+              border-left: 1px solid $gray-100;
 
               .feature-level-label {
                 min-width: 80px;
@@ -672,7 +715,7 @@
           padding: $spacing-lg;
           background: rgba($color-class, 0.05);
           border-radius: $border-radius-md;
-          border-left: 3px solid $color-class;
+          border-left: 1px solid $gray-200;
           
           .feature-name {
             @include heading-style($font-size-lg);

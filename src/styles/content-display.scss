@@ -12,7 +12,7 @@
 }
 
 .content-header {
-  padding: $spacing-3xl;
+  padding: $spacing-xl;
   border-bottom: 2px solid $gray-200;
   background: linear-gradient(135deg, rgba($color-primary, 0.9) 0%, rgba($color-primary-light, 0.9) 100%);
   border-bottom: 3px solid $color-accent;
@@ -49,7 +49,7 @@
 }
 
 .content-content {
-  padding: $spacing-3xl;
+  padding: $spacing-xl;
   font-family: $font-primary;
   color: $color-text-primary;
 }
@@ -74,8 +74,8 @@
 }
 
 .content-source {
-  margin-top: $spacing-3xl;
-  padding: $spacing-2xl;
+  margin-top: $spacing-xl;
+  padding: $spacing-lg;
   background: linear-gradient(145deg, rgba($color-primary, 0.1) 0%, rgba($color-primary-light, 0.1) 100%);
   border-radius: $border-radius-lg;
   border-left: 4px solid #3b82f6;
@@ -126,7 +126,7 @@
 
 // Fluff content styling
 .fluff-content {
-  margin: $spacing-xl $spacing-2xl $spacing-2xl $spacing-2xl;
+  margin: $spacing-lg $spacing-lg $spacing-lg $spacing-lg;
 
   .fluff-toggle {
     color: $gray-700;
@@ -169,9 +169,107 @@
       background: linear-gradient(145deg, rgba($color-background-primary, 0.95) 0%, rgba($color-background-secondary, 0.95) 100%);
       border: 2px solid $color-primary;
       border-radius: $border-radius-md;
-      padding: $spacing-3xl;
-      margin: $spacing-xl 0;
+      padding: $spacing-xl;
+      margin: $spacing-lg 0;
       box-shadow: $shadow-md;
     }
+  }
+}
+
+// Mobile optimizations for content display
+@media (max-width: 768px) {
+  .content-display {
+    margin: 0 $spacing-xs;
+  }
+
+  .content-header {
+    padding: $spacing-md;
+
+    h1, h2 {
+      font-size: $font-size-xl;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  .content-content {
+    padding: $spacing-lg;
+  }
+
+  .content-source {
+    margin-top: $spacing-lg;
+    padding: $spacing-md;
+  }
+
+  .fluff-content {
+    margin: $spacing-md;
+
+    .fluff-content-body .content-entries .content-entry {
+      padding: $spacing-lg;
+      margin: $spacing-md 0;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .content-header {
+    padding: $spacing-sm;
+
+    h1, h2 {
+      font-size: $font-size-lg;
+      letter-spacing: 0px;
+    }
+
+    > div > div {
+      margin-top: $spacing-xs;
+      font-size: $font-size-sm;
+    }
+  }
+
+  .content-content {
+    padding: $spacing-md;
+  }
+
+  .content-source {
+    padding: $spacing-sm;
+  }
+
+  .fluff-content {
+    margin: $spacing-sm;
+
+    .fluff-content-body .content-entries .content-entry {
+      padding: $spacing-md;
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .content-header {
+    padding: $spacing-xs;
+
+    h1, h2 {
+      font-size: $font-size-base;
+    }
+
+    > div > div {
+      font-size: $font-size-xs;
+    }
+  }
+
+  .content-content {
+    padding: $spacing-sm;
+  }
+}
+
+@media (max-width: 320px) {
+  .content-header {
+    padding: 4px;
+
+    h1, h2 {
+      font-size: $font-size-sm;
+    }
+  }
+
+  .content-content {
+    padding: $spacing-xs;
   }
 }

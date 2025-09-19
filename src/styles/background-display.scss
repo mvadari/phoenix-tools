@@ -78,3 +78,204 @@
     color: $gray-500;
   }
 }
+
+// Mobile optimizations for background display
+@media (max-width: 768px) {
+  .background-display {
+    .background-proficiencies {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .background-description {
+      margin-bottom: $spacing-lg;
+    }
+
+    .personality-traits {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .ideals {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .bonds {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .flaws {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .trait-item {
+      margin-bottom: $spacing-sm;
+
+      .trait-number {
+        margin-bottom: $spacing-xs;
+      }
+    }
+
+    .source-selection-message {
+      padding: $spacing-lg;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .background-display {
+    .background-description {
+      margin-bottom: $spacing-sm;
+    }
+
+    .background-proficiencies {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .personality-traits {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .ideals {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .bonds {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .flaws {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .trait-item {
+      margin-bottom: $spacing-xs;
+
+      .trait-number {
+        margin-bottom: 2px;
+      }
+    }
+
+    .source-selection-message {
+      padding: $spacing-md;
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .background-display {
+    .background-description {
+      margin-bottom: $spacing-xs;
+    }
+
+    .background-proficiencies {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .personality-traits {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .ideals {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .bonds {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .flaws {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .trait-item {
+      margin-bottom: 2px;
+
+      .trait-number {
+        margin-bottom: 1px;
+      }
+    }
+
+    .source-selection-message {
+      padding: $spacing-sm;
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .background-display {
+    .background-description {
+      margin-bottom: $spacing-2xs;
+    }
+
+    .background-proficiencies {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .personality-traits {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .ideals {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .bonds {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .flaws {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .trait-item {
+      margin-bottom: 1px;
+
+      .trait-number {
+        margin-bottom: 0;
+      }
+    }
+
+    .source-selection-message {
+      padding: $spacing-xs;
+    }
+  }
+}

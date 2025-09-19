@@ -180,12 +180,226 @@
 
   .condition-treatment {
     @include content-section($color-success);
-    
+
     h4 {
       margin: 0 0 $spacing-lg 0;
       color: #2e7d32;
       font-size: $font-size-lg;
       @include heading-style($font-size-lg);
+    }
+  }
+}
+
+// Mobile optimizations for condition display
+@media (max-width: 768px) {
+  .condition-display {
+    .condition-type {
+      margin-bottom: $spacing-lg;
+      padding: $spacing-md;
+
+      h4 {
+        font-size: $font-size-lg;
+      }
+    }
+
+    .condition-mechanics {
+      gap: $spacing-md;
+      margin-bottom: $spacing-lg;
+      grid-template-columns: 1fr;
+
+      .duration-info {
+        padding: $spacing-xs $spacing-md;
+      }
+
+      .save-info {
+        padding: $spacing-xs $spacing-md;
+      }
+    }
+
+    .condition-effects {
+      margin-bottom: $spacing-lg;
+      padding: $spacing-md;
+
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .condition-severity {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .condition-transmission {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .condition-treatment {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .condition-display {
+    .condition-type {
+      margin-bottom: $spacing-sm;
+      padding: $spacing-sm;
+
+      h4 {
+        font-size: $font-size-base;
+      }
+    }
+
+    .condition-mechanics {
+      gap: $spacing-sm;
+      margin-bottom: $spacing-sm;
+
+      .duration-info {
+        padding: 2px $spacing-sm;
+      }
+
+      .save-info {
+        padding: 2px $spacing-sm;
+      }
+    }
+
+    .condition-effects {
+      margin-bottom: $spacing-sm;
+      padding: $spacing-sm;
+
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .condition-severity {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .condition-transmission {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .condition-treatment {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .condition-display {
+    .condition-type {
+      margin-bottom: $spacing-xs;
+      padding: $spacing-xs;
+
+      h4 {
+        font-size: $font-size-sm;
+      }
+    }
+
+    .condition-mechanics {
+      gap: $spacing-xs;
+      margin-bottom: $spacing-xs;
+
+      .duration-info {
+        padding: 1px $spacing-xs;
+      }
+
+      .save-info {
+        padding: 1px $spacing-xs;
+      }
+    }
+
+    .condition-effects {
+      margin-bottom: $spacing-xs;
+      padding: $spacing-xs;
+
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .condition-severity {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .condition-transmission {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .condition-treatment {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .condition-display {
+    .condition-type {
+      margin-bottom: $spacing-2xs;
+      padding: $spacing-2xs;
+
+      h4 {
+        font-size: $font-size-xs;
+      }
+    }
+
+    .condition-mechanics {
+      gap: $spacing-2xs;
+      margin-bottom: $spacing-2xs;
+
+      .duration-info {
+        padding: 0 $spacing-2xs;
+      }
+
+      .save-info {
+        padding: 0 $spacing-2xs;
+      }
+    }
+
+    .condition-effects {
+      margin-bottom: $spacing-2xs;
+      padding: $spacing-2xs;
+
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .condition-severity {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .condition-transmission {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .condition-treatment {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
     }
   }
 }

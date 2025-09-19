@@ -167,3 +167,408 @@
 .race-details {
   @include content-section($color-race);
 }
+
+// Mobile optimizations for race display
+@media (max-width: 768px) {
+  .race-display {
+    .race-basic-info {
+      margin-bottom: $spacing-lg;
+    }
+
+    .physical-characteristics {
+      margin-bottom: $spacing-lg;
+      padding: $spacing-md;
+
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .ability-increases {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+
+      .ability-increase-item {
+        span {
+          margin-right: $spacing-md;
+        }
+      }
+    }
+
+    .race-proficiencies {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .resistances {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .trait-tags {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+
+      .trait-tags-list {
+        gap: $spacing-xs;
+
+        .trait-tag {
+          padding: $spacing-xs $spacing-sm;
+          font-size: $font-size-xs;
+        }
+      }
+    }
+
+    .racial-traits {
+      margin-bottom: $spacing-lg;
+
+      h4 {
+        margin-bottom: $spacing-md;
+        padding-bottom: $spacing-xs;
+      }
+
+      .racial-trait {
+        margin-bottom: $spacing-md;
+        padding-left: $spacing-md;
+
+        h5 {
+          margin: 0 0 $spacing-xs 0;
+        }
+      }
+    }
+
+    .subraces {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+
+      .subrace {
+        margin-bottom: $spacing-lg;
+        padding-bottom: $spacing-md;
+
+        h5 {
+          margin: 0 0 $spacing-md 0;
+        }
+
+        .subrace-section {
+          margin-bottom: $spacing-sm;
+
+          .subrace-content {
+            margin-left: $spacing-md;
+          }
+        }
+      }
+    }
+
+    .loading-message {
+      padding: $spacing-lg;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .race-display {
+    .race-basic-info {
+      margin-bottom: $spacing-sm;
+    }
+
+    .physical-characteristics {
+      margin-bottom: $spacing-sm;
+      padding: $spacing-sm;
+
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .ability-increases {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+
+      .ability-increase-item {
+        span {
+          margin-right: $spacing-sm;
+        }
+      }
+    }
+
+    .race-proficiencies {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .resistances {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .trait-tags {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+
+      .trait-tags-list {
+        gap: 2px;
+
+        .trait-tag {
+          padding: 2px $spacing-xs;
+          font-size: $font-size-xs;
+        }
+      }
+    }
+
+    .racial-traits {
+      margin-bottom: $spacing-sm;
+
+      h4 {
+        margin-bottom: $spacing-sm;
+        padding-bottom: 2px;
+      }
+
+      .racial-trait {
+        margin-bottom: $spacing-sm;
+        padding-left: $spacing-sm;
+
+        h5 {
+          margin: 0 0 2px 0;
+        }
+      }
+    }
+
+    .subraces {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+
+      .subrace {
+        margin-bottom: $spacing-sm;
+        padding-bottom: $spacing-sm;
+
+        h5 {
+          margin: 0 0 $spacing-sm 0;
+        }
+
+        .subrace-section {
+          margin-bottom: $spacing-xs;
+
+          .subrace-content {
+            margin-left: $spacing-sm;
+          }
+        }
+      }
+    }
+
+    .loading-message {
+      padding: $spacing-md;
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .race-display {
+    .race-basic-info {
+      margin-bottom: $spacing-xs;
+    }
+
+    .physical-characteristics {
+      margin-bottom: $spacing-xs;
+      padding: $spacing-xs;
+
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .ability-increases {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+
+      .ability-increase-item {
+        span {
+          margin-right: $spacing-xs;
+        }
+      }
+    }
+
+    .race-proficiencies {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .resistances {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .trait-tags {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+
+      .trait-tags-list {
+        gap: 1px;
+
+        .trait-tag {
+          padding: 1px $spacing-xs;
+          font-size: 10px;
+        }
+      }
+    }
+
+    .racial-traits {
+      margin-bottom: $spacing-xs;
+
+      h4 {
+        margin-bottom: $spacing-xs;
+        padding-bottom: 1px;
+      }
+
+      .racial-trait {
+        margin-bottom: $spacing-xs;
+        padding-left: $spacing-xs;
+
+        h5 {
+          margin: 0 0 1px 0;
+        }
+      }
+    }
+
+    .subraces {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+
+      .subrace {
+        margin-bottom: $spacing-xs;
+        padding-bottom: $spacing-xs;
+
+        h5 {
+          margin: 0 0 $spacing-xs 0;
+        }
+
+        .subrace-section {
+          margin-bottom: 2px;
+
+          .subrace-content {
+            margin-left: $spacing-xs;
+          }
+        }
+      }
+    }
+
+    .loading-message {
+      padding: $spacing-sm;
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .race-display {
+    .race-basic-info {
+      margin-bottom: $spacing-2xs;
+    }
+
+    .physical-characteristics {
+      margin-bottom: $spacing-2xs;
+      padding: $spacing-2xs;
+
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .ability-increases {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+
+      .ability-increase-item {
+        span {
+          margin-right: $spacing-2xs;
+        }
+      }
+    }
+
+    .race-proficiencies {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .resistances {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .trait-tags {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+
+      .trait-tags-list {
+        gap: 0;
+
+        .trait-tag {
+          padding: 0 2px;
+          font-size: 9px;
+        }
+      }
+    }
+
+    .racial-traits {
+      margin-bottom: $spacing-2xs;
+
+      h4 {
+        margin-bottom: $spacing-2xs;
+        padding-bottom: 0;
+      }
+
+      .racial-trait {
+        margin-bottom: $spacing-2xs;
+        padding-left: $spacing-2xs;
+
+        h5 {
+          margin: 0;
+        }
+      }
+    }
+
+    .subraces {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+
+      .subrace {
+        margin-bottom: $spacing-2xs;
+        padding-bottom: $spacing-2xs;
+
+        h5 {
+          margin: 0 0 $spacing-2xs 0;
+        }
+
+        .subrace-section {
+          margin-bottom: 1px;
+
+          .subrace-content {
+            margin-left: $spacing-2xs;
+          }
+        }
+      }
+    }
+
+    .loading-message {
+      padding: $spacing-xs;
+    }
+  }
+}

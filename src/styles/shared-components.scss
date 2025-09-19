@@ -40,7 +40,7 @@
 
 // Source Tabs
 .source-tabs {
-  margin-bottom: $spacing-2xl;
+  margin-bottom: $spacing-lg;
   border-bottom: 2px solid $gray-200;
 
   .tab-container {
@@ -131,8 +131,8 @@
   @include stat-block;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: $spacing-lg;
-  padding: $spacing-lg;
+  gap: $spacing-md;
+  padding: $spacing-md;
   background-color: $gray-50;
   border-radius: $border-radius-md;
   border: 1px solid $gray-200;
@@ -218,8 +218,8 @@
 // Spellcasting Block
 .spellcasting-block {
   @include content-section($color-spell);
-  margin-top: $spacing-2xl;
-  padding: $spacing-lg;
+  margin-top: $spacing-lg;
+  padding: $spacing-md;
   background-color: #f0f8ff;
   border-radius: $border-radius-md;
   border: 1px solid #b3d9ff;
@@ -303,10 +303,10 @@
 
 // Actions List
 .actions-list {
-  margin-top: $spacing-2xl;
+  margin-top: $spacing-lg;
 
   .action-group {
-    margin-top: $spacing-2xl;
+    margin-top: $spacing-lg;
 
     h4 {
       margin-bottom: $spacing-lg;
@@ -372,7 +372,7 @@
     padding: $spacing-lg;
     background: rgba($gray-50, 0.5);
     border-radius: $border-radius-md;
-    border-left: 3px solid $color-primary;
+    border-left: 1px solid $gray-200;
     
     .action-name {
       @include heading-style($font-size-lg);
@@ -546,6 +546,694 @@
         border-radius: $border-radius-sm;
         font-size: $font-size-sm;
         border: 1px solid rgba($color-primary, 0.2);
+      }
+    }
+  }
+}
+
+// Mobile optimizations for shared components
+@media (max-width: 768px) {
+  .ability-scores {
+    .ability-score {
+      padding: $spacing-xs;
+    }
+  }
+
+  .source-tabs {
+    margin-bottom: $spacing-md;
+
+    .tab-container {
+      gap: $spacing-xs;
+      padding-bottom: $spacing-xs;
+
+      .source-tab {
+        padding: $spacing-sm $spacing-md;
+        font-size: $font-size-xs;
+      }
+    }
+  }
+
+  .stat-block {
+    gap: $spacing-sm;
+    padding: $spacing-sm;
+    margin-top: $spacing-md;
+  }
+
+  .damage-resistance-block {
+    margin-top: $spacing-md;
+    padding: $spacing-md;
+  }
+
+  .spellcasting-block {
+    margin-top: $spacing-md;
+    padding: $spacing-sm;
+
+    .spellcaster {
+      margin-bottom: $spacing-lg;
+
+      .spell-levels {
+        margin-top: $spacing-xs;
+
+        .spell-level {
+          margin-bottom: $spacing-sm;
+          margin-left: $spacing-md;
+        }
+      }
+    }
+  }
+
+  .actions-list {
+    margin-top: $spacing-md;
+
+    .action-group {
+      margin-top: $spacing-md;
+
+      .action-item {
+        margin-bottom: $spacing-md;
+        padding-left: $spacing-md;
+      }
+    }
+
+    .action-item {
+      margin: $spacing-md 0;
+      padding: $spacing-md;
+    }
+  }
+
+  .equipment-list {
+    margin-top: $spacing-md;
+    padding: $spacing-md;
+
+    .equipment-section {
+      margin: $spacing-md 0;
+    }
+
+    .equipment-grid {
+      .equipment-item {
+        padding: $spacing-sm;
+      }
+    }
+  }
+
+  .prerequisite-display {
+    margin-top: $spacing-md;
+    padding: $spacing-md;
+  }
+
+  .proficiency-list {
+    .proficiency-section {
+      margin: $spacing-sm 0;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .ability-scores {
+    .ability-score {
+      padding: 2px;
+
+      .ability-name {
+        margin-bottom: 1px;
+        font-size: $font-size-2xs;
+      }
+
+      .ability-value {
+        font-size: $font-size-base;
+        margin-bottom: 1px;
+      }
+
+      .ability-modifier {
+        font-size: $font-size-xs;
+      }
+    }
+  }
+
+  .source-tabs {
+    margin-bottom: $spacing-sm;
+
+    .tab-container {
+      gap: 2px;
+      padding-bottom: 2px;
+
+      .source-tab {
+        padding: $spacing-xs $spacing-sm;
+        font-size: $font-size-2xs;
+      }
+    }
+  }
+
+  .stat-block {
+    gap: $spacing-xs;
+    padding: $spacing-xs;
+    margin-top: $spacing-sm;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+
+    .stat-item {
+      .stat-label {
+        margin-bottom: 1px;
+        font-size: $font-size-2xs;
+      }
+
+      .stat-value {
+        font-size: $font-size-base;
+      }
+    }
+
+    .stat-row {
+      gap: $spacing-sm;
+      margin: $spacing-sm 0;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    }
+  }
+
+  .damage-resistance-block {
+    margin-top: $spacing-sm;
+    padding: $spacing-sm;
+
+    .detail-row {
+      margin-bottom: $spacing-xs;
+    }
+
+    .resistance-type {
+      margin-bottom: $spacing-xs;
+    }
+
+    .resistance-list {
+      gap: $spacing-xs;
+
+      .resistance-item {
+        padding: 1px $spacing-xs;
+        font-size: $font-size-xs;
+      }
+    }
+  }
+
+  .spellcasting-block {
+    margin-top: $spacing-sm;
+    padding: $spacing-xs;
+
+    h4 {
+      margin-bottom: $spacing-md;
+      padding-bottom: $spacing-xs;
+    }
+
+    .spellcaster {
+      margin-bottom: $spacing-md;
+
+      h5 {
+        margin: 0 0 $spacing-xs 0;
+      }
+
+      .spell-levels {
+        margin-top: 2px;
+
+        .spell-level {
+          margin-bottom: $spacing-xs;
+          margin-left: $spacing-sm;
+        }
+      }
+    }
+
+    .spell-level {
+      margin: $spacing-md 0 $spacing-xs 0;
+
+      .level-header {
+        margin-bottom: $spacing-xs;
+      }
+
+      .spell-slots {
+        margin-bottom: $spacing-xs;
+      }
+    }
+
+    .spell-list {
+      gap: $spacing-xs;
+
+      .spell-link {
+        font-size: $font-size-2xs;
+        padding: 1px $spacing-xs;
+      }
+    }
+  }
+
+  .actions-list {
+    margin-top: $spacing-sm;
+
+    .action-group {
+      margin-top: $spacing-sm;
+
+      h4 {
+        margin-bottom: $spacing-md;
+        padding-bottom: $spacing-xs;
+      }
+
+      .action-item {
+        margin-bottom: $spacing-sm;
+        padding-left: $spacing-sm;
+      }
+    }
+
+    .action-item {
+      margin: $spacing-sm 0;
+      padding: $spacing-sm;
+
+      .action-name {
+        margin-bottom: $spacing-xs;
+      }
+
+      .action-type {
+        margin-bottom: $spacing-xs;
+      }
+    }
+  }
+
+  .equipment-list {
+    margin-top: $spacing-sm;
+    padding: $spacing-sm;
+
+    h4 {
+      margin-bottom: $spacing-md;
+      padding-bottom: $spacing-xs;
+    }
+
+    .equipment-section {
+      margin: $spacing-sm 0;
+
+      .section-header {
+        padding-bottom: 1px;
+        margin-bottom: $spacing-sm;
+      }
+    }
+
+    .equipment-grid {
+      .equipment-item {
+        padding: $spacing-xs;
+
+        .item-name {
+          margin-bottom: 1px;
+        }
+      }
+    }
+  }
+
+  .prerequisite-display {
+    margin-top: $spacing-sm;
+    padding: $spacing-sm;
+
+    .prerequisite-header {
+      margin-bottom: $spacing-xs;
+    }
+  }
+
+  .proficiency-list {
+    .proficiency-section {
+      margin: $spacing-xs 0;
+
+      .proficiency-type {
+        margin-bottom: $spacing-xs;
+      }
+
+      .proficiency-items {
+        gap: $spacing-xs;
+
+        .proficiency-item {
+          padding: 1px $spacing-xs;
+          font-size: $font-size-xs;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .ability-scores {
+    .ability-score {
+      padding: 1px;
+
+      .ability-name {
+        margin-bottom: 0;
+        font-size: 8px;
+      }
+
+      .ability-value {
+        font-size: $font-size-sm;
+        margin-bottom: 0;
+      }
+
+      .ability-modifier {
+        font-size: 8px;
+      }
+    }
+  }
+
+  .source-tabs {
+    margin-bottom: $spacing-xs;
+
+    .tab-container {
+      gap: 1px;
+      padding-bottom: 1px;
+
+      .source-tab {
+        padding: 2px 4px;
+        font-size: 8px;
+      }
+    }
+  }
+
+  .stat-block {
+    gap: 2px;
+    padding: 2px;
+    margin-top: $spacing-xs;
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+
+    .stat-item {
+      .stat-label {
+        margin-bottom: 0;
+        font-size: 8px;
+      }
+
+      .stat-value {
+        font-size: $font-size-sm;
+      }
+    }
+
+    .stat-row {
+      gap: $spacing-xs;
+      margin: $spacing-xs 0;
+      grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    }
+  }
+
+  .damage-resistance-block {
+    margin-top: $spacing-xs;
+    padding: $spacing-xs;
+
+    .detail-row {
+      margin-bottom: 1px;
+    }
+
+    .resistance-type {
+      margin-bottom: 1px;
+    }
+
+    .resistance-list {
+      gap: 1px;
+
+      .resistance-item {
+        padding: 0 2px;
+        font-size: 8px;
+      }
+    }
+  }
+
+  .spellcasting-block {
+    margin-top: $spacing-xs;
+    padding: 2px;
+
+    h4 {
+      margin-bottom: $spacing-sm;
+      padding-bottom: 1px;
+    }
+
+    .spellcaster {
+      margin-bottom: $spacing-sm;
+
+      h5 {
+        margin: 0 0 1px 0;
+      }
+
+      .spell-levels {
+        margin-top: 0;
+
+        .spell-level {
+          margin-bottom: 2px;
+          margin-left: $spacing-xs;
+        }
+      }
+    }
+
+    .spell-level {
+      margin: $spacing-sm 0 1px 0;
+
+      .level-header {
+        margin-bottom: 1px;
+      }
+
+      .spell-slots {
+        margin-bottom: 1px;
+      }
+    }
+
+    .spell-list {
+      gap: 1px;
+
+      .spell-link {
+        font-size: 8px;
+        padding: 0 2px;
+      }
+    }
+  }
+
+  .actions-list {
+    margin-top: $spacing-xs;
+
+    .action-group {
+      margin-top: $spacing-xs;
+
+      h4 {
+        margin-bottom: $spacing-sm;
+        padding-bottom: 1px;
+      }
+
+      .action-item {
+        margin-bottom: $spacing-xs;
+        padding-left: $spacing-xs;
+      }
+    }
+
+    .action-item {
+      margin: $spacing-xs 0;
+      padding: $spacing-xs;
+
+      .action-name {
+        margin-bottom: 1px;
+      }
+
+      .action-type {
+        margin-bottom: 1px;
+      }
+    }
+  }
+
+  .equipment-list {
+    margin-top: $spacing-xs;
+    padding: $spacing-xs;
+
+    h4 {
+      margin-bottom: $spacing-sm;
+      padding-bottom: 1px;
+    }
+
+    .equipment-section {
+      margin: $spacing-xs 0;
+
+      .section-header {
+        padding-bottom: 0;
+        margin-bottom: $spacing-xs;
+      }
+    }
+
+    .equipment-grid {
+      .equipment-item {
+        padding: 2px;
+
+        .item-name {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  .prerequisite-display {
+    margin-top: $spacing-xs;
+    padding: $spacing-xs;
+
+    .prerequisite-header {
+      margin-bottom: 1px;
+    }
+  }
+
+  .proficiency-list {
+    .proficiency-section {
+      margin: 2px 0;
+
+      .proficiency-type {
+        margin-bottom: 1px;
+      }
+
+      .proficiency-items {
+        gap: 1px;
+
+        .proficiency-item {
+          padding: 0 2px;
+          font-size: 8px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .ability-scores {
+    .ability-score {
+      padding: 0;
+
+      .ability-name {
+        font-size: 7px;
+      }
+
+      .ability-value {
+        font-size: $font-size-xs;
+      }
+
+      .ability-modifier {
+        font-size: 7px;
+      }
+    }
+  }
+
+  .source-tabs {
+    margin-bottom: 2px;
+
+    .tab-container {
+      .source-tab {
+        padding: 1px 2px;
+        font-size: 7px;
+      }
+    }
+  }
+
+  .stat-block {
+    gap: 1px;
+    padding: 1px;
+    margin-top: 2px;
+    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+
+    .stat-item {
+      .stat-label {
+        font-size: 7px;
+      }
+
+      .stat-value {
+        font-size: $font-size-xs;
+      }
+    }
+
+    .stat-row {
+      gap: 2px;
+      margin: 2px 0;
+      grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+    }
+  }
+
+  .damage-resistance-block {
+    margin-top: 2px;
+    padding: 2px;
+
+    .resistance-item {
+      font-size: 7px;
+    }
+  }
+
+  .spellcasting-block {
+    margin-top: 2px;
+    padding: 1px;
+
+    h4 {
+      margin-bottom: $spacing-xs;
+    }
+
+    .spellcaster {
+      margin-bottom: $spacing-xs;
+
+      .spell-levels {
+        .spell-level {
+          margin-bottom: 1px;
+          margin-left: 2px;
+        }
+      }
+    }
+
+    .spell-level {
+      margin: $spacing-xs 0 0 0;
+    }
+
+    .spell-list {
+      .spell-link {
+        font-size: 7px;
+        padding: 0 1px;
+      }
+    }
+  }
+
+  .actions-list {
+    margin-top: 2px;
+
+    .action-group {
+      margin-top: 2px;
+
+      h4 {
+        margin-bottom: $spacing-xs;
+      }
+
+      .action-item {
+        margin-bottom: 2px;
+        padding-left: 2px;
+      }
+    }
+
+    .action-item {
+      margin: 2px 0;
+      padding: 2px;
+    }
+  }
+
+  .equipment-list {
+    margin-top: 2px;
+    padding: 2px;
+
+    h4 {
+      margin-bottom: $spacing-xs;
+    }
+
+    .equipment-section {
+      margin: 2px 0;
+
+      .section-header {
+        margin-bottom: 2px;
+      }
+    }
+
+    .equipment-grid {
+      .equipment-item {
+        padding: 1px;
+      }
+    }
+  }
+
+  .prerequisite-display {
+    margin-top: 2px;
+    padding: 2px;
+  }
+
+  .proficiency-list {
+    .proficiency-section {
+      margin: 1px 0;
+
+      .proficiency-items {
+        .proficiency-item {
+          font-size: 7px;
+        }
       }
     }
   }

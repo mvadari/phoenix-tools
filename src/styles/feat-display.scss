@@ -107,3 +107,240 @@
     color: $gray-500;
   }
 }
+
+// Mobile optimizations for feat display
+@media (max-width: 768px) {
+  .feat-display {
+    .ability-increases {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .feat-proficiencies {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .additional-spells {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+
+      .spell-group {
+        .innate-spells {
+          margin-left: $spacing-md;
+        }
+      }
+    }
+
+    .feat-description {
+      margin-top: $spacing-lg;
+
+      h4 {
+        margin-bottom: $spacing-md;
+        padding-bottom: $spacing-xs;
+      }
+    }
+
+    .feat-options {
+      margin-top: $spacing-lg;
+      padding: $spacing-md;
+
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+
+      .feat-option {
+        margin-bottom: $spacing-md;
+        padding-bottom: $spacing-md;
+
+        h5 {
+          margin: 0 0 $spacing-xs 0;
+        }
+      }
+    }
+
+    .source-selection-message {
+      padding: $spacing-lg;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .feat-display {
+    .ability-increases {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .feat-proficiencies {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .additional-spells {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+
+      .spell-group {
+        .innate-spells {
+          margin-left: $spacing-sm;
+        }
+      }
+    }
+
+    .feat-description {
+      margin-top: $spacing-sm;
+
+      h4 {
+        margin-bottom: $spacing-sm;
+        padding-bottom: 2px;
+      }
+    }
+
+    .feat-options {
+      margin-top: $spacing-sm;
+      padding: $spacing-sm;
+
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+
+      .feat-option {
+        margin-bottom: $spacing-sm;
+        padding-bottom: $spacing-sm;
+
+        h5 {
+          margin: 0 0 2px 0;
+        }
+      }
+    }
+
+    .source-selection-message {
+      padding: $spacing-md;
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .feat-display {
+    .ability-increases {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .feat-proficiencies {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .additional-spells {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+
+      .spell-group {
+        .innate-spells {
+          margin-left: $spacing-xs;
+        }
+      }
+    }
+
+    .feat-description {
+      margin-top: $spacing-xs;
+
+      h4 {
+        margin-bottom: $spacing-xs;
+        padding-bottom: 1px;
+      }
+    }
+
+    .feat-options {
+      margin-top: $spacing-xs;
+      padding: $spacing-xs;
+
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+
+      .feat-option {
+        margin-bottom: $spacing-xs;
+        padding-bottom: $spacing-xs;
+
+        h5 {
+          margin: 0 0 1px 0;
+        }
+      }
+    }
+
+    .source-selection-message {
+      padding: $spacing-sm;
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .feat-display {
+    .ability-increases {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .feat-proficiencies {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .additional-spells {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+
+      .spell-group {
+        .innate-spells {
+          margin-left: $spacing-2xs;
+        }
+      }
+    }
+
+    .feat-description {
+      margin-top: $spacing-2xs;
+
+      h4 {
+        margin-bottom: $spacing-2xs;
+        padding-bottom: 0;
+      }
+    }
+
+    .feat-options {
+      margin-top: $spacing-2xs;
+      padding: $spacing-2xs;
+
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+
+      .feat-option {
+        margin-bottom: $spacing-2xs;
+        padding-bottom: $spacing-2xs;
+
+        h5 {
+          margin: 0;
+        }
+      }
+    }
+
+    .source-selection-message {
+      padding: $spacing-xs;
+    }
+  }
+}

@@ -254,7 +254,7 @@
 
   .deity-altnames {
     @include content-section($color-warning);
-    
+
     h4 {
       margin: 0 0 $spacing-lg 0;
       color: #f57c00;
@@ -264,6 +264,268 @@
 
     .altnames-list {
       font-style: italic;
+    }
+  }
+}
+
+// Mobile optimizations for deity display
+@media (max-width: 768px) {
+  .deity-display {
+    .deity-header {
+      gap: $spacing-md;
+      margin-bottom: $spacing-lg;
+      grid-template-columns: 1fr;
+    }
+
+    .deity-pantheon {
+      margin-bottom: $spacing-lg;
+      padding: $spacing-md;
+
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .deity-alignment {
+      margin-bottom: $spacing-lg;
+      padding: $spacing-md;
+
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+
+      .domains-section {
+        margin-top: $spacing-sm;
+
+        .domain-list {
+          margin-top: $spacing-xs;
+          gap: $spacing-xs;
+
+          .domain-tag {
+            padding: $spacing-xs $spacing-sm;
+            font-size: $font-size-xs;
+          }
+        }
+      }
+    }
+
+    .divine-details {
+      margin-bottom: $spacing-lg;
+      padding: $spacing-md;
+
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .deity-description {
+      margin-bottom: $spacing-lg;
+
+      h4 {
+        margin-bottom: $spacing-md;
+        padding-bottom: $spacing-xs;
+      }
+    }
+
+    .deity-altnames {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .deity-display {
+    .deity-header {
+      gap: $spacing-sm;
+      margin-bottom: $spacing-sm;
+    }
+
+    .deity-pantheon {
+      margin-bottom: $spacing-sm;
+      padding: $spacing-sm;
+
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .deity-alignment {
+      margin-bottom: $spacing-sm;
+      padding: $spacing-sm;
+
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+
+      .domains-section {
+        margin-top: $spacing-xs;
+
+        .domain-list {
+          margin-top: 2px;
+          gap: 2px;
+
+          .domain-tag {
+            padding: 2px $spacing-xs;
+            font-size: $font-size-xs;
+          }
+        }
+      }
+    }
+
+    .divine-details {
+      margin-bottom: $spacing-sm;
+      padding: $spacing-sm;
+
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .deity-description {
+      margin-bottom: $spacing-sm;
+
+      h4 {
+        margin-bottom: $spacing-sm;
+        padding-bottom: 2px;
+      }
+    }
+
+    .deity-altnames {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .deity-display {
+    .deity-header {
+      gap: $spacing-xs;
+      margin-bottom: $spacing-xs;
+    }
+
+    .deity-pantheon {
+      margin-bottom: $spacing-xs;
+      padding: $spacing-xs;
+
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .deity-alignment {
+      margin-bottom: $spacing-xs;
+      padding: $spacing-xs;
+
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+
+      .domains-section {
+        margin-top: 2px;
+
+        .domain-list {
+          margin-top: 1px;
+          gap: 1px;
+
+          .domain-tag {
+            padding: 1px $spacing-xs;
+            font-size: 10px;
+          }
+        }
+      }
+    }
+
+    .divine-details {
+      margin-bottom: $spacing-xs;
+      padding: $spacing-xs;
+
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .deity-description {
+      margin-bottom: $spacing-xs;
+
+      h4 {
+        margin-bottom: $spacing-xs;
+        padding-bottom: 1px;
+      }
+    }
+
+    .deity-altnames {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .deity-display {
+    .deity-header {
+      gap: $spacing-2xs;
+      margin-bottom: $spacing-2xs;
+    }
+
+    .deity-pantheon {
+      margin-bottom: $spacing-2xs;
+      padding: $spacing-2xs;
+
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .deity-alignment {
+      margin-bottom: $spacing-2xs;
+      padding: $spacing-2xs;
+
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+
+      .domains-section {
+        margin-top: 1px;
+
+        .domain-list {
+          margin-top: 0;
+          gap: 0;
+
+          .domain-tag {
+            padding: 0 2px;
+            font-size: 9px;
+          }
+        }
+      }
+    }
+
+    .divine-details {
+      margin-bottom: $spacing-2xs;
+      padding: $spacing-2xs;
+
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .deity-description {
+      margin-bottom: $spacing-2xs;
+
+      h4 {
+        margin-bottom: $spacing-2xs;
+        padding-bottom: 0;
+      }
+    }
+
+    .deity-altnames {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
     }
   }
 }

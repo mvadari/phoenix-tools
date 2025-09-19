@@ -119,3 +119,328 @@
 .monster-details {
   @include content-section($color-monster);
 }
+
+// Mobile optimizations for monster display
+@media (max-width: 768px) {
+  .monster-display {
+    .monster-basic-info {
+      margin-bottom: $spacing-lg;
+      padding: $spacing-md;
+      font-size: $font-size-base;
+    }
+
+    .monster-proficiencies {
+      margin-top: $spacing-lg;
+      padding: $spacing-md;
+    }
+
+    .monster-senses {
+      margin-top: $spacing-lg;
+    }
+
+    .traits {
+      margin-top: $spacing-lg;
+
+      h4 {
+        margin-bottom: $spacing-md;
+        padding-bottom: $spacing-xs;
+      }
+
+      .trait-item {
+        margin-bottom: $spacing-md;
+        padding-left: $spacing-md;
+      }
+    }
+
+    .monster-description {
+      margin-top: $spacing-lg;
+
+      h4 {
+        margin-bottom: $spacing-md;
+        padding-bottom: $spacing-xs;
+      }
+    }
+
+    .source-selection-message {
+      padding: $spacing-lg;
+    }
+
+    .monster-stats {
+      padding: $spacing-lg;
+      margin-bottom: $spacing-lg;
+    }
+
+    .monster-abilities {
+      margin-bottom: $spacing-lg;
+    }
+
+    .monster-actions {
+      .actions-section {
+        margin: $spacing-lg 0;
+
+        .section-title {
+          padding-bottom: $spacing-xs;
+          margin-bottom: $spacing-md;
+        }
+      }
+    }
+
+    .legendary-actions {
+      .legendary-header {
+        margin-bottom: $spacing-md;
+      }
+    }
+
+    .monster-spellcasting {
+      .spellcasting-header {
+        margin-bottom: $spacing-md;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .monster-display {
+    .monster-basic-info {
+      margin-bottom: $spacing-sm;
+      padding: $spacing-sm;
+      font-size: $font-size-sm;
+    }
+
+    .monster-proficiencies {
+      margin-top: $spacing-sm;
+      padding: $spacing-sm;
+    }
+
+    .monster-senses {
+      margin-top: $spacing-sm;
+    }
+
+    .traits {
+      margin-top: $spacing-sm;
+
+      h4 {
+        margin-bottom: $spacing-sm;
+        padding-bottom: 2px;
+      }
+
+      .trait-item {
+        margin-bottom: $spacing-sm;
+        padding-left: $spacing-sm;
+
+        h5 {
+          margin: 0 0 $spacing-xs 0;
+        }
+      }
+    }
+
+    .monster-description {
+      margin-top: $spacing-sm;
+
+      h4 {
+        margin-bottom: $spacing-sm;
+        padding-bottom: 2px;
+      }
+    }
+
+    .source-selection-message {
+      padding: $spacing-md;
+    }
+
+    .monster-stats {
+      padding: $spacing-md;
+      margin-bottom: $spacing-sm;
+    }
+
+    .monster-abilities {
+      margin-bottom: $spacing-sm;
+    }
+
+    .monster-actions {
+      .actions-section {
+        margin: $spacing-sm 0;
+
+        .section-title {
+          padding-bottom: 2px;
+          margin-bottom: $spacing-sm;
+        }
+      }
+    }
+
+    .legendary-actions {
+      .legendary-header {
+        margin-bottom: $spacing-sm;
+      }
+    }
+
+    .monster-spellcasting {
+      .spellcasting-header {
+        margin-bottom: $spacing-sm;
+      }
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .monster-display {
+    .monster-basic-info {
+      margin-bottom: $spacing-xs;
+      padding: $spacing-xs;
+      font-size: $font-size-xs;
+    }
+
+    .monster-proficiencies {
+      margin-top: $spacing-xs;
+      padding: $spacing-xs;
+    }
+
+    .monster-senses {
+      margin-top: $spacing-xs;
+    }
+
+    .traits {
+      margin-top: $spacing-xs;
+
+      h4 {
+        margin-bottom: $spacing-xs;
+        padding-bottom: 1px;
+      }
+
+      .trait-item {
+        margin-bottom: $spacing-xs;
+        padding-left: $spacing-xs;
+
+        h5 {
+          margin: 0 0 1px 0;
+        }
+      }
+    }
+
+    .monster-description {
+      margin-top: $spacing-xs;
+
+      h4 {
+        margin-bottom: $spacing-xs;
+        padding-bottom: 1px;
+      }
+    }
+
+    .source-selection-message {
+      padding: $spacing-sm;
+    }
+
+    .monster-stats {
+      padding: $spacing-sm;
+      margin-bottom: $spacing-xs;
+    }
+
+    .monster-abilities {
+      margin-bottom: $spacing-xs;
+    }
+
+    .monster-actions {
+      .actions-section {
+        margin: $spacing-xs 0;
+
+        .section-title {
+          padding-bottom: 1px;
+          margin-bottom: $spacing-xs;
+        }
+      }
+    }
+
+    .legendary-actions {
+      .legendary-header {
+        margin-bottom: $spacing-xs;
+      }
+    }
+
+    .monster-spellcasting {
+      .spellcasting-header {
+        margin-bottom: $spacing-xs;
+      }
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .monster-display {
+    .monster-basic-info {
+      margin-bottom: $spacing-2xs;
+      padding: $spacing-2xs;
+      font-size: 10px;
+    }
+
+    .monster-proficiencies {
+      margin-top: $spacing-2xs;
+      padding: $spacing-2xs;
+    }
+
+    .monster-senses {
+      margin-top: $spacing-2xs;
+    }
+
+    .traits {
+      margin-top: $spacing-2xs;
+
+      h4 {
+        margin-bottom: $spacing-2xs;
+        padding-bottom: 0;
+      }
+
+      .trait-item {
+        margin-bottom: $spacing-2xs;
+        padding-left: $spacing-2xs;
+
+        h5 {
+          margin: 0;
+        }
+      }
+    }
+
+    .monster-description {
+      margin-top: $spacing-2xs;
+
+      h4 {
+        margin-bottom: $spacing-2xs;
+        padding-bottom: 0;
+      }
+    }
+
+    .source-selection-message {
+      padding: $spacing-xs;
+    }
+
+    .monster-stats {
+      padding: $spacing-xs;
+      margin-bottom: $spacing-2xs;
+    }
+
+    .monster-abilities {
+      margin-bottom: $spacing-2xs;
+    }
+
+    .monster-actions {
+      .actions-section {
+        margin: $spacing-2xs 0;
+
+        .section-title {
+          padding-bottom: 0;
+          margin-bottom: $spacing-2xs;
+        }
+      }
+    }
+
+    .legendary-actions {
+      .legendary-header {
+        margin-bottom: $spacing-2xs;
+      }
+    }
+
+    .monster-spellcasting {
+      .spellcasting-header {
+        margin-bottom: $spacing-2xs;
+      }
+    }
+  }
+}

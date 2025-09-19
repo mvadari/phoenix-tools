@@ -184,3 +184,316 @@
 .vehicle-details {
   @include content-section(#6c757d);
 }
+
+// Mobile optimizations for vehicle display
+@media (max-width: 768px) {
+  .vehicle-display {
+    .vehicle-header {
+      margin-bottom: $spacing-lg;
+      padding: $spacing-md;
+
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+
+      .vehicle-basic-info {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      }
+    }
+
+    .vehicle-combat {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+
+      .combat-stats {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      }
+    }
+
+    .vehicle-capacity {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .vehicle-terrain {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+
+      .terrain-list {
+        gap: $spacing-xs;
+
+        .terrain-tag {
+          padding: $spacing-xs $spacing-sm;
+          font-size: $font-size-xs;
+        }
+      }
+    }
+
+    .vehicle-description {
+      margin-bottom: $spacing-lg;
+
+      h4 {
+        margin-bottom: $spacing-md;
+        padding-bottom: $spacing-xs;
+      }
+    }
+
+    .vehicle-actions {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+
+      .action-item {
+        margin-bottom: $spacing-md;
+        padding-left: $spacing-md;
+
+        h5 {
+          margin: 0 0 $spacing-xs 0;
+        }
+      }
+    }
+
+    .vehicle-equipment {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .vehicle-display {
+    .vehicle-header {
+      margin-bottom: $spacing-sm;
+      padding: $spacing-sm;
+
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+
+      .vehicle-basic-info {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      }
+    }
+
+    .vehicle-combat {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+
+      .combat-stats {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      }
+    }
+
+    .vehicle-capacity {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .vehicle-terrain {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+
+      .terrain-list {
+        gap: 2px;
+
+        .terrain-tag {
+          padding: 2px $spacing-xs;
+          font-size: $font-size-xs;
+        }
+      }
+    }
+
+    .vehicle-description {
+      margin-bottom: $spacing-sm;
+
+      h4 {
+        margin-bottom: $spacing-sm;
+        padding-bottom: 2px;
+      }
+    }
+
+    .vehicle-actions {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+
+      .action-item {
+        margin-bottom: $spacing-sm;
+        padding-left: $spacing-sm;
+
+        h5 {
+          margin: 0 0 2px 0;
+        }
+      }
+    }
+
+    .vehicle-equipment {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .vehicle-display {
+    .vehicle-header {
+      margin-bottom: $spacing-xs;
+      padding: $spacing-xs;
+
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+
+      .vehicle-basic-info {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      }
+    }
+
+    .vehicle-combat {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+
+      .combat-stats {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      }
+    }
+
+    .vehicle-capacity {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .vehicle-terrain {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+
+      .terrain-list {
+        gap: 1px;
+
+        .terrain-tag {
+          padding: 1px $spacing-xs;
+          font-size: 10px;
+        }
+      }
+    }
+
+    .vehicle-description {
+      margin-bottom: $spacing-xs;
+
+      h4 {
+        margin-bottom: $spacing-xs;
+        padding-bottom: 1px;
+      }
+    }
+
+    .vehicle-actions {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+
+      .action-item {
+        margin-bottom: $spacing-xs;
+        padding-left: $spacing-xs;
+
+        h5 {
+          margin: 0 0 1px 0;
+        }
+      }
+    }
+
+    .vehicle-equipment {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .vehicle-display {
+    .vehicle-header {
+      margin-bottom: $spacing-2xs;
+      padding: $spacing-2xs;
+
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+
+      .vehicle-basic-info {
+        grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+      }
+    }
+
+    .vehicle-combat {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+
+      .combat-stats {
+        grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+      }
+    }
+
+    .vehicle-capacity {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .vehicle-terrain {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+
+      .terrain-list {
+        gap: 0;
+
+        .terrain-tag {
+          padding: 0 2px;
+          font-size: 9px;
+        }
+      }
+    }
+
+    .vehicle-description {
+      margin-bottom: $spacing-2xs;
+
+      h4 {
+        margin-bottom: $spacing-2xs;
+        padding-bottom: 0;
+      }
+    }
+
+    .vehicle-actions {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+
+      .action-item {
+        margin-bottom: $spacing-2xs;
+        padding-left: $spacing-2xs;
+
+        h5 {
+          margin: 0;
+        }
+      }
+    }
+
+    .vehicle-equipment {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+  }
+}

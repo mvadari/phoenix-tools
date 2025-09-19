@@ -23,13 +23,13 @@ body {
 .App {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 12px;
 }
 
 header {
   text-align: center;
-  margin-bottom: 2rem;
-  padding: 2rem 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem 0.75rem;
   background: 
     linear-gradient(135deg, rgba(139, 69, 19, 0.9) 0%, rgba(160, 82, 45, 0.9) 100%),
     url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
@@ -56,7 +56,7 @@ header::before {
 header h1 {
   font-family: 'Cinzel', serif;
   color: #f4f1e8;
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: 700;
   text-shadow: 
     2px 2px 4px rgba(0,0,0,0.5),
@@ -67,11 +67,11 @@ header h1 {
 
 /* Search components */
 .search-container {
-  background: 
+  background:
     linear-gradient(145deg, rgba(244, 241, 232, 0.95) 0%, rgba(232, 220, 192, 0.95) 100%);
   border: 2px solid #8b4513;
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 0.75rem;
   box-shadow: 
     0 8px 16px rgba(0,0,0,0.15),
     inset 0 1px 0 rgba(255,255,255,0.2),
@@ -94,8 +94,8 @@ header h1 {
 
 .search-input {
   width: 100%;
-  padding: 16px 20px;
-  font-size: 18px;
+  padding: 12px 16px;
+  font-size: 16px;
   font-family: 'Crimson Text', serif;
   color: #2d1810;
   background: rgba(244, 241, 232, 0.9);
@@ -125,13 +125,13 @@ header h1 {
 
 .category-filters {
   display: flex;
-  gap: 0.75rem;
-  margin: 1.5rem 0;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
   flex-wrap: wrap;
 }
 
 .category-filter {
-  padding: 10px 16px;
+  padding: 8px 12px;
   font-family: 'Cinzel', serif;
   font-weight: 600;
   font-size: 14px;
@@ -204,16 +204,16 @@ header h1 {
 }
 
 .search-results {
-  margin-top: 1.5rem;
+  margin-top: 0.75rem;
 }
 
 .result-item {
-  padding: 1.25rem;
+  padding: 0.75rem;
   background: 
     linear-gradient(145deg, rgba(244, 241, 232, 0.95) 0%, rgba(232, 220, 192, 0.95) 100%);
   border: 2px solid #8b4513;
   border-radius: 10px;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 
@@ -279,7 +279,7 @@ header h1 {
 
 .loading {
   text-align: center;
-  padding: 3rem;
+  padding: 1.5rem;
   color: rgba(45, 24, 16, 0.7);
   font-family: 'Cinzel', serif;
   font-size: 1.1rem;
@@ -288,9 +288,9 @@ header h1 {
 
 .error {
   color: #8b1538;
-  background: 
+  background:
     linear-gradient(145deg, rgba(220, 53, 69, 0.1) 0%, rgba(248, 215, 218, 0.3) 100%);
-  padding: 1.25rem;
+  padding: 0.75rem;
   border-radius: 10px;
   border: 2px solid #8b1538;
   margin: 1rem 0;
@@ -354,15 +354,15 @@ header h1 {
 
 /* Fluff content styling */
 .fluff-content {
-  background: 
+  background:
     linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(255, 215, 0, 0.08) 100%);
   border: 2px solid rgba(212, 175, 55, 0.3);
   border-radius: 8px;
-  margin: 1rem 0 2rem 0;
-  padding: 2rem 2.5rem;
+  margin: 0.75rem 0 1rem 0;
+  padding: 1rem 1.5rem;
   font-style: italic;
   position: relative;
-  line-height: 1.7;
+  line-height: 1.5;
 }
 
 .fluff-content::before {
@@ -377,15 +377,15 @@ header h1 {
 }
 
 .fluff-content p {
-  margin: 1rem 0;
-  text-indent: 1.5em;
+  margin: 0.5rem 0;
+  text-indent: 1em;
 }
 
 .fluff-content h3 {
   font-family: 'Cinzel', serif;
   color: #8b4513;
-  margin: 0 0 1rem 0;
-  padding: 0.8rem 1.5rem;
+  margin: 0 0 0.5rem 0;
+  padding: 0.5rem 1rem;
   font-weight: 600;
   font-style: normal;
   letter-spacing: 0.5px;
@@ -398,8 +398,8 @@ header h1 {
 .fluff-content h4 {
   font-family: 'Cinzel', serif;
   color: #8b4513;
-  margin: 1.2rem 0 0.8rem 0;
-  padding: 0.6rem 1rem;
+  margin: 0.75rem 0 0.5rem 0;
+  padding: 0.375rem 0.75rem;
   font-weight: 600;
   font-style: normal;
   letter-spacing: 0.3px;
@@ -410,7 +410,7 @@ header h1 {
 }
 
 .fluff-content > div {
-  margin: 1.2rem 0;
+  margin: 0.5rem 0;
 }
 
 .fluff-content > div:first-child {
@@ -427,8 +427,8 @@ header h1 {
   background: rgba(139, 69, 19, 0.08);
   border: 1px solid rgba(139, 69, 19, 0.2);
   border-radius: 6px;
-  padding: 1.2rem;
-  margin: 1.5rem 0;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
   font-style: normal;
 }
 
@@ -443,13 +443,13 @@ header h1 {
 
 /* Unknown content types fallback styling */
 .content-unknown {
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
 .content-unknown h5 {
   font-family: 'Cinzel', serif;
   color: #8b4513;
-  margin: 1rem 0 0.6rem 0;
+  margin: 0.5rem 0 0.375rem 0;
   font-weight: 600;
   font-style: normal;
   letter-spacing: 0.3px;
@@ -472,15 +472,15 @@ header h1 {
 .content-quote {
   background: rgba(212, 175, 55, 0.05);
   border-left: 4px solid #d4af37;
-  margin: 1.5rem 0;
-  padding: 1rem 1.5rem;
+  margin: 0.75rem 0;
+  padding: 0.75rem 1rem;
   font-style: italic;
   position: relative;
 }
 
 .content-quote cite {
   display: block;
-  margin-top: 0.8rem;
+  margin-top: 0.5rem;
   font-style: normal;
   color: #8b4513;
   font-weight: 600;
@@ -489,21 +489,21 @@ header h1 {
 
 /* Table group styling */
 .content-table-group {
-  margin: 1.5rem 0;
+  margin: 0.75rem 0;
 }
 
 .content-table-group h4 {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .content-table-group .content-table {
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
 .detail-row {
-  margin: 0.75rem 0;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid rgba(139, 69, 19, 0.2);
+  margin: 0.25rem 0;
+  padding: 0.125rem 0;
+  border-bottom: 1px solid rgba(139, 69, 19, 0.1);
 }
 
 .detail-row:last-child {
@@ -514,9 +514,32 @@ header h1 {
   font-family: 'Cinzel', serif;
   color: #8b4513;
   font-weight: 600;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.25px;
   text-transform: uppercase;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+}
+
+/* Compact grid layout for detail sections */
+.detail-rows-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+@media (max-width: 768px) {
+  .detail-rows-container {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+    margin: 0.5rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .detail-rows-container {
+    gap: 0.125rem;
+    margin: 0.25rem 0;
+  }
 }
 
 .content-source {
@@ -655,14 +678,14 @@ header h1 {
 .content-entries h4, .content-entries h5 {
   font-family: 'Cinzel', serif;
   color: #8b4513;
-  margin: 1rem 0 0.5rem 0;
+  margin: 0.5rem 0 0.25rem 0;
   font-weight: 600;
   letter-spacing: 0.5px;
 }
 
 .content-entries p {
-  margin-bottom: 0.75rem;
-  line-height: 1.7;
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
 }
 
 /* Scrollbar styling */
@@ -705,8 +728,8 @@ header h1 {
 
 /* Spellcasting Information Section */
 .spellcasting-info {
-  margin: 1.5rem 0;
-  padding: 1.5rem;
+  margin: 0.75rem 0;
+  padding: 0.75rem;
   background: linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(160, 82, 45, 0.05) 100%);
   border: 2px solid rgba(139, 69, 19, 0.3);
   border-radius: 8px;
@@ -716,7 +739,7 @@ header h1 {
 .spellcasting-info h4 {
   font-family: 'Cinzel', serif;
   color: #8b4513;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   font-weight: 600;
   border-bottom: 2px solid rgba(139, 69, 19, 0.3);
   padding-bottom: 0.5rem;
@@ -724,12 +747,12 @@ header h1 {
 
 .spellcasting-details {
   display: grid;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .mystic-arcanum {
-  margin-top: 1rem;
-  padding-top: 1rem;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
   border-top: 1px solid rgba(139, 69, 19, 0.2);
 }
 
@@ -753,20 +776,20 @@ header h1 {
 
 /* Spellcasting Progression Section */
 .spellcasting-progression {
-  margin: 1.5rem 0;
+  margin: 0.75rem 0;
 }
 
 .spellcasting-progression h4 {
   font-family: 'Cinzel', serif;
   color: #8b4513;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   font-weight: 600;
 }
 
 /* Spellcasting Table - FORCE OVERRIDE with maximum specificity */
 .class-display .spellcasting-table,
 .spellcasting-table {
-  margin: 1.5rem 0 !important;
+  margin: 0.75rem 0 !important;
   border-radius: 8px !important;
   overflow: hidden !important;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
@@ -789,7 +812,7 @@ header h1 {
 }
 
 .class-progression-table th {
-  padding: 0.75rem 0.5rem !important;
+  padding: 0.5rem 0.375rem !important;
   text-align: center !important;
   font-family: 'Cinzel', serif !important;
   font-weight: 600 !important;
@@ -825,7 +848,7 @@ header h1 {
 }
 
 .class-progression-table td {
-  padding: 0.5rem !important;
+  padding: 0.375rem !important;
   text-align: center !important;
   border-right: 1px solid rgba(139, 69, 19, 0.2) !important;
   border-bottom: 1px solid rgba(139, 69, 19, 0.1) !important;
@@ -895,27 +918,327 @@ header h1 {
     border-radius: 6px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
-  
+
   .class-progression-table {
     min-width: 500px;
     font-size: 0.75rem;
   }
-  
+
   .class-progression-table th,
   .class-progression-table td {
     padding: 0.4rem 0.3rem;
   }
-  
+
   .level-cell {
     font-size: 0.9rem;
   }
-  
+
   /* Simplify hover effects on mobile */
   .class-progression-table tbody tr:hover {
     transform: none;
   }
-  
+
   .progression-cell:hover {
     transform: none;
+  }
+}
+
+/* Mobile optimization - ultra-dense layout */
+@media (max-width: 768px) {
+  .App {
+    padding: 8px;
+  }
+
+  header {
+    margin-bottom: 0.375rem;
+    padding: 0.5rem 0.375rem;
+    border-radius: 8px;
+  }
+
+  header h1 {
+    font-size: 1.75rem;
+    letter-spacing: 1px;
+  }
+
+  .search-container {
+    padding: 0.375rem;
+    border-radius: 8px;
+  }
+
+  .search-input {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .category-filters {
+    gap: 0.25rem;
+    margin: 0.5rem 0;
+  }
+
+  .category-filter {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .result-item {
+    padding: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .result-name {
+    font-size: 1.1rem;
+  }
+
+  .fluff-content {
+    margin: 0.5rem 0;
+    padding: 0.75rem 1rem;
+  }
+
+  .loading {
+    padding: 1rem;
+  }
+
+  .error {
+    padding: 0.5rem;
+  }
+
+  .detail-row {
+    margin: 0.125rem 0;
+    padding: 0.0625rem 0;
+  }
+
+  .detail-row strong {
+    font-size: 0.75rem;
+    letter-spacing: 0.1px;
+  }
+}
+
+@media (max-width: 480px) {
+  .App {
+    padding: 6px;
+  }
+
+  header {
+    margin-bottom: 0.25rem;
+    padding: 0.375rem 0.25rem;
+    border-radius: 6px;
+  }
+
+  header h1 {
+    font-size: 1.5rem;
+    letter-spacing: 0.5px;
+  }
+
+  .search-container {
+    padding: 0.25rem;
+    border-radius: 6px;
+  }
+
+  .search-input {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .category-filter {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  .result-item {
+    padding: 0.375rem;
+  }
+
+  .result-name {
+    font-size: 1rem;
+  }
+
+  .fluff-content {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .spellcasting-info {
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+  }
+
+  .class-progression-table th,
+  .class-progression-table td {
+    padding: 0.25rem 0.2rem !important;
+  }
+}
+
+/* Ultra-mobile optimization for very small screens */
+@media (max-width: 360px) {
+  .App {
+    padding: 4px;
+  }
+
+  header {
+    padding: 0.375rem 0.125rem;
+    margin-bottom: 0.375rem;
+  }
+
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  .search-container {
+    padding: 0.25rem;
+  }
+
+  .search-input {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  .category-filters {
+    gap: 0.0625rem;
+    margin: 0.25rem 0;
+  }
+
+  .search-results {
+    margin-top: 0.25rem;
+  }
+
+  .category-filter {
+    padding: 3px 6px;
+    font-size: 10px;
+  }
+
+  .result-item {
+    padding: 0.25rem;
+    margin-bottom: 0.125rem;
+  }
+
+  .result-name {
+    font-size: 0.9rem;
+  }
+
+  .detail-row {
+    margin: 0.0625rem 0;
+    padding: 0.03125rem 0;
+  }
+
+  .fluff-content {
+    padding: 0.375rem 0.5rem;
+    margin: 0.375rem 0;
+  }
+
+  .fluff-content p {
+    margin: 0.25rem 0;
+  }
+
+  .content-inset {
+    padding: 0.375rem;
+    margin: 0.375rem 0;
+  }
+
+  .spellcasting-info {
+    padding: 0.375rem;
+    margin: 0.375rem 0;
+  }
+
+  .spellcasting-info h4 {
+    margin-bottom: 0.25rem;
+  }
+
+  .class-progression-table {
+    font-size: 0.7rem !important;
+  }
+
+  .class-progression-table th,
+  .class-progression-table td {
+    padding: 0.2rem 0.15rem !important;
+  }
+}
+
+@media (max-width: 320px) {
+  .App {
+    padding: 2px;
+  }
+
+  header {
+    margin-bottom: 0.125rem;
+    padding: 0.25rem 0.0625rem;
+    border-radius: 4px;
+  }
+
+  header h1 {
+    font-size: 1.125rem;
+    letter-spacing: 0px;
+  }
+
+  .search-container {
+    padding: 0.125rem;
+    border-radius: 4px;
+  }
+
+  .search-input {
+    padding: 4px 6px;
+    font-size: 11px;
+  }
+
+  .category-filter {
+    padding: 2px 4px;
+    font-size: 9px;
+  }
+
+  .category-filters {
+    gap: 0.03125rem;
+    margin: 0.125rem 0;
+  }
+
+  .search-results {
+    margin-top: 0.125rem;
+  }
+
+  .result-item {
+    padding: 0.125rem;
+  }
+
+  .result-name {
+    font-size: 0.8rem;
+  }
+
+  .fluff-content {
+    padding: 0.25rem 0.375rem;
+    margin: 0.125rem 0;
+  }
+
+  .content-entries h4, .content-entries h5 {
+    margin: 0.25rem 0 0.125rem 0;
+  }
+
+  .content-entries p {
+    margin-bottom: 0.25rem;
+  }
+
+  .class-progression-table {
+    font-size: 0.65rem !important;
+  }
+
+  .class-progression-table th,
+  .class-progression-table td {
+    padding: 0.15rem 0.1rem !important;
+  }
+
+  .loading {
+    padding: 0.5rem;
+  }
+
+  .error {
+    padding: 0.25rem;
+  }
+
+  .detail-row {
+    margin: 0.03125rem 0;
+    padding: 0.015625rem 0;
+    border-bottom: none;
+  }
+
+  .detail-row strong {
+    font-size: 0.65rem;
+    letter-spacing: 0px;
+    font-weight: 500;
   }
 }

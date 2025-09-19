@@ -164,3 +164,276 @@
     color: $gray-500;
   }
 }
+
+// Mobile optimizations for action display
+@media (max-width: 768px) {
+  .action-display {
+    .action-timing {
+      margin-bottom: $spacing-lg;
+      padding: $spacing-md;
+
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .spell-properties {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .action-description {
+      margin-bottom: $spacing-lg;
+
+      h4 {
+        margin-bottom: $spacing-md;
+        padding-bottom: $spacing-xs;
+      }
+    }
+
+    .higher-level-section {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .action-classes {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+
+      .class-tags {
+        gap: $spacing-xs;
+
+        .class-tag {
+          padding: $spacing-xs $spacing-sm;
+          font-size: $font-size-xs;
+        }
+      }
+    }
+
+    .related-actions {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+
+      .action-tags {
+        gap: $spacing-xs;
+
+        .action-tag {
+          padding: $spacing-xs $spacing-sm;
+          font-size: $font-size-xs;
+        }
+      }
+    }
+
+    .source-selection-message {
+      padding: $spacing-lg;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .action-display {
+    .action-timing {
+      margin-bottom: $spacing-sm;
+      padding: $spacing-sm;
+
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .spell-properties {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .action-description {
+      margin-bottom: $spacing-sm;
+
+      h4 {
+        margin-bottom: $spacing-sm;
+        padding-bottom: 2px;
+      }
+    }
+
+    .higher-level-section {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .action-classes {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+
+      .class-tags {
+        gap: 2px;
+
+        .class-tag {
+          padding: 2px $spacing-xs;
+          font-size: $font-size-xs;
+        }
+      }
+    }
+
+    .related-actions {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+
+      .action-tags {
+        gap: 2px;
+
+        .action-tag {
+          padding: 2px $spacing-xs;
+          font-size: $font-size-xs;
+        }
+      }
+    }
+
+    .source-selection-message {
+      padding: $spacing-md;
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .action-display {
+    .action-timing {
+      margin-bottom: $spacing-xs;
+      padding: $spacing-xs;
+
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .spell-properties {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .action-description {
+      margin-bottom: $spacing-xs;
+
+      h4 {
+        margin-bottom: $spacing-xs;
+        padding-bottom: 1px;
+      }
+    }
+
+    .higher-level-section {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .action-classes {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+
+      .class-tags {
+        gap: 1px;
+
+        .class-tag {
+          padding: 1px $spacing-xs;
+          font-size: 10px;
+        }
+      }
+    }
+
+    .related-actions {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+
+      .action-tags {
+        gap: 1px;
+
+        .action-tag {
+          padding: 1px $spacing-xs;
+          font-size: 10px;
+        }
+      }
+    }
+
+    .source-selection-message {
+      padding: $spacing-sm;
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .action-display {
+    .action-timing {
+      margin-bottom: $spacing-2xs;
+      padding: $spacing-2xs;
+
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .spell-properties {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .action-description {
+      margin-bottom: $spacing-2xs;
+
+      h4 {
+        margin-bottom: $spacing-2xs;
+        padding-bottom: 0;
+      }
+    }
+
+    .higher-level-section {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .action-classes {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+
+      .class-tags {
+        gap: 0;
+
+        .class-tag {
+          padding: 0 2px;
+          font-size: 9px;
+        }
+      }
+    }
+
+    .related-actions {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+
+      .action-tags {
+        gap: 0;
+
+        .action-tag {
+          padding: 0 2px;
+          font-size: 9px;
+        }
+      }
+    }
+
+    .source-selection-message {
+      padding: $spacing-xs;
+    }
+  }
+}

@@ -252,3 +252,260 @@
 .reward-details {
   @include content-section(#8b5cf6);
 }
+
+// Mobile optimizations for reward display
+@media (max-width: 768px) {
+  .reward-display {
+    .reward-type {
+      margin-bottom: $spacing-lg;
+      padding: $spacing-md;
+
+      .reward-type-header {
+        gap: $spacing-md;
+      }
+
+      .reward-rarity {
+        padding: $spacing-xs $spacing-sm;
+        font-size: $font-size-xs;
+      }
+    }
+
+    .reward-properties {
+      margin-bottom: $spacing-lg;
+      padding: $spacing-md;
+
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .reward-spells {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+
+      .spell-group {
+        .spell-frequency {
+          margin-left: $spacing-md;
+        }
+
+        .spellcasting-ability {
+          margin-left: $spacing-md;
+        }
+      }
+    }
+
+    .reward-description {
+      margin-bottom: $spacing-lg;
+
+      h4 {
+        margin-bottom: $spacing-md;
+        padding-bottom: $spacing-xs;
+      }
+    }
+
+    .reward-flaws {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+
+    .reward-source {
+      h4 {
+        margin: 0 0 $spacing-md 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .reward-display {
+    .reward-type {
+      margin-bottom: $spacing-sm;
+      padding: $spacing-sm;
+
+      .reward-type-header {
+        gap: $spacing-sm;
+      }
+
+      .reward-rarity {
+        padding: 2px $spacing-xs;
+        font-size: $font-size-xs;
+      }
+    }
+
+    .reward-properties {
+      margin-bottom: $spacing-sm;
+      padding: $spacing-sm;
+
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .reward-spells {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+
+      .spell-group {
+        .spell-frequency {
+          margin-left: $spacing-sm;
+        }
+
+        .spellcasting-ability {
+          margin-left: $spacing-sm;
+        }
+      }
+    }
+
+    .reward-description {
+      margin-bottom: $spacing-sm;
+
+      h4 {
+        margin-bottom: $spacing-sm;
+        padding-bottom: 2px;
+      }
+    }
+
+    .reward-flaws {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+
+    .reward-source {
+      h4 {
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .reward-display {
+    .reward-type {
+      margin-bottom: $spacing-xs;
+      padding: $spacing-xs;
+
+      .reward-type-header {
+        gap: $spacing-xs;
+      }
+
+      .reward-rarity {
+        padding: 1px $spacing-xs;
+        font-size: 10px;
+      }
+    }
+
+    .reward-properties {
+      margin-bottom: $spacing-xs;
+      padding: $spacing-xs;
+
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .reward-spells {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+
+      .spell-group {
+        .spell-frequency {
+          margin-left: $spacing-xs;
+        }
+
+        .spellcasting-ability {
+          margin-left: $spacing-xs;
+        }
+      }
+    }
+
+    .reward-description {
+      margin-bottom: $spacing-xs;
+
+      h4 {
+        margin-bottom: $spacing-xs;
+        padding-bottom: 1px;
+      }
+    }
+
+    .reward-flaws {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+
+    .reward-source {
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .reward-display {
+    .reward-type {
+      margin-bottom: $spacing-2xs;
+      padding: $spacing-2xs;
+
+      .reward-type-header {
+        gap: $spacing-2xs;
+      }
+
+      .reward-rarity {
+        padding: 0 2px;
+        font-size: 9px;
+      }
+    }
+
+    .reward-properties {
+      margin-bottom: $spacing-2xs;
+      padding: $spacing-2xs;
+
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .reward-spells {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+
+      .spell-group {
+        .spell-frequency {
+          margin-left: $spacing-2xs;
+        }
+
+        .spellcasting-ability {
+          margin-left: $spacing-2xs;
+        }
+      }
+    }
+
+    .reward-description {
+      margin-bottom: $spacing-2xs;
+
+      h4 {
+        margin-bottom: $spacing-2xs;
+        padding-bottom: 0;
+      }
+    }
+
+    .reward-flaws {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+
+    .reward-source {
+      h4 {
+        margin: 0 0 $spacing-2xs 0;
+      }
+    }
+  }
+}
