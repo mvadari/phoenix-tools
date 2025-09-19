@@ -628,14 +628,25 @@
     .subclass-tabs-container {
       .subclass-tab-nav {
         gap: $spacing-xs;
-        
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+
         .subclass-tab {
-          flex: 1;
+          flex: 0 1 auto;
           text-align: center;
           padding: $spacing-sm;
           font-size: $font-size-xs;
-          min-width: 0; // Allow text to wrap
-          word-wrap: break-word;
+          min-width: 80px;
+          max-width: 120px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
       }
 
@@ -673,6 +684,45 @@
               }
             }
           }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    .subclass-tabs-container {
+      .subclass-tab-nav {
+        gap: $spacing-2xs;
+        padding: 0 $spacing-xs;
+
+        .subclass-tab {
+          min-width: 70px;
+          max-width: 100px;
+          padding: $spacing-xs $spacing-sm;
+          font-size: $font-size-2xs;
+        }
+      }
+
+      .subclass-tab-content {
+        .subclass-content {
+          padding: $spacing-sm;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 360px) {
+    .subclass-tabs-container {
+      .subclass-tab-nav {
+        gap: 2px;
+        padding: 0 $spacing-2xs;
+
+        .subclass-tab {
+          min-width: 60px;
+          max-width: 85px;
+          padding: $spacing-2xs $spacing-xs;
+          font-size: $font-size-2xs;
+          border-radius: $border-radius-sm;
         }
       }
     }
